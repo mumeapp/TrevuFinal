@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/placeIllustration"
+            android:layout_width="match_parent"
+            android:layout_height="264dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/bgjapan"
+            android:contentDescription="place-image" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="270dp"
+            android:background="@drawable/shade_black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="70dp"
+            android:fontFamily="@font/osregular"
+            android:text="Halo"
+            android:textColor="#ffffff"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="100sp"
+            android:fontFamily="@font/osextrabold"
+            android:text="Remu"
+            android:textColor="#ffffff"
+            android:textSize="40sp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/FaithCardView"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="25dp"
+            android:elevation="6dp"
+            app:cardCornerRadius="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/oslight"
+                    android:text="Jadwal Sholat Selanjutnya"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/osextrabold"
+                    android:text="18:00"
+                    android:textColor="#000000"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Selengkapnya" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="325dp"
+            android:columnCount="2"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:rowCount="2"
+            android:useDefaultMargins="true">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/foodButton"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:elevation="8dp"
+                app:cardCornerRadius="10dp">
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:elevation="8dp"
+                app:cardCornerRadius="10dp">
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:elevation="8dp"
+                app:cardCornerRadius="10dp">
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:elevation="8dp"
+                app:cardCornerRadius="10dp">
+
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="700dp"
+            android:layout_marginEnd="25dp"
+            android:elevation="6dp"
+            app:cardCornerRadius="10dp">
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+</ScrollView>
