@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MosqueActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="40dp"
+        android:elevation="12dp"
+        app:cardCornerRadius="12dp">
+
+        <com.alespero.expandablecardview.ExpandableCardView
+            android:id="@+id/jamSolat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:animationDuration="200"
+            app:expandOnClick="true"
+            app:inner_view="@layout/activity_salat_time"
+            app:title="Jadwal Sholat Selanjutnya" />
+
+        <RelativeLayout
+            android:id="@+id/someInformation"
+            android:layout_width="match_parent"
+            android:layout_height="125dp">
+
+            <TextView
+                android:id="@+id/jamSolatSelanjutnya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="90dp"
+                android:layout_marginTop="55dp"
+                android:fontFamily="@font/osextrabold"
+                android:text="18:00"
+                android:textColor="#000000"
+                android:textSize="43sp" />
+
+            <TextView
+                android:id="@+id/solatSelanjutnya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="75dp"
+                android:fontFamily="@font/osregular"
+                android:text="Maghrib"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
