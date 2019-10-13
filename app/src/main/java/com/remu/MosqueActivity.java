@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alespero.expandablecardview.ExpandableCardView;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,13 +31,20 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.saber.chentianslideback.SlideBackActivity;
+import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
 
-public class MosqueActivity extends AppCompatActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+
+public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MosqueActivity";
 
     ExpandableCardView jamSolat;
     RelativeLayout someInformation;
+
+    MultiSnapRecyclerView listMasjid;
+
     //sydney
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
     // The entry points to the Places API.
@@ -50,6 +58,9 @@ public class MosqueActivity extends AppCompatActivity implements OnMapReadyCallb
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
+
+    private RecyclerView.Adapter mAdapter;
+    private ArrayList<String> mDataSet;
 
 
     @Override
@@ -85,6 +96,25 @@ public class MosqueActivity extends AppCompatActivity implements OnMapReadyCallb
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+
+        mDataSet = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            mDataSet.add("Title #" + i);
+        }
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        listMasjid.setLayoutManager(layoutManager);
+        mAdapter = new MosqueAdapter(mDataSet);
+        listMasjid.setAdapter(mAdapter);
+        listMasjid.setOnSnapListener(position -> {
+        });
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
     }
 
     @Override
@@ -182,5 +212,6 @@ public class MosqueActivity extends AppCompatActivity implements OnMapReadyCallb
     private void initializeUI() {
         jamSolat = findViewById(R.id.jamSolat);
         someInformation = findViewById(R.id.someInformation);
+        listMasjid = findViewById(R.id.listMasjid);
     }
 }
