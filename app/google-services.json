@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "248080592970",
+    "firebase_url": "https://remu-939ac.firebaseio.com",
+    "project_id": "remu-939ac",
+    "storage_bucket": "remu-939ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248080592970:android:a4b2f7ae4947ced36276b3",
+        "android_client_info": {
+          "package_name": "com.remu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "248080592970-i3rn6l0cn08ua7mrnfl9bs5u5g1sprha.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.remu",
+            "certificate_hash": "d8b00c1514724816aca62851915ac3d757a0c861"
+          }
+        },
+        {
+          "client_id": "248080592970-3kicomo8dugq84blrddf01bjvl31rp62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQDMQEYRZ02A_d6_rcq4qIFlcEEXOR_-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "248080592970-3kicomo8dugq84blrddf01bjvl31rp62.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
