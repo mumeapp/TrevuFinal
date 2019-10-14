@@ -14,7 +14,7 @@ public class FoodKategoriActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
-    private UploadTask uploadTask;
+
     private EditText kategori;
     private Button selanjutnya, batal;
     private ImageView foto;
