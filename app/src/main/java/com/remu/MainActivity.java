@@ -8,7 +8,7 @@ import androidx.cardview.widget.CardView;
 
 public class MainActivity extends AppCompatActivity {
 
-    CardView mosqueCardView;
+    CardView mosqueCardView, foodButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,13 +18,21 @@ public class MainActivity extends AppCompatActivity {
         //initialize uI
         initializeUI();
 
+        //go to mosque activity
         mosqueCardView.setOnClickListener(view -> {
             Intent viewMosque = new Intent(MainActivity.this, MosqueActivity.class);
             startActivity(viewMosque);
+        });
+
+        //go to food activity
+        foodButton.setOnClickListener(view -> {
+            Intent viewFood = new Intent(MainActivity.this, FoodActivity.class);
+            startActivity(viewFood);
         });
     }
 
     private void initializeUI() {
         mosqueCardView = findViewById(R.id.MosqueCardView);
+        foodButton = findViewById(R.id.foodButton);
     }
 }

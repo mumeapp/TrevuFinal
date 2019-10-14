@@ -16,6 +16,9 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".FoodKategoriActivity"></activity>
 
+        <activity android:name=".HalalFoodActivity"></activity>
+        <activity android:name=".FoodActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8" />
