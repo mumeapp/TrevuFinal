@@ -14,7 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".HalalFoodActivity"></activity>
+        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".OnboardingActivity" />
+        <activity android:name=".SplashscreenActivity" />
+        <activity android:name=".HalalFoodActivity" />
         <activity android:name=".FoodActivity" />
 
         <meta-data
