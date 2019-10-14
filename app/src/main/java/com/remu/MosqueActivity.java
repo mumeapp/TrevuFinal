@@ -59,8 +59,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
 
-    private RecyclerView.Adapter mAdapter;
-    private ArrayList<String> mDataSet;
+    RecyclerView.Adapter mAdapter;
+    ArrayList<String> mDataSet;
 
 
     @Override

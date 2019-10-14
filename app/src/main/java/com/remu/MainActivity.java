@@ -6,8 +6,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
-
 public class MainActivity extends AppCompatActivity {
 
     CardView mosqueCardView, foodButton;
@@ -30,11 +28,7 @@ public class MainActivity extends AppCompatActivity {
         foodButton.setOnClickListener(view -> {
             Intent viewFood = new Intent(MainActivity.this, FoodActivity.class);
             startActivity(viewFood);
-            Animatoo.animateCard(MainActivity.this);
         });
-
-        //give card animation
-        Animatoo.animateCard(MainActivity.this);
     }
 
     private void initializeUI() {

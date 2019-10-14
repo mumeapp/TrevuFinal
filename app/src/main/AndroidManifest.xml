@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".FoodActivity"></activity>
+        <activity android:name=".HalalFoodActivity"></activity>
+        <activity android:name=".FoodActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
