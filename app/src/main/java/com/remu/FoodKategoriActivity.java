@@ -44,11 +44,9 @@ public class FoodKategoriActivity extends AppCompatActivity {
         });
 
         selanjutnya.setOnClickListener(new View.OnClickListener() {
-
             @Override
-            public void OnClick(View view) {
-                String kategori =
-
+            public void onClick(View v) {
+                String kategori1 = kategori.getText().toString();
             }
         });
 
