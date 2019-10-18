@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,8 @@ public class FoodKategoriActivity extends AppCompatActivity {
     private Uri filePath;
     private UploadTask uploadTask;
     private EditText kategori;
-    private Button selanjutnya, batal;
+    private Button selanjutnya;
+    private TextView batal;
     private ImageView foto;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
@@ -51,6 +53,13 @@ public class FoodKategoriActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         this.idUser = currentUser.getUid();
+
+        batal = findViewById(R.id.btn_batal);
+        //batalin input kategori
+        batal.setOnClickListener(view -> {
+            Intent intent = new Intent(this, HalalFoodActivity.class);
+            startActivity(intent);
+        });
 
     }
 
