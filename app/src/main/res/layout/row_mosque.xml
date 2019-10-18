@@ -11,33 +11,66 @@
 
     <RelativeLayout
         android:layout_width="325dp"
-        android:layout_height="match_parent"
-        android:background="#000000"
-
-        />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="100dp"
-            android:text="title"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
+        <ImageView
+            android:id="@+id/gbr1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_loading" />
 
-        <TextView
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="135dp"
-            android:text="rating"
-            android:textColor="#ffffff"
-            android:textSize="15sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_black">
+
+            <TextView
+                android:id="@+id/tul1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="40dp"
+                android:fontFamily="@font/osbold"
+                android:text="title"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/ic_star_white_24dp" />
+
+            <TextView
+                android:id="@+id/tul2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/osregular"
+                android:text="rating"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/osregular"
+                android:text="distance"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
+
 </androidx.cardview.widget.CardView>
