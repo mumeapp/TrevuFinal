@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,8 +23,6 @@ import com.remu.POJO.HalalFood;
 
 public class HalalFoodActivity extends AppCompatActivity {
 
-    private DatabaseReference databaseReference;
-    private FirebaseRecyclerAdapter<HalalFood, HalalFoodActivity.HalalFoodViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvFood;
 
     @Override
@@ -34,44 +31,31 @@ public class HalalFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_halal_food);
 
         initializeUI();
-//        mDataSet = new ArrayList<>();
-//        for (int i = 0; i < 30; i++) {
-//            mDataSet.add("Title #" + i);
-//        }
-//
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        halalFoodCategories.setLayoutManager(layoutManager);
-//        mAdapter = new MosqueAdapter(mDataSet);
-//        halalFoodCategories.setAdapter(mAdapter);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
+        FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
+        DatabaseReference databaseReference;
         rvFood.setHasFixedSize(true);
         rvFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this));
-
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Gift");
         Query query = databaseReference.orderByKey();
-
         FirebaseRecyclerOptions<HalalFood> options = new FirebaseRecyclerOptions.Builder<HalalFood>()
                 .setQuery(query, HalalFood.class).build();
 
 
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<HalalFood, HalalFoodViewHolder>(options) {
+        FirebaseRecyclerAdapter<HalalFood, HalalFoodViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<HalalFood, HalalFoodViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood halalFood) {
-                halalFoodViewHolder.setGambar(halalFood.getGambar());
-                halalFoodViewHolder.setJudul(halalFood.getNama());
-                halalFoodViewHolder.setJumlah(halalFood.getJumlah());
-                halalFoodViewHolder.setJarak(halalFood.getJarak());
+            protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood HalalFood) {
+                halalFoodViewHolder.setGambar(HalalFood.getGambar());
+                halalFoodViewHolder.setJudul(HalalFood.getNama());
+                halalFoodViewHolder.setJumlah(HalalFood.getJumlah());
+                halalFoodViewHolder.setJarak(HalalFood.getJarak());
 
-                String id = halalFood.getId();
+                String id = HalalFood.getId();
 
 
-                halalFoodViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(HalalFoodActivity.this, halalFood.getNama(), Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
-                        intent.putExtra(HalalFoodRestaurantActivity.id, id);
-                        startActivity(intent);
-                    }
+                halalFoodViewHolder.itemView.setOnClickListener(view -> {
+                    Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
+                    intent.putExtra(HalalFoodRestaurantActivity.id, id);
+                    startActivity(intent);
                 });
             }
 
@@ -90,6 +74,7 @@ public class HalalFoodActivity extends AppCompatActivity {
     private void initializeUI() {
         rvFood = findViewById(R.id.HalalFoodCategories);
     }
+
     public class HalalFoodViewHolder extends RecyclerView.ViewHolder {
 
         ImageView fotoMkn;
@@ -97,7 +82,7 @@ public class HalalFoodActivity extends AppCompatActivity {
         TextView jarak;
         TextView jumlah;
 
-        public HalalFoodViewHolder(@NonNull View itemView) {
+        HalalFoodViewHolder(@NonNull View itemView) {
             super(itemView);
             fotoMkn = itemView.findViewById(R.id.Gambarkategoi);
             judul = itemView.findViewById(R.id.NamaKategori);
@@ -105,22 +90,22 @@ public class HalalFoodActivity extends AppCompatActivity {
             jarak = itemView.findViewById(R.id.Jarak);
         }
 
-        public void setGambar(String foto) {
+        void setGambar(String foto) {
             Glide.with(HalalFoodActivity.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading)
                     .into(fotoMkn);
         }
 
-        public void setJudul(String text) {
+        void setJudul(String text) {
             judul.setText(text);
         }
 
-        public void setJumlah(String text) {
+        void setJumlah(String text) {
             jumlah.setText(text);
         }
 
-        public void setJarak(String text) {
+        void setJarak(String text) {
             jarak.setText(text);
         }
     }
