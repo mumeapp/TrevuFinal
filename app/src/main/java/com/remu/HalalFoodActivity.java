@@ -43,7 +43,7 @@ public class HalalFoodActivity extends AppCompatActivity {
 //        halalFoodCategories.setLayoutManager(layoutManager);
 //        mAdapter = new MosqueAdapter(mDataSet);
 //        halalFoodCategories.setAdapter(mAdapter);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("FastFood");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
         rvFood.setHasFixedSize(true);
         rvFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this));
 
