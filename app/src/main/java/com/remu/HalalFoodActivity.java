@@ -43,10 +43,9 @@ public class HalalFoodActivity extends AppCompatActivity {
 //        halalFoodCategories.setLayoutManager(layoutManager);
 //        mAdapter = new MosqueAdapter(mDataSet);
 //        halalFoodCategories.setAdapter(mAdapter);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("FastFood");
         rvFood.setHasFixedSize(true);
         rvFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this));
-
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Gift");
 
         Query query = databaseReference.orderByKey();
 
@@ -56,21 +55,21 @@ public class HalalFoodActivity extends AppCompatActivity {
 
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<HalalFood, HalalFoodViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood HalalFood) {
-                halalFoodViewHolder.setGambar(HalalFood.getGambar());
-                halalFoodViewHolder.setJudul(HalalFood.getNama());
-                halalFoodViewHolder.setJumlah(HalalFood.getJumlah());
-                halalFoodViewHolder.setJarak(HalalFood.getJarak());
+            protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood halalFood) {
+                halalFoodViewHolder.setGambar(halalFood.getGambar());
+                halalFoodViewHolder.setJudul(halalFood.getNama());
+                halalFoodViewHolder.setJumlah(halalFood.getJumlah());
+                halalFoodViewHolder.setJarak(halalFood.getJarak());
 
-                String id = HalalFood.getId();
+                String id = halalFood.getId();
 
 
                 halalFoodViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        Toast.makeText(Foodnearby.this, halalFood.getNama(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HalalFoodActivity.this, halalFood.getNama(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
-                        intent.putExtra(HalalFoodRestaurantActivity.ID, id);
+                        intent.putExtra(HalalFoodRestaurantActivity.id, id);
                         startActivity(intent);
                     }
                 });

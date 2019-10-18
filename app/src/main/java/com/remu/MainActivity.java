@@ -2,13 +2,14 @@ package com.remu;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 public class MainActivity extends AppCompatActivity {
 
-    CardView mosqueCardView, foodButton;
+    CardView mosqueCardView, foodButton, dictionaryButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +30,17 @@ public class MainActivity extends AppCompatActivity {
             Intent viewFood = new Intent(MainActivity.this, FoodActivity.class);
             startActivity(viewFood);
         });
+
+        //go to Dictionary Activity
+        dictionaryButton.setOnClickListener(view -> {
+            Intent viewDictonary = new Intent(MainActivity.this, DictionaryActivity.class);
+            startActivity(viewDictonary);
+        });
     }
 
     private void initializeUI() {
         mosqueCardView = findViewById(R.id.MosqueCardView);
         foodButton = findViewById(R.id.foodButton);
+        dictionaryButton = findViewById(R.id.dictionaryButton);
     }
 }
