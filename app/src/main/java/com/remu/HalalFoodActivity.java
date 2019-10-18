@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,7 +63,6 @@ public class HalalFoodActivity extends AppCompatActivity {
 
                 String id = halalFood.getId();
 
-
                 halalFoodViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
                     intent.putExtra(HalalFoodRestaurantActivity.id, id);
@@ -103,7 +101,7 @@ public class HalalFoodActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         try {
-        firebaseRecyclerAdapter.stopListening();
+            firebaseRecyclerAdapter.stopListening();
         }catch (Exception e){
 
         }

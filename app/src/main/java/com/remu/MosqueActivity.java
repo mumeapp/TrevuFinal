@@ -107,8 +107,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         mAdapter = new MosqueAdapter(mDataSet);
         listMasjid.setAdapter(mAdapter);
         listMasjid.setOnSnapListener(position -> {
-        });
 
+        });
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
 

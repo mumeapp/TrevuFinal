@@ -38,72 +38,9 @@ public class DictionaryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
-
-
-//        spinAwal = findViewById(R.id.bhsawal);
-//        spinAkhir = findViewById(R.id.bhstrans);
-//
-//        check=0;
-//        check2=0;
-//
-//        ArrayAdapter<CharSequence> adaptAw = ArrayAdapter.createFromResource(DictionaryActivity.this, R.array.bahasaAwal, android.R.layout.simple_spinner_item);
-//        adaptAw.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinAwal.setAdapter(adaptAw);
-//        spinAwal.setSelected(false);
-//        spinAwal.setSelection(0,false);
-//        spinAwal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                textAw = (String)spinAwal.getSelectedItem().toString();
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-//
-//        ArrayAdapter<CharSequence> adaptAk = ArrayAdapter.createFromResource(DictionaryActivity.this, R.array.bahasaTrans, android.R.layout.simple_spinner_item);
-//        adaptAk.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinAkhir.setAdapter(adaptAk);
-//        spinAkhir.setSelected(false);
-//        spinAkhir.setSelection(0,false);
-//        spinAkhir.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                textAk = (String)spinAkhir.getSelectedItem().toString();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-//        textAk = (String)spinAkhir.getSelectedItem().toString();
-//        textAw = (String)spinAwal.getSelectedItem().toString();
-        //btn2.setVisibility(View.INVISIBLE);
-        //new Handler().postDelayed(() -> btn2.performClick(), 500);
-//        System.out.println(spinAwal.getSelectedItem().toString());
         rvDictionary = findViewById(R.id.rv_listDictionary);
         rvDictionary.setHasFixedSize(true);
         rvDictionary.setLayoutManager(new LinearLayoutManager(DictionaryActivity.this));
-
-
-        //btn2.setOnClickListener(view -> invisible());
-//        String child = null;
-//        if(textAw!=null&&textAk!=null){
-//        if ((textAw.equalsIgnoreCase("jepang") && textAk.equalsIgnoreCase("Indonesia")) || (textAw.equalsIgnoreCase("indonesia") && textAk.equalsIgnoreCase("jepang"))) {
-//            child = "indonesia-jepang";
-//        } else if ((textAw.equalsIgnoreCase("jepang") && textAk.equalsIgnoreCase("Inggris")) || (textAw.equalsIgnoreCase("inggris") && textAk.equalsIgnoreCase("jepang"))) {
-//            child = "jepang-inggris";
-//        } else if ((textAw.equalsIgnoreCase("inggris") && textAk.equalsIgnoreCase("Indonesia")) || (textAw.equalsIgnoreCase("indonesia") && textAk.equalsIgnoreCase("inggris"))) {
-//            child = "inggris-indonesia";
-//        } else {
-//            Toast.makeText(getApplicationContext(), "Tidak bisa menggunakan bahasa yang sama", Toast.LENGTH_LONG).show();
-//        }
-//        }
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("jepang-inggris");
 
 
