@@ -3,13 +3,21 @@ package com.remu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
 
     CardView mosqueCardView, foodButton, dictionaryButton;
+    String name;
+    TextView nama;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
         //initialize uI
         initializeUI();
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        //set nama
+        getCurrentUser(currentUser);
         //go to mosque activity
         mosqueCardView.setOnClickListener(view -> {
             Intent viewMosque = new Intent(MainActivity.this, MosqueActivity.class);
@@ -42,5 +55,12 @@ public class MainActivity extends AppCompatActivity {
         mosqueCardView = findViewById(R.id.MosqueCardView);
         foodButton = findViewById(R.id.foodButton);
         dictionaryButton = findViewById(R.id.dictionaryButton);
+        nama = findViewById(R.id.nama);
+    }
+    private void getCurrentUser(FirebaseUser user){
+        if(user !=null){
+            String name =user.getDisplayName();
+            nama.setText(name);
+        }
     }
 }
