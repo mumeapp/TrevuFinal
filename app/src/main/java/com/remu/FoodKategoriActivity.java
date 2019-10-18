@@ -119,7 +119,7 @@ public class FoodKategoriActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(FoodKategoriActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                         databaseReference.child("id").setValue(id);
-                                        databaseReference.child("jumlah").setValue("0");
+                                        databaseReference.child("jumlah").setValue("0 Restaurant");
                                         databaseReference.child("jarak").setValue("0 KM");
                                         Intent in = new Intent(FoodKategoriActivity.this, FoodActivity.class);
                                         startActivity(in);

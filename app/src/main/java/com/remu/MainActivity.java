@@ -14,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
-    CardView mosqueCardView, foodButton, dictionaryButton;
+    CardView mosqueCardView, foodButton, dictionaryButton, friendButton;
     String name;
     TextView nama;
     private FirebaseAuth mAuth;
@@ -49,12 +49,18 @@ public class MainActivity extends AppCompatActivity {
             Intent viewDictonary = new Intent(MainActivity.this, DictionaryActivity.class);
             startActivity(viewDictonary);
         });
+        friendButton.setOnClickListener(view -> {
+            Intent viewFriend = new Intent(MainActivity.this, FindFriendsActivity.class);
+            startActivity(viewFriend);
+        });
+
     }
 
     private void initializeUI() {
         mosqueCardView = findViewById(R.id.MosqueCardView);
         foodButton = findViewById(R.id.foodButton);
         dictionaryButton = findViewById(R.id.dictionaryButton);
+        friendButton = findViewById(R.id.findFriendsButton);
         nama = findViewById(R.id.nama);
     }
     private void getCurrentUser(FirebaseUser user){
