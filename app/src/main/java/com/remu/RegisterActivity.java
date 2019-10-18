@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void have_account(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
