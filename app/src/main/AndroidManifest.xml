@@ -16,15 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".FindFriendsActivity"/>
-        <activity android:name=".FindFriends"/>
-        <activity android:name=".FriendResult"></activity>
+        <activity android:name=".TourismDetail"></activity>
+        <activity android:name=".TourismActivity" />
+        <activity android:name=".FastFoodActivity" />
+        <activity android:name=".FindFriendsActivity" />
+        <activity android:name=".FindFriends" />
+        <activity android:name=".FriendResult" />
         <activity android:name=".HalalFoodRestaurantActivity" />
-        <activity android:name=".RestoranActivity"></activity>
+        <activity android:name=".RestoranActivity" />
         <activity android:name=".FoodKategoriActivity" />
         <activity android:name=".HalalFoodActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".AddDictionary"></activity>
+        <activity android:name=".AddDictionary" />
         <activity android:name=".DictionaryActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -43,7 +46,7 @@
 
         <activity android:name=".SalatTimeActivity" />
         <activity android:name=".MosqueActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
