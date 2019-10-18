@@ -22,14 +22,15 @@
         <activity android:name=".HalalFoodActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddDictionary">
+        </activity>
+        <activity android:name=".DictionaryActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DictionaryActivity" />
-        <activity android:name=".LoginActivity" />
         <activity android:name=".OnboardingActivity" />
         <activity android:name=".SplashscreenActivity" />
         <activity android:name=".FoodActivity" />

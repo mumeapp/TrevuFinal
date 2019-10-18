@@ -7,6 +7,10 @@ public class HalalFood {
     private String id;
     private String gambar;
 
+    public HalalFood(){
+
+    }
+
     public HalalFood(String nama, String jumlah, String jarak, String id, String gambar){
         this.nama = nama;
         this.gambar = gambar;
