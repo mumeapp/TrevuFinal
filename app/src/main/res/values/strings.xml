@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Remu</string>
+    <string-array name="bahasaAwal">
+        <item>Jepang</item>
+        <item>Indonesia</item>
+        <item>Inggris</item>
+    </string-array>
+    <string-array name="bahasaTrans">
+        <item>Indonesia</item>
+        <item>Jepang</item>
+        <item>Inggris</item>
+    </string-array>
 </resources>

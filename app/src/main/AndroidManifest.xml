@@ -18,13 +18,17 @@
         <activity android:name=".FoodKategoriActivity" />
         <activity android:name=".HalalFoodActivity" />
         <activity android:name=".FoodKategoriActivity"></activity>
+        <activity android:name=".AddDictionary"><intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter></activity>
+        <activity android:name=".DictionaryActivity"/>
         <activity android:name=".HalalFoodActivity"></activity>
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".OnboardingActivity" />
         <activity android:name=".SplashscreenActivity" />
-        <activity android:name=".HalalFoodActivity" />
         <activity android:name=".FoodActivity" />
 
         <meta-data
@@ -34,11 +38,7 @@
         <activity android:name=".SalatTimeActivity" />
         <activity android:name=".MosqueActivity" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
