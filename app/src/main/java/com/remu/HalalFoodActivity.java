@@ -42,7 +42,7 @@ public class HalalFoodActivity extends AppCompatActivity {
 //        halalFoodCategories.setLayoutManager(layoutManager);
 //        mAdapter = new MosqueAdapter(mDataSet);
 //        halalFoodCategories.setAdapter(mAdapter);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
+
 //        rvFood.setHasFixedSize(true);
 
         rvFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this));
@@ -80,10 +80,13 @@ public class HalalFoodActivity extends AppCompatActivity {
         };
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
+
     }
+
 
     private void initializeUI() {
         rvFood = findViewById(R.id.HalalFoodCategories);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
     }
 
     @Override
