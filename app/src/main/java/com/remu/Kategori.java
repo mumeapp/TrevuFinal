@@ -2,26 +2,28 @@ package com.remu;
 
 public class Kategori {
 
-    String kategori, foto;
+    String nama, gambar;
 
-    public Kategori(String kategori, String foto) {
-        this.kategori = kategori;
-        this.foto = foto;
+    public Kategori(String nama, String gambar) {
+        this.nama = nama;
+        this.gambar = gambar;
     }
 
-    public String getKategori() {
-        return kategori;
+
+
+    public String getNama() {
+        return nama;
     }
 
-    public void setKategori(String kategori) {
-        this.kategori = kategori;
+    public void setNama(String nama) {
+        this.nama = nama;
     }
 
-    public void setFoto() {
-        this.foto = foto;
+    public String getGambar() {
+        return gambar;
     }
 
-    public String getFoto() {
-        return foto;
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
     }
 }

@@ -42,6 +42,7 @@ public class FoodKategoriActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     private String idUser;
+    public static String Kategori;
 
 
     @Override
@@ -53,7 +54,8 @@ public class FoodKategoriActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         this.idUser = currentUser.getUid();
-
+        setKategori();
+        setFoto();
         batal = findViewById(R.id.btn_batal);
         //batalin input kategori
         batal.setOnClickListener(view -> {
@@ -72,7 +74,7 @@ public class FoodKategoriActivity extends AppCompatActivity {
     }
 
     public void setFoto() {
-        this.foto = findViewById(R.id.imageKategori);
+        this.foto = findViewById(R.id.setImage);
         this.selanjutnya = findViewById(R.id.btn_Selanjutnya);
         this.foto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,19 +108,24 @@ public class FoodKategoriActivity extends AppCompatActivity {
                             String id;
                             String kategori = getKategori().getText().toString();
                             String foto = downloadUri.toString();
+                            String kate = getIntent().getStringExtra(Kategori);
 
                             Kategori kategori1 = new Kategori(kategori, foto);
-                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Kategori").push();
-                            id = databaseReference.toString();
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child(kate).push();
+                            id = databaseReference.getKey();
                             databaseReference.setValue(kategori1).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(FoodKategoriActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                        databaseReference.child("id").setValue(id);
+                                        databaseReference.child("jumlah").setValue("0");
+                                        databaseReference.child("jarak").setValue("0 KM");
+                                        Intent in = new Intent(FoodKategoriActivity.this, FoodActivity.class);
+                                        startActivity(in);
                                     }
                                 }
                             });
-
                         }
                     }
                 });

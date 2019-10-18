@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,10 +32,12 @@ import java.io.IOException;
 public class RestoranActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
+    public static String kategori= "kategori";
     private EditText Namarestoran, AlamatRestoran, Deskripsi;
-    private Button Next, Batal;
+    private Button Next;
     private ImageView foto;
     private Uri filePath;
+    private TextView Batal;
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private UploadTask uploadTask;
@@ -51,12 +54,12 @@ public class RestoranActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         this.idUser = currentUser.getUid();
 
-        this.Namarestoran = findViewById(R.id.nameRestoran);
-        this.AlamatRestoran = findViewById(R.id.alamatRestoran);
-        this.Deskripsi = findViewById(R.id.deskripsi);
-        this.Next = findViewById(R.id.Next);
-        this.Batal = findViewById(R.id.batal);
-        this.foto = findViewById(R.id.FotoRestoran);
+        this.Namarestoran = findViewById(R.id.inputKategori);
+        this.AlamatRestoran = findViewById(R.id.inputAlamat);
+        this.Deskripsi = findViewById(R.id.deskripsiSingkat);
+        this.Next = findViewById(R.id.btn_Selanjutnya);
+        this.Batal = findViewById(R.id.btn_batal);
+        this.foto = findViewById(R.id.imageLogo);
 
         foto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,9 +94,11 @@ public class RestoranActivity extends AppCompatActivity {
                             String alamat = AlamatRestoran.getText().toString();
                             String deskripsi = Deskripsi.getText().toString();
                             String foto1 = downloadUri.toString();
+                            String Kategori= null;
+
 
                             Restoran restoran = new Restoran(nama, alamat, foto1, deskripsi);
-                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").push();
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child(Kategori).push();
                             id = databaseReference.toString();
                             databaseReference.setValue(restoran).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

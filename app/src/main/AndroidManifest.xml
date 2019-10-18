@@ -17,8 +17,10 @@
         android:fullBackupContent="@xml/backup_descriptor"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".HalalFoodRestaurantActivity" />
-        <activity android:name=".RestoranActivity" />
-        <activity android:name=".FoodKategoriActivity" />
+        <activity android:name=".RestoranActivity">
+        </activity>
+        <activity android:name=".FoodKategoriActivity"/>
+
         <activity android:name=".HalalFoodActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddDictionary">
