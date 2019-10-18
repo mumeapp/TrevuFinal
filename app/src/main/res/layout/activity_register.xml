@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".RegisterActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_bg_register" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/osregular"
+        android:text="Create an account"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="460dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="150dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/osregular"
+                android:text="Username"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/RegisterUsername"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/input_grey"
+                android:hint="remuapp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="125dp"
+                android:fontFamily="@font/osregular"
+                android:text="Email"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/RegisterEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="160dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/input_grey"
+                android:hint="remuapp@remu.com"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="225dp"
+                android:fontFamily="@font/osregular"
+                android:text="Password"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/RegisterPassword"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="260dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/input_grey"
+                android:hint="sshh!"
+                android:inputType="textPassword"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp" />
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="335dp"
+                android:background="@drawable/button_green"
+                android:text="Register"
+                android:textAllCaps="false"
+                android:textColor="#ffffff" />
+
+            <Button
+                android:id="@+id/LoginWithGoogle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="410dp"
+                android:background="@drawable/ic_google_plus" />
+
+            <Button
+                android:id="@+id/LoginWithTwitter"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="410dp"
+                android:background="@drawable/ic_twitter" />
+
+            <Button
+                android:id="@+id/LoginWithFacebook"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="275dp"
+                android:layout_marginTop="410dp"
+                android:background="@drawable/ic_facebook" />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="85dp"
+        android:fontFamily="@font/osregular"
+        android:text="Already have an account?" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_blue"
+        android:text="Login to your account"
+        android:textAllCaps="false"
+        android:textColor="#ffffff" />
+</RelativeLayout>
