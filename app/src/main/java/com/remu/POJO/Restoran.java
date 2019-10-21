@@ -1,13 +1,25 @@
 package com.remu.POJO;
 
 public class Restoran {
-    private String namaRestoran, alamatRestoran, foto, deskripsi;
+    private String namaRestoran, alamatRestoran, foto, deskripsi, id;
+
+    public Restoran(){
+
+    }
 
     public Restoran(String namaRestoran, String alamatRestoran, String foto, String deskripsi) {
         this.namaRestoran = namaRestoran;
         this.alamatRestoran = alamatRestoran;
         this.foto = foto;
         this.deskripsi = deskripsi;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNamaRestoran() {

@@ -1,60 +1,158 @@
 package com.remu;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
+import com.remu.POJO.HalalFood;
+import com.remu.POJO.HalalFoodRestaurant;
+import com.remu.POJO.Restoran;
 
 public class HalalFoodRestaurantActivity extends AppCompatActivity {
-    public static String ID="id";
-    private ImageView imgFotoMkn;
-    private TextView nama, rating, deskripsi;
+
+    public static String Nama= "Nama";
     private DatabaseReference databaseReference;
+    private FirebaseRecyclerAdapter<Restoran, HalalFoodRestaurantActivity.HalalFoodRestaurantViewHolder> firebaseRecyclerAdapter;
+    private RecyclerView rvRestaurant;
+    private CardView cd;
+    private Intent getID;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restoran);
 
+        initializeUI();
 
-//        nama = findViewById(R.id.tvNama1);
-//        rating = findViewById(R.id.tvRating1);
-//        deskripsi = findViewById(R.id.tvDeskripsi1);
-//        imgFotoMkn = findViewById(R.id.imgFoto1);
+        rvRestaurant.setLayoutManager(new LinearLayoutManager(HalalFoodRestaurantActivity.this));
+
+        Query query = databaseReference.orderByKey();
+
+        FirebaseRecyclerOptions<Restoran> options = new FirebaseRecyclerOptions.Builder<Restoran>()
+                .setQuery(query, Restoran.class).build();
 
 
-        String id = getIntent().getStringExtra(ID);
-
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalaFood").child(id);
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Restoran, HalalFoodRestaurantViewHolder>(options) {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            protected void onBindViewHolder(@NonNull HalalFoodRestaurantViewHolder halalFoodRestaurantViewHolder, int i, @NonNull Restoran halalFoodRestaurant) {
+                halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
+                halalFoodRestaurantViewHolder.setNamaRestoranet(halalFoodRestaurant.getNamaRestoran());
+                halalFoodRestaurantViewHolder.setRating("5.0");
+                halalFoodRestaurantViewHolder.setJarak("0.3 KM");
 
-                Glide.with(HalalFoodRestaurantActivity.this).load(dataSnapshot.child("gambar").getValue().toString()).into(imgFotoMkn);
+                id = halalFoodRestaurant.getId();
 
-                nama.setText(dataSnapshot.child("nama").getValue().toString());
-
+                halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
+                    Intent intent = new Intent(HalalFoodRestaurantActivity.this, HalalRestaurantDetailActivity.class);
+                    intent.putExtra(HalalRestaurantDetailActivity.ID, id);
+                    startActivity(intent);
+                });
             }
 
+            @NonNull
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public HalalFoodRestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_kategori, parent, false);
 
+                return new HalalFoodRestaurantViewHolder(view);
             }
-        });
+        };
+
+        rvRestaurant.setAdapter(firebaseRecyclerAdapter);
+        cd.setOnClickListener(view -> addFood());
+
     }
-}
 
+
+    private void initializeUI() {
+        getID = getIntent();
+        String nama = getID.getStringExtra(Nama);
+        rvRestaurant = findViewById(R.id.HalalRestauran);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("HalalFood").child(nama);
+        cd = findViewById(R.id.addReastaurant);
+    }
+
+    private void addFood(){
+        String Jenis = "HalalFood";
+        Intent intent = new Intent(HalalFoodRestaurantActivity.this, RestoranActivity.class);
+        intent.putExtra(RestoranActivity.kategori, Nama);
+        intent.putExtra(RestoranActivity.Jenis, Jenis);
+        startActivity(intent);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            firebaseRecyclerAdapter.startListening();
+        }catch (Exception e){
+
+        }
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            firebaseRecyclerAdapter.stopListening();
+        }catch (Exception e){
+
+        }
+    }
+
+    public class HalalFoodRestaurantViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView foto;
+        TextView namaRestoran;
+        TextView jarak;
+        TextView rating;
+
+        public HalalFoodRestaurantViewHolder(@NonNull View itemView) {
+            super(itemView);
+            foto = itemView.findViewById(R.id.gambarRestaurant);
+            namaRestoran = itemView.findViewById(R.id.judul);
+            rating = itemView.findViewById(R.id.rating);
+            jarak = itemView.findViewById(R.id.Jarak);
+        }
+
+        public void setGambar(String foto) {
+            Glide.with(HalalFoodRestaurantActivity.this)
+                    .load(foto)
+                    .placeholder(R.drawable.bg_loading)
+                    .into(this.foto);
+
+        }
+
+        public void setNamaRestoranet(String text) {
+            namaRestoran.setText(text);
+        }
+
+        public void setRating(String text) {
+            rating.setText(text);
+        }
+
+        public void setJarak(String text) {
+                jarak.setText(text);
+        }
+    }
+
+}

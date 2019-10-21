@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -49,14 +50,14 @@ public class HalalFoodActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood halalFood) {
                 halalFoodViewHolder.setGambar(halalFood.getGambar());
                 halalFoodViewHolder.setJudul(halalFood.getNama());
-                halalFoodViewHolder.setJumlah(halalFood.getJumlah());
+                halalFoodViewHolder.setJumlah( halalFood.getJarak());
                 halalFoodViewHolder.setJarak(halalFood.getJarak());
 
-                String id = halalFood.getId();
+                String nama = halalFood.getNama();
 
                 halalFoodViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
-                    intent.putExtra(HalalFoodRestaurantActivity.ID, id);
+                    intent.putExtra(HalalFoodRestaurantActivity.Nama, nama);
                     startActivity(intent);
                 });
             }

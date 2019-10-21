@@ -13,7 +13,7 @@
     app:cardElevation="2dp">
 
     <ImageView
-        android:id="@+id/gbr1"
+        android:id="@+id/gambarRestaurant"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
@@ -25,7 +25,7 @@
         android:background="@drawable/gradient_black">
 
         <TextView
-            android:id="@+id/tul1"
+            android:id="@+id/judul"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -43,7 +43,7 @@
             android:background="@drawable/ic_star_white_24dp" />
 
         <TextView
-            android:id="@+id/tul2"
+            android:id="@+id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
