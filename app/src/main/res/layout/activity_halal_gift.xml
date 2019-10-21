@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HalalGiftActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_login" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="133dp"
+                android:layout_marginBottom="325dp"
+                app:srcCompat="@drawable/ic_keyboard_arrow_left_black_24dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/osbold"
+                android:text="Halal Gift idea"
+                android:textColor="#ffffff"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+
+            <Button
+                android:id="@+id/gift_1"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/coklat"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_2"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="95dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/toys"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_3"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="170dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/tea"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_4"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="245dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/chopstick"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_5"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="320dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/clothes"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_6"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="135dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/comic"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_7"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="95dp"
+                android:layout_marginTop="135dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/seni"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_8"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="170dp"
+                android:layout_marginTop="135dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/sensu"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_9"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="245dp"
+                android:layout_marginTop="135dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/mi"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+            <Button
+                android:id="@+id/gift_10"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="320dp"
+                android:layout_marginTop="135dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/snack"
+                android:text=""
+                android:textColor="#FFFFFF"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+            </Button>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Halal Gift Store"
+                android:textColor="#000000"
+
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="35dp"
+                android:background="@drawable/ic_plus" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_listGift"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</RelativeLayout>

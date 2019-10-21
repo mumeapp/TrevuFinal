@@ -10,7 +10,7 @@ import androidx.cardview.widget.CardView;
 public class FoodActivity extends AppCompatActivity {
 
     ImageView buttonBack;
-    CardView buttonHalalFood;
+    CardView buttonHalalFood, buttonFastFood, buttonGift;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +31,24 @@ public class FoodActivity extends AppCompatActivity {
             Intent halalFoodCategories = new Intent(FoodActivity.this, HalalFoodActivity.class);
             startActivity(halalFoodCategories);
         });
+
+        //set intent to back to previous activity
+        buttonFastFood.setOnClickListener(view -> {
+            Intent BackToMenu = new Intent(FoodActivity.this, HalalFastFoodActivity.class);
+            startActivity(BackToMenu);
+        });
+
+        //set intent to back to previous activity
+        buttonGift.setOnClickListener(view -> {
+            Intent BackToMenu = new Intent(FoodActivity.this, HalalGiftActivity.class);
+            startActivity(BackToMenu);
+        });
     }
 
     private void initializeUI() {
         buttonBack = findViewById(R.id.ButtonBack);
         buttonHalalFood = findViewById(R.id.halalFoodButton);
-
+        buttonFastFood = findViewById(R.id.HalalFastFoodButton);
+        buttonGift = findViewById(R.id.GiftIdeaButton);
     }
 }
