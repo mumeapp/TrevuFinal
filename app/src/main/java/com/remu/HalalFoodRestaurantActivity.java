@@ -38,7 +38,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
 
         String id = getIntent().getStringExtra(ID);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("FastFood").child(id);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalaFood").child(id);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
