@@ -1,4 +1,4 @@
-package com.remu;
+package com.remu.POJO;
 
 public class Restoran {
     private String namaRestoran, alamatRestoran, foto, deskripsi;
