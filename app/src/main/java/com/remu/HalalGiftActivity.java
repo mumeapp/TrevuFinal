@@ -26,6 +26,7 @@ public class HalalGiftActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<HalalGift, HalalGiftActivity.HalalGiftViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvFood;
+    private ImageView addGift;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +51,13 @@ public class HalalGiftActivity extends AppCompatActivity {
                 halalGiftViewHolder.setJudul(halalGift.getNama());
                 halalGiftViewHolder.setJarak(halalGift.getJarak());
 
-                String id = halalGift.getId();
+                String id = halalGift.getNama();
 
                 halalGiftViewHolder.itemView.setOnClickListener(view -> {
-                    Intent intent = new Intent(HalalGiftActivity.this, HalalGiftDetail.class);
-                    intent.putExtra(HalalGiftDetail.ID, id);
+                    String gambar = halalGift.getGambar();
+                    Intent intent = new Intent(HalalGiftActivity.this, HalalFoodRestaurantActivity.class);
+                    intent.putExtra(HalalFoodRestaurantActivity.Nama, id);
+                    intent.putExtra(HalalFoodRestaurantActivity.url,gambar);
                     startActivity(intent);
                 });
             }
@@ -69,14 +72,21 @@ public class HalalGiftActivity extends AppCompatActivity {
         };
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
+        addGift.setOnClickListener(View -> addGift());
     }
 
     private void initializeUI() {
-        rvFood = findViewById(R.id.HalalFoodCategories);
+        rvFood = findViewById(R.id.rv_listGift);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Gift");
+        addGift = findViewById(R.id.addGift);
         //cd = findViewById(R.id.addFood);
     }
 
+    private void addGift(){
+        Intent intent = new Intent(HalalGiftActivity.this, FoodKategoriActivity.class);
+        intent.putExtra(FoodKategoriActivity.Kategori, "Gift");
+        startActivity(intent);
+    }
     @Override
     protected void onStart() {
         super.onStart();

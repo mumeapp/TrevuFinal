@@ -17,6 +17,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".HalalFastFoodRestaurantActivity"></activity>
+        <activity android:name=".HalalGiftActivity"/>
         <activity android:name=".TourismDetail" />
         <activity android:name=".HalalFastFoodActivity" />
         <activity android:name=".TourismActivity" />
