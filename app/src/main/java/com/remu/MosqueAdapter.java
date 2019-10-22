@@ -28,7 +28,12 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MosqueAdapter.ViewHolder holder, int position) {
-        holder.mTitle.setText(mDataset.get(position));
+        //ntr ganti
+        try {
+            holder.mTitle.setText(mDataset.get(position));
+        } catch (NullPointerException e) {
+
+        }
     }
 
     @Override
