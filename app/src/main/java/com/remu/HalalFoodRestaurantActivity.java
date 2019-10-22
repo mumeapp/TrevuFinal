@@ -26,6 +26,7 @@ import com.remu.POJO.Restoran;
 
 public class HalalFoodRestaurantActivity extends AppCompatActivity {
 
+    public static final String ID = "HalalFOodRestaurantActivity";
     public static String Nama= "Nama";
     private String nama = null;
     private DatabaseReference databaseReference;
