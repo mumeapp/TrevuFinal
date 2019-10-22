@@ -10,34 +10,42 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.remu.POJO.HalalFood;
 
-public class HalalFoodActivity extends AppCompatActivity {
+public class HalalFastFoodActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
-    private FirebaseRecyclerAdapter<HalalFood, HalalFoodActivity.HalalFoodViewHolder> firebaseRecyclerAdapter;
+    private FirebaseRecyclerAdapter<HalalFood, HalalFastFoodActivity.HalalFoodViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvFood;
-    private CardView cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_halal_food);
+        setContentView(R.layout.activity_halal_fast_food);
 
         initializeUI();
+//        mDataSet = new ArrayList<>();
+//        for (int i = 0; i < 30; i++) {
+//            mDataSet.add("Title #" + i);
+//        }
+//
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        halalFoodCategories.setLayoutManager(layoutManager);
+//        mAdapter = new MosqueAdapter(mDataSet);
+//        halalFoodCategories.setAdapter(mAdapter);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
+//        rvFood.setHasFixedSize(true);
 
-        rvFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this));
+        rvFood.setLayoutManager(new LinearLayoutManager(HalalFastFoodActivity.this));
 
         Query query = databaseReference.orderByKey();
 
@@ -50,14 +58,14 @@ public class HalalFoodActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood halalFood) {
                 halalFoodViewHolder.setGambar(halalFood.getGambar());
                 halalFoodViewHolder.setJudul(halalFood.getNama());
-                halalFoodViewHolder.setJumlah( halalFood.getJarak());
+                halalFoodViewHolder.setJumlah(halalFood.getJumlah());
                 halalFoodViewHolder.setJarak(halalFood.getJarak());
 
-                String nama = halalFood.getNama();
+                String id = halalFood.getId();
 
                 halalFoodViewHolder.itemView.setOnClickListener(view -> {
-                    Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
-                    intent.putExtra(HalalFoodRestaurantActivity.Nama, nama);
+                    Intent intent = new Intent(HalalFastFoodActivity.this, HalalFoodRestaurantActivity.class);
+                    intent.putExtra(HalalFoodRestaurantActivity.ID, id);
                     startActivity(intent);
                 });
             }
@@ -72,21 +80,10 @@ public class HalalFoodActivity extends AppCompatActivity {
         };
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
-        cd.setOnClickListener(view -> addFood());
-
     }
-
 
     private void initializeUI() {
-        rvFood = findViewById(R.id.HalalFoodCategories);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
-        cd = findViewById(R.id.addFood);
-    }
-
-    private void addFood(){
-        Intent intent = new Intent(HalalFoodActivity.this, FoodKategoriActivity.class);
-        intent.putExtra(FoodKategoriActivity.Kategori, "HalalFood");
-        startActivity(intent);
+        rvFood = findViewById(R.id.HalalFastFoodCategories);
     }
 
     @Override
@@ -94,7 +91,7 @@ public class HalalFoodActivity extends AppCompatActivity {
         super.onStart();
         try {
             firebaseRecyclerAdapter.startListening();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -105,7 +102,7 @@ public class HalalFoodActivity extends AppCompatActivity {
         super.onStop();
         try {
             firebaseRecyclerAdapter.stopListening();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -126,7 +123,7 @@ public class HalalFoodActivity extends AppCompatActivity {
         }
 
         public void setGambar(String foto) {
-            Glide.with(HalalFoodActivity.this)
+            Glide.with(HalalFastFoodActivity.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading)
                     .into(fotoMkn);

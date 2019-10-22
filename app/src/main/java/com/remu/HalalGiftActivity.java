@@ -10,83 +10,71 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.remu.POJO.HalalFood;
+import com.remu.POJO.HalalGift;
 
-public class HalalFoodActivity extends AppCompatActivity {
+public class HalalGiftActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
-    private FirebaseRecyclerAdapter<HalalFood, HalalFoodActivity.HalalFoodViewHolder> firebaseRecyclerAdapter;
+    private FirebaseRecyclerAdapter<HalalGift, HalalGiftActivity.HalalGiftViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvFood;
-    private CardView cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_halal_food);
+        setContentView(R.layout.activity_halal_gift);
+
 
         initializeUI();
 
-        rvFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this));
+        rvFood.setLayoutManager(new LinearLayoutManager(HalalGiftActivity.this));
 
         Query query = databaseReference.orderByKey();
 
-        FirebaseRecyclerOptions<HalalFood> options = new FirebaseRecyclerOptions.Builder<HalalFood>()
-                .setQuery(query, HalalFood.class).build();
+        FirebaseRecyclerOptions<HalalGift> options = new FirebaseRecyclerOptions.Builder<HalalGift>()
+                .setQuery(query, HalalGift.class).build();
 
 
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<HalalFood, HalalFoodViewHolder>(options) {
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<HalalGift, HalalGiftActivity.HalalGiftViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood halalFood) {
-                halalFoodViewHolder.setGambar(halalFood.getGambar());
-                halalFoodViewHolder.setJudul(halalFood.getNama());
-                halalFoodViewHolder.setJumlah( halalFood.getJarak());
-                halalFoodViewHolder.setJarak(halalFood.getJarak());
+            protected void onBindViewHolder(@NonNull HalalGiftActivity.HalalGiftViewHolder halalGiftViewHolder, int i, @NonNull HalalGift halalGift) {
+                halalGiftViewHolder.setGambar(halalGift.getGambar());
+                halalGiftViewHolder.setJudul(halalGift.getNama());
+                halalGiftViewHolder.setJarak(halalGift.getJarak());
 
-                String nama = halalFood.getNama();
+                String id = halalGift.getId();
 
-                halalFoodViewHolder.itemView.setOnClickListener(view -> {
-                    Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
-                    intent.putExtra(HalalFoodRestaurantActivity.Nama, nama);
+                halalGiftViewHolder.itemView.setOnClickListener(view -> {
+                    Intent intent = new Intent(HalalGiftActivity.this, HalalGiftDetail.class);
+                    intent.putExtra(HalalGiftDetail.ID, id);
                     startActivity(intent);
                 });
             }
 
             @NonNull
             @Override
-            public HalalFoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public HalalGiftActivity.HalalGiftViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_kategori, parent, false);
 
-                return new HalalFoodViewHolder(view);
+                return new HalalGiftActivity.HalalGiftViewHolder(view);
             }
         };
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
-        cd.setOnClickListener(view -> addFood());
-
     }
-
 
     private void initializeUI() {
         rvFood = findViewById(R.id.HalalFoodCategories);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
-        cd = findViewById(R.id.addFood);
-    }
-
-    private void addFood(){
-        Intent intent = new Intent(HalalFoodActivity.this, FoodKategoriActivity.class);
-        intent.putExtra(FoodKategoriActivity.Kategori, "HalalFood");
-        startActivity(intent);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Gift");
+        //cd = findViewById(R.id.addFood);
     }
 
     @Override
@@ -94,7 +82,7 @@ public class HalalFoodActivity extends AppCompatActivity {
         super.onStart();
         try {
             firebaseRecyclerAdapter.startListening();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -105,19 +93,19 @@ public class HalalFoodActivity extends AppCompatActivity {
         super.onStop();
         try {
             firebaseRecyclerAdapter.stopListening();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
-    public class HalalFoodViewHolder extends RecyclerView.ViewHolder {
+    public class HalalGiftViewHolder extends RecyclerView.ViewHolder {
 
         ImageView fotoMkn;
         TextView judul;
         TextView jarak;
         TextView jumlah;
 
-        public HalalFoodViewHolder(@NonNull View itemView) {
+        public HalalGiftViewHolder(@NonNull View itemView) {
             super(itemView);
             fotoMkn = itemView.findViewById(R.id.Gambarkategoi);
             judul = itemView.findViewById(R.id.NamaKategori);
@@ -126,7 +114,7 @@ public class HalalFoodActivity extends AppCompatActivity {
         }
 
         public void setGambar(String foto) {
-            Glide.with(HalalFoodActivity.this)
+            Glide.with(HalalGiftActivity.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading)
                     .into(fotoMkn);

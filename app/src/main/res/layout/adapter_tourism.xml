@@ -13,7 +13,7 @@
     app:cardElevation="2dp">
 
     <ImageView
-        android:id="@+id/gambarRestaurant"
+        android:id="@+id/Gambarkategoi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
@@ -25,34 +25,29 @@
         android:background="@drawable/gradient_black">
 
         <TextView
-            android:id="@+id/judul"
+            android:id="@+id/NamaKategori"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="100dp"
+            android:fontFamily="@font/osbold"
             android:text="title"
             android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="135dp"
-            android:background="@drawable/ic_star_white_24dp" />
+            android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/rating"
+            android:id="@+id/JumlahRestoran"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="137.5dp"
+            android:fontFamily="@font/osregular"
             android:text="rating"
             android:textColor="#ffffff"
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/Jarak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

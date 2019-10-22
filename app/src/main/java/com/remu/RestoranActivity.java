@@ -34,6 +34,7 @@ public class RestoranActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
     public static String kategori= "kategori";
+    public static String Jenis = "jenis";
     private EditText Namarestoran, AlamatRestoran, Deskripsi;
     private Button Next;
     private ImageView foto;
@@ -75,7 +76,7 @@ public class RestoranActivity extends AppCompatActivity {
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StorageReference restoran = storageReference.child("Food").child("Fast Food");
+                StorageReference restoran = storageReference.child("Food").child("Restoran").child(Jenis);
                 uploadTask = restoran.putFile(filePath);
                 Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
@@ -88,6 +89,7 @@ public class RestoranActivity extends AppCompatActivity {
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
+                        Intent get= getIntent();
                         if (task.isSuccessful()) {
                             Uri downloadUri = task.getResult();
                             String id;
@@ -95,17 +97,19 @@ public class RestoranActivity extends AppCompatActivity {
                             String alamat = AlamatRestoran.getText().toString();
                             String deskripsi = Deskripsi.getText().toString();
                             String foto1 = downloadUri.toString();
-                            String Kategori= null;
+                            String Kategori= get.getStringExtra(kategori);
+                            String jenis = get.getStringExtra(Jenis);
 
 
                             Restoran restoran = new Restoran(nama, alamat, foto1, deskripsi);
-                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child(Kategori).push();
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child(jenis).child(Kategori).push();
                             id = databaseReference.toString();
                             databaseReference.setValue(restoran).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(RestoranActivity.this, "Success", Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
                             });

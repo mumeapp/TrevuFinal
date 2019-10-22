@@ -111,7 +111,7 @@ public class FoodKategoriActivity extends AppCompatActivity {
                             String kate = getIntent().getStringExtra(Kategori);
 
                             Kategori kategori1 = new Kategori(kategori, foto);
-                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child(kate).push();
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child(kate);
                             id = databaseReference.getKey();
                             databaseReference.setValue(kategori1).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
