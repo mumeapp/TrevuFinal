@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,7 +66,7 @@ public class HalalFastFoodActivity extends AppCompatActivity {
 
                 halalFoodViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(HalalFastFoodActivity.this, HalalFoodRestaurantActivity.class);
-                    intent.putExtra(HalalFoodRestaurantActivity.ID, id);
+                    intent.putExtra(HalalFoodRestaurantActivity.id, id);
                     startActivity(intent);
                 });
             }
@@ -92,7 +93,7 @@ public class HalalFastFoodActivity extends AppCompatActivity {
         try {
             firebaseRecyclerAdapter.startListening();
         } catch (Exception e) {
-
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -103,7 +104,7 @@ public class HalalFastFoodActivity extends AppCompatActivity {
         try {
             firebaseRecyclerAdapter.stopListening();
         } catch (Exception e) {
-
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -114,7 +115,7 @@ public class HalalFastFoodActivity extends AppCompatActivity {
         TextView jarak;
         TextView jumlah;
 
-        public HalalFoodViewHolder(@NonNull View itemView) {
+        HalalFoodViewHolder(@NonNull View itemView) {
             super(itemView);
             fotoMkn = itemView.findViewById(R.id.Gambarkategoi);
             judul = itemView.findViewById(R.id.NamaKategori);
@@ -122,18 +123,18 @@ public class HalalFastFoodActivity extends AppCompatActivity {
             jarak = itemView.findViewById(R.id.Jarak);
         }
 
-        public void setGambar(String foto) {
+        void setGambar(String foto) {
             Glide.with(HalalFastFoodActivity.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading)
                     .into(fotoMkn);
         }
 
-        public void setJudul(String text) {
+        void setJudul(String text) {
             judul.setText(text);
         }
 
-        public void setJumlah(String text) {
+        void setJumlah(String text) {
             jumlah.setText(text);
         }
 

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +22,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -45,7 +43,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
     MultiSnapRecyclerView listMasjid;
 
-    //sydney
+    //sydney, change later to malang
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
     // The entry points to the Places API.
     GeoDataClient mGeoDataClient;
@@ -75,6 +73,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         jamSolat.setOnExpandedListener((v, isExpanded) -> {
             if (isExpanded) {
                 jamSolat.setTitle("Jadwal Sholat Hari Ini");
+
                 someInformation.setVisibility(View.INVISIBLE);
             } else {
                 jamSolat.setTitle("Jadwal Sholat Selanjutnya");
@@ -174,7 +173,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                 getLocationPermission();
             }
         } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
+            Log.e("Exception: %s", e.toString());
         }
     }
 
@@ -185,26 +184,23 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
          */
         try {
             Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-            locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    if (task.isSuccessful()) {
-                        // Set the map's camera position to the current location of the device.
-                        mLastKnownLocation = task.getResult();
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                new LatLng(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude()), 15));
-                    } else {
-                        Log.d(TAG, "Current location is null. Using defaults.");
-                        Log.e(TAG, "Exception: %s", task.getException());
-                        mMap.moveCamera(CameraUpdateFactory
-                                .newLatLngZoom(mDefaultLocation, 15));
-                        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                    }
+            locationResult.addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    // Set the map's camera position to the current location of the device.
+                    mLastKnownLocation = task.getResult();
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude()), 15));
+                } else {
+                    Log.d(TAG, "Current location is null. Using defaults.");
+                    Log.e(TAG, "Exception: %s", task.getException());
+                    mMap.moveCamera(CameraUpdateFactory
+                            .newLatLngZoom(mDefaultLocation, 15));
+                    mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 }
             });
         } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
+            Log.e("Exception: %s", e.toString());
         }
     }
 

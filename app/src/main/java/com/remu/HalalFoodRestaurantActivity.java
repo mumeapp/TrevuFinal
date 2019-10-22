@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +21,6 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.remu.POJO.HalalFood;
-import com.remu.POJO.HalalFoodRestaurant;
 import com.remu.POJO.Restoran;
 
 public class HalalFoodRestaurantActivity extends AppCompatActivity {
@@ -32,7 +31,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
     private RecyclerView rvRestaurant;
     private CardView cd;
     private Intent getID;
-    private String id;
+    public static String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +103,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
         try {
             firebaseRecyclerAdapter.startListening();
         }catch (Exception e){
-
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -115,7 +114,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
         try {
             firebaseRecyclerAdapter.stopListening();
         }catch (Exception e){
-
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -126,7 +125,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
         TextView jarak;
         TextView rating;
 
-        public HalalFoodRestaurantViewHolder(@NonNull View itemView) {
+        HalalFoodRestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
             foto = itemView.findViewById(R.id.gambarRestaurant);
             namaRestoran = itemView.findViewById(R.id.judul);
@@ -134,7 +133,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
             jarak = itemView.findViewById(R.id.Jarak);
         }
 
-        public void setGambar(String foto) {
+        void setGambar(String foto) {
             Glide.with(HalalFoodRestaurantActivity.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading)
@@ -142,7 +141,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
 
         }
 
-        public void setNamaRestoranet(String text) {
+        void setNamaRestoranet(String text) {
             namaRestoran.setText(text);
         }
 
