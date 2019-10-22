@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +27,7 @@ public class HalalFastFoodActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<HalalFood, HalalFastFoodActivity.HalalFoodViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvFood;
+    private CardView cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,6 @@ public class HalalFastFoodActivity extends AppCompatActivity {
 //        halalFoodCategories.setLayoutManager(layoutManager);
 //        mAdapter = new MosqueAdapter(mDataSet);
 //        halalFoodCategories.setAdapter(mAdapter);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFood");
 //        rvFood.setHasFixedSize(true);
 
         rvFood.setLayoutManager(new LinearLayoutManager(HalalFastFoodActivity.this));
@@ -65,7 +66,7 @@ public class HalalFastFoodActivity extends AppCompatActivity {
 
                 halalFoodViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(HalalFastFoodActivity.this, HalalFoodRestaurantActivity.class);
-                    intent.putExtra(HalalFoodRestaurantActivity.ID, id);
+                    intent.putExtra(HalalFoodRestaurantActivity.Nama, id);
                     startActivity(intent);
                 });
             }
@@ -80,10 +81,13 @@ public class HalalFastFoodActivity extends AppCompatActivity {
         };
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
+        cd.setOnClickListener(view -> addFood());
     }
 
     private void initializeUI() {
         rvFood = findViewById(R.id.HalalFastFoodCategories);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("HalalFastFood");
+        cd = findViewById(R.id.addNew);
     }
 
     @Override
@@ -105,6 +109,12 @@ public class HalalFastFoodActivity extends AppCompatActivity {
         } catch (Exception e) {
 
         }
+    }
+
+    private void addFood(){
+        Intent intent = new Intent(HalalFastFoodActivity.this, FoodKategoriActivity.class);
+        intent.putExtra(FoodKategoriActivity.Kategori, "HalalFastFood");
+        startActivity(intent);
     }
 
     public class HalalFoodViewHolder extends RecyclerView.ViewHolder {

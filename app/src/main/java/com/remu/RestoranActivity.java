@@ -76,7 +76,7 @@ public class RestoranActivity extends AppCompatActivity {
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StorageReference restoran = storageReference.child("Food").child("Restoran").child(Jenis);
+                StorageReference restoran = storageReference.child("Food").child("Restoran").child(getIntent().getStringExtra(Jenis));
                 uploadTask = restoran.putFile(filePath);
                 Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override

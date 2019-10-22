@@ -27,6 +27,7 @@ import com.remu.POJO.Restoran;
 public class HalalFoodRestaurantActivity extends AppCompatActivity {
 
     public static String Nama= "Nama";
+    private String nama = null;
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<Restoran, HalalFoodRestaurantActivity.HalalFoodRestaurantViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvRestaurant;
@@ -52,8 +53,10 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Restoran, HalalFoodRestaurantViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull HalalFoodRestaurantViewHolder halalFoodRestaurantViewHolder, int i, @NonNull Restoran halalFoodRestaurant) {
+
                 halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
-                halalFoodRestaurantViewHolder.setNamaRestoranet(halalFoodRestaurant.getNamaRestoran());
+
+                halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
                 halalFoodRestaurantViewHolder.setRating("5.0");
                 halalFoodRestaurantViewHolder.setJarak("0.3 KM");
 
@@ -69,7 +72,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
             @NonNull
             @Override
             public HalalFoodRestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_kategori, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_restoran, parent, false);
 
                 return new HalalFoodRestaurantViewHolder(view);
             }
@@ -83,7 +86,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
 
     private void initializeUI() {
         getID = getIntent();
-        String nama = getID.getStringExtra(Nama);
+        nama = getID.getStringExtra(Nama);
         rvRestaurant = findViewById(R.id.HalalRestauran);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("HalalFood").child(nama);
         cd = findViewById(R.id.addReastaurant);
@@ -92,7 +95,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
     private void addFood(){
         String Jenis = "HalalFood";
         Intent intent = new Intent(HalalFoodRestaurantActivity.this, RestoranActivity.class);
-        intent.putExtra(RestoranActivity.kategori, Nama);
+        intent.putExtra(RestoranActivity.kategori, nama);
         intent.putExtra(RestoranActivity.Jenis, Jenis);
         startActivity(intent);
 
@@ -135,14 +138,14 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
         }
 
         public void setGambar(String foto) {
+
             Glide.with(HalalFoodRestaurantActivity.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading)
                     .into(this.foto);
-
         }
 
-        public void setNamaRestoranet(String text) {
+        public void setNamaRestoran(String text) {
             namaRestoran.setText(text);
         }
 
