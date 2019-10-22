@@ -54,10 +54,11 @@ public class HalalFoodActivity extends AppCompatActivity {
                 halalFoodViewHolder.setJarak(halalFood.getJarak());
 
                 String nama = halalFood.getNama();
-
+                String url = halalFood.getGambar();
                 halalFoodViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
                     intent.putExtra(HalalFoodRestaurantActivity.Nama, nama);
+                    intent.putExtra(HalalFoodRestaurantActivity.url, url);
                     startActivity(intent);
                 });
             }

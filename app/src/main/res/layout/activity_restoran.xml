@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:layout_collapseParallaxMultiplier="@integer/google_play_services_version"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -17,14 +18,12 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/kategoriGambar"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/bg_halal_food" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/ic_halal_food_bg_obj" />
+                android:scaleType="fitXY"
+                android:background="@drawable/bg_loading"
+                />
 
             <EditText
                 android:layout_width="match_parent"
@@ -53,17 +52,6 @@
                 android:textColor="#ffffff"
                 android:textSize="30sp" />
 
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="110dp"
-                android:fontFamily="@font/osextrabold"
-                android:text="Food"
-                android:textColor="#ffffff"
-                android:textSize="30sp" />
-
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -78,12 +66,6 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/ic_keyboard_arrow_left_black_24dp" />
-
-            <ImageView
-                android:layout_width="300dp"
-                android:layout_height="200dp"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/ic_food_logo" />
         </RelativeLayout>
 
 
