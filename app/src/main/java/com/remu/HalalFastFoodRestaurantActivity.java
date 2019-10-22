@@ -104,7 +104,6 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
         img = findViewById(R.id.kategoriGambar);
         Glide.with(HalalFastFoodRestaurantActivity.this)
                 .load(url)
-                .fitCenter()
                 .into(img);
     }
 
