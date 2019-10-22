@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,8 @@ public class HalalFastFoodActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter<HalalFood, HalalFastFoodActivity.HalalFoodViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvFood;
     private CardView cd;
+    private String gambar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +38,8 @@ public class HalalFastFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_halal_fast_food);
 
         initializeUI();
-//        mDataSet = new ArrayList<>();
-//        for (int i = 0; i < 30; i++) {
-//            mDataSet.add("Title #" + i);
-//        }
-//
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        halalFoodCategories.setLayoutManager(layoutManager);
-//        mAdapter = new MosqueAdapter(mDataSet);
-//        halalFoodCategories.setAdapter(mAdapter);
-//        rvFood.setHasFixedSize(true);
+
+
 
         rvFood.setLayoutManager(new LinearLayoutManager(HalalFastFoodActivity.this));
 
@@ -61,12 +56,12 @@ public class HalalFastFoodActivity extends AppCompatActivity {
                 halalFoodViewHolder.setJudul(halalFood.getNama());
                 halalFoodViewHolder.setJumlah(halalFood.getJumlah());
                 halalFoodViewHolder.setJarak(halalFood.getJarak());
-
-                String id = halalFood.getId();
-
+                String id = halalFood.getNama();
                 halalFoodViewHolder.itemView.setOnClickListener(view -> {
-                    Intent intent = new Intent(HalalFastFoodActivity.this, HalalFoodRestaurantActivity.class);
-                    intent.putExtra(HalalFoodRestaurantActivity.Nama, id);
+                    gambar = halalFood.getGambar();
+                    Intent intent = new Intent(HalalFastFoodActivity.this, HalalFastFoodRestaurantActivity.class);
+                    intent.putExtra(HalalFastFoodRestaurantActivity.Nama, id);
+                    intent.putExtra(HalalFastFoodRestaurantActivity.gambar,gambar);
                     startActivity(intent);
                 });
             }

@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".HalalFastFoodRestaurantActivity"></activity>
         <activity android:name=".TourismDetail" />
+        <activity android:name=".HalalFastFoodActivity" />
         <activity android:name=".TourismActivity" />
         <activity android:name=".FastFoodActivity" />
         <activity android:name=".FindFriendsActivity" />
@@ -39,14 +41,14 @@
         <activity android:name=".OnboardingActivity" />
         <activity android:name=".SplashscreenActivity" />
         <activity android:name=".FoodActivity" />
-        <activity android:name=".SalatTimeActivity" />
-        <activity android:name=".MosqueActivity" />
-        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8" />
 
+        <activity android:name=".SalatTimeActivity" />
+        <activity android:name=".MosqueActivity" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
