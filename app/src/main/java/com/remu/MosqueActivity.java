@@ -2,14 +2,12 @@ package com.remu;
 
 import android.Manifest;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Range;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,34 +31,22 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.remu.POJO.PrayerTime;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 
 public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MosqueActivity";
 
-    private static String url = "http://api.aladhan.com/v1/timingsByCity?city=Selangor&country=Malaysia&method=3";
-
-    ArrayList<HashMap<String, String>> prayerList;
+    private PrayerTime prayerTime;
 
     ExpandableCardView jamSolat;
     RelativeLayout someInformation;
-    TextView jamSolatSelanjutnya;
-    TextView solatSelanjutnya;
-    TextView timeFajr;
-    TextView timeDhuhr;
-    TextView timeAsr;
-    TextView timeMahgrib;
-    TextView timeIsha;
+    TextView jamSolatSelanjutnya, solatSelanjutnya, timeFajr, timeDhuhr, timeAsr, timeMahgrib, timeIsha;
+    LinearLayout layoutFajr, layoutDhuhr, layoutAsr, layoutMaghrib, layoutIsha;
 
     MultiSnapRecyclerView listMasjid;
 
@@ -89,7 +75,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
         //initialize ui
         initializeUI();
-        new GetData().execute();
 
         //set title for expandable card
         jamSolat.setOnExpandedListener((v, isExpanded) -> {
@@ -133,116 +118,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
-    private class GetData extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            progressDialog = new ProgressDialog(SalatTimeActivity.this);
-//            progressDialog.setMessage("Please wait...");
-//            progressDialog.setCancelable(false);
-//            progressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            HttpHandler httpHandler = new HttpHandler();
-
-            String jsonStr = httpHandler.makeServiceCall(url);
-
-            Log.e(TAG, "Response from url: " + jsonStr);
-
-            if (jsonStr != null) {
-                try {
-                    JSONObject timings = new JSONObject(jsonStr).getJSONObject("data").getJSONObject("timings");
-
-                    String fajr = timings.getString("Fajr");
-                    String dhuhr = timings.getString("Dhuhr");
-                    String asr = timings.getString("Asr");
-                    String maghrib = timings.getString("Maghrib");
-                    String isha = timings.getString("Isha");
-
-                    HashMap<String, String> fajrHash = new HashMap<>();
-                    HashMap<String, String> dhuhrHash = new HashMap<>();
-                    HashMap<String, String> asrHash = new HashMap<>();
-                    HashMap<String, String> magribHash = new HashMap<>();
-                    HashMap<String, String> ishaHash = new HashMap<>();
-
-                    fajrHash.put("name", "Fajr");
-                    fajrHash.put("time", fajr);
-                    dhuhrHash.put("name", "Dhuhr");
-                    dhuhrHash.put("time", dhuhr);
-                    asrHash.put("name", "Asr");
-                    asrHash.put("time", asr);
-                    magribHash.put("name", "Maghrib");
-                    magribHash.put("time", maghrib);
-                    ishaHash.put("name", "Isha");
-                    ishaHash.put("time", isha);
-
-                    prayerList.add(fajrHash);
-                    prayerList.add(dhuhrHash);
-                    prayerList.add(asrHash);
-                    prayerList.add(magribHash);
-                    prayerList.add(ishaHash);
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    });
-                }
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-//            if (progressDialog.isShowing()) {
-//                progressDialog.dismiss();
-//            }
-
-            Calendar c = Calendar.getInstance();
-            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-            String currentTime = df.format(c.getTime());
-
-            HashMap<String, String> temp = nextPrayerTime(currentTime);
-            jamSolatSelanjutnya.setText(temp.get("time"));
-            solatSelanjutnya.setText(temp.get("name"));
-
-            timeFajr.setText(prayerList.get(0).get("time"));
-            timeDhuhr.setText(prayerList.get(1).get("time"));
-            timeAsr.setText(prayerList.get(2).get("time"));
-            timeMahgrib.setText(prayerList.get(3).get("time"));
-            timeIsha.setText(prayerList.get(4).get("time"));
-//                        ListAdapter adapter = new SimpleAdapter(
-//                    SalatTimeActivity.this, prayerList,
-//                    R.layout.salat_time_list_item, new String[]{"name", "time"}, new int[]{R.id.name,
-//                    R.id.time});
-//
-//            listView.setAdapter(adapter);
-        }
-
-    }
-
     @Override
     protected void slideBackSuccess() {
         finish();
@@ -268,7 +143,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     }
 
     private void getLocationPermission() {
-
         //WILL BE MOVED TO PERMISSIONACTIVITY LATER!
         Dexter.withActivity(MosqueActivity.this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -339,7 +213,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     private void initializeUI() {
         jamSolat = findViewById(R.id.jamSolat);
         someInformation = findViewById(R.id.someInformation);
-        prayerList = new ArrayList<>();
         listMasjid = findViewById(R.id.listMasjid);
         jamSolatSelanjutnya = someInformation.findViewById(R.id.jamSolatSelanjutnya);
         solatSelanjutnya = someInformation.findViewById(R.id.solatSelanjutnya);
@@ -348,27 +221,29 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         timeAsr = jamSolat.findViewById(R.id.time_asr);
         timeMahgrib = jamSolat.findViewById(R.id.time_maghrib);
         timeIsha = jamSolat.findViewById(R.id.time_isha);
+        ArrayList<TextView> textViews = new ArrayList<TextView>(){{
+            add(jamSolatSelanjutnya);
+            add(solatSelanjutnya);
+            add(timeFajr);
+            add(timeDhuhr);
+            add(timeAsr);
+            add(timeMahgrib);
+            add(timeIsha);
+        }};
+        layoutFajr = jamSolat.findViewById(R.id.layout_fajr);
+        layoutDhuhr = jamSolat.findViewById(R.id.layout_dhuhr);
+        layoutAsr = jamSolat.findViewById(R.id.layout_asr);
+        layoutMaghrib = jamSolat.findViewById(R.id.layout_maghrib);
+        layoutIsha = jamSolat.findViewById(R.id.layout_isha);
+        ArrayList<LinearLayout> linearLayouts = new ArrayList<LinearLayout>(){{
+            add(layoutFajr);
+            add(layoutDhuhr);
+            add(layoutAsr);
+            add(layoutMaghrib);
+            add(layoutIsha);
+        }};
+        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, textViews, linearLayouts);
+        prayerTime.execute();
     }
 
-    private HashMap<String, String> nextPrayerTime(String currentTime) {
-        HashMap<String, String> currentPrayerTime = new HashMap<String, String>();
-
-        int index = 0;
-
-        for (int i = 0; i < prayerList.size() - 1; i++) {
-            int rangeBottom = (Integer.parseInt(prayerList.get(i).get("time").split(":")[0]) * 60) + Integer.parseInt(prayerList.get(i).get("time").split(":")[1]);
-            int rangeTop = (Integer.parseInt(prayerList.get(i + 1).get("time").split(":")[0]) * 60) + Integer.parseInt(prayerList.get(i + 1).get("time").split(":")[1]);
-            int currentTimeMnt = (Integer.parseInt(currentTime.split(":")[0]) * 60) + Integer.parseInt(currentTime.split(":")[1]);
-
-            Range<Integer> myRange = new Range<Integer>(rangeBottom, rangeTop);
-            if (myRange.contains(currentTimeMnt)){
-                index = i + 1;
-                break;
-            }
-        }
-
-        currentPrayerTime.put("name", prayerList.get(index).get("name"));
-        currentPrayerTime.put("time", prayerList.get(index).get("time"));
-        return currentPrayerTime;
-    }
 }

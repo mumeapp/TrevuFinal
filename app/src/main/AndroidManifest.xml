@@ -46,7 +46,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8" />
 
-        <activity android:name=".SalatTimeActivity" />
         <activity android:name=".MosqueActivity" />
         <activity android:name=".MainActivity" />
     </application>
