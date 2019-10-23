@@ -1,12 +1,8 @@
 package com.remu;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Range;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -16,13 +12,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.remu.POJO.PrayerTime;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         //set nama
         getCurrentUser(currentUser);
+
         //go to mosque activity
         mosqueCardView.setOnClickListener(view -> {
             Intent viewMosque = new Intent(MainActivity.this, MosqueActivity.class);
@@ -98,4 +89,5 @@ public class MainActivity extends AppCompatActivity {
             nama.setText(name);
         }
     }
+
 }

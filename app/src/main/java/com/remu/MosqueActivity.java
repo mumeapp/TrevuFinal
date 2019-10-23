@@ -80,7 +80,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         jamSolat.setOnExpandedListener((v, isExpanded) -> {
             if (isExpanded) {
                 jamSolat.setTitle("Jadwal Sholat Hari Ini");
-
                 someInformation.setVisibility(View.INVISIBLE);
             } else {
                 jamSolat.setTitle("Jadwal Sholat Selanjutnya");

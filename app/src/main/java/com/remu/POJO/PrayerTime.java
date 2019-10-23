@@ -25,12 +25,12 @@ import java.util.HashMap;
 
 public class PrayerTime extends AsyncTask<Void, Void, Void> {
 
-    private static String TAG;
-    private static Context context;
+    private String TAG;
+    private Context context;
     private static String url = "http://api.aladhan.com/v1/timingsByCity?city=Selangor&country=Malaysia&method=3";
-    private static ArrayList<HashMap<String, String>> prayerList = new ArrayList<HashMap<String, String>>();
-    private static ArrayList<TextView> textViews = new ArrayList<>();
-    private static ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
+    private static ArrayList<HashMap<String, String>> prayerList;
+    private ArrayList<TextView> textViews = new ArrayList<>();
+    private ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
 
     public PrayerTime(Context context, String TAG, ArrayList<TextView> textViews) {
         this.context = context;
@@ -60,35 +60,28 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
             try {
                 JSONObject timings = new JSONObject(jsonStr).getJSONObject("data").getJSONObject("timings");
 
-
-                String fajr = timings.getString("Fajr");
-                String dhuhr = timings.getString("Dhuhr");
-                String asr = timings.getString("Asr");
-                String maghrib = timings.getString("Maghrib");
-                String isha = timings.getString("Isha");
-
-                HashMap<String, String> fajrHash = new HashMap<>();
-                HashMap<String, String> dhuhrHash = new HashMap<>();
-                HashMap<String, String> asrHash = new HashMap<>();
-                HashMap<String, String> magribHash = new HashMap<>();
-                HashMap<String, String> ishaHash = new HashMap<>();
-
-                fajrHash.put("name", "Fajr");
-                fajrHash.put("time", fajr);
-                dhuhrHash.put("name", "Dhuhr");
-                dhuhrHash.put("time", dhuhr);
-                asrHash.put("name", "Asr");
-                asrHash.put("time", asr);
-                magribHash.put("name", "Maghrib");
-                magribHash.put("time", maghrib);
-                ishaHash.put("name", "Isha");
-                ishaHash.put("time", isha);
-
-                prayerList.add(fajrHash);
-                prayerList.add(dhuhrHash);
-                prayerList.add(asrHash);
-                prayerList.add(magribHash);
-                prayerList.add(ishaHash);
+                prayerList = new ArrayList<HashMap<String, String>>(){{
+                    add(new HashMap<String, String>(){{
+                        put("name", "Fajr");
+                        put("time", timings.getString("Fajr"));
+                    }});
+                    add(new HashMap<String, String>(){{
+                        put("name", "Dhuhr");
+                        put("time", timings.getString("Dhuhr"));
+                    }});
+                    add(new HashMap<String, String>(){{
+                        put("name", "Asr");
+                        put("time", timings.getString("Asr"));
+                    }});
+                    add(new HashMap<String, String>(){{
+                        put("name", "Maghrib");
+                        put("time", timings.getString("Maghrib"));
+                    }});
+                    add(new HashMap<String, String>(){{
+                        put("name", "Isha");
+                        put("time", timings.getString("Isha"));
+                    }});
+                }};
             } catch (final JSONException e) {
                 Log.e(TAG, "Json parsing error: " + e.getMessage());
             }
@@ -141,10 +134,14 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
             int rangeTop = (Integer.parseInt(prayerList.get(i + 1).get("time").split(":")[0]) * 60) + Integer.parseInt(prayerList.get(i + 1).get("time").split(":")[1]);
             int currentTimeMnt = (Integer.parseInt(currentTime.split(":")[0]) * 60) + Integer.parseInt(currentTime.split(":")[1]);
 
-            Range<Integer> myRange = new Range<Integer>(rangeBottom, rangeTop);
-            if (myRange.contains(currentTimeMnt)) {
-                index = i + 1;
-                break;
+            try {
+                Range<Integer> myRange = new Range<Integer>(rangeBottom, rangeTop);
+                if (myRange.contains(currentTimeMnt)) {
+                    index = i + 1;
+                    break;
+                }
+            } catch (IllegalArgumentException ignored) {
+
             }
         }
 
