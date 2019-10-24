@@ -60,6 +60,7 @@ public class SetAddressActivity extends AppCompatActivity {
                 in.putExtra(RestoranActivity.Jenis, jenis);
                 in.putExtra(RestoranActivity.kategori, kategori);
                 startActivity(in);
+                finish();
             }
         }
     }
