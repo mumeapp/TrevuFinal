@@ -51,7 +51,7 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
         initializeUI();
 
 
-
+//Get Current Location
         FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override

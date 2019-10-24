@@ -33,11 +33,7 @@ import java.io.IOException;
 public class RestoranActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
-    public static String kategori= "kategori";
-    public static String Jenis = "jenis";
-    public static String lat = "lat";
-    public static String lang="lang";
-    public static String nama= "nama";
+    public static String kategori= "kategori",Jenis = "jenis", nama= "nama", lang="lang", lat = "lat", namaRestoran= "nama", deskripsi = "desk";
     private EditText Namarestoran, Deskripsi;
     private Button Next, AlamatRestoran;
     private ImageView foto;
@@ -65,6 +61,9 @@ public class RestoranActivity extends AppCompatActivity {
         this.foto = findViewById(R.id.imageLogo);
 
         AlamatRestoran.setOnClickListener(View -> setAlamat());
+
+        Namarestoran.setText(getIntent().getStringExtra(namaRestoran));
+        Deskripsi.setText((getIntent().getStringExtra(deskripsi)));
 
         foto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +138,8 @@ public class RestoranActivity extends AppCompatActivity {
         String jenis = getIntent().getStringExtra(Jenis);
         String kate = getIntent().getStringExtra(kategori);
         Intent in = new Intent(this, SetAddressActivity.class);
+        in.putExtra(SetAddressActivity.NamaRestoran, Namarestoran.getText().toString());
+        in.putExtra(SetAddressActivity.Deskripsi, Deskripsi.getText().toString());
         in.putExtra(SetAddressActivity.Jenis,jenis);
         in.putExtra(SetAddressActivity.Kategori, kate);
         startActivity(in);

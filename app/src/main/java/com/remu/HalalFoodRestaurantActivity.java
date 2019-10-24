@@ -1,7 +1,9 @@
 package com.remu;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,22 +16,25 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.remu.POJO.HalalFood;
-import com.remu.POJO.HalalFoodRestaurant;
+import com.remu.POJO.Distance;
 import com.remu.POJO.Restoran;
+
+import java.text.DecimalFormat;
 
 public class HalalFoodRestaurantActivity extends AppCompatActivity {
 
     public static final String ID = "HalalFOodRestaurantActivity";
     public static String Nama= "Nama", url= "url";
-    private String nama = null;
+    private String nama = null, myLat, myLong;
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<Restoran, HalalFoodRestaurantActivity.HalalFoodRestaurantViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvRestaurant;
@@ -46,6 +51,24 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
 
         initializeUI();
 
+        //Get Current Location
+        FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null){
+                    myLat = Double.toString(location.getLatitude());
+                    myLong = Double.toString(location.getLongitude());
+                    // Do it all with location
+                    Log.d("My Current location", "Lat : " + location.getLatitude() + " Long : " + location.getLongitude());
+                    // Display in Toast
+//                    Toast.makeText(HalalFastFoodRestaurantActivity.this,
+//                            "Lat : " + location.getLatitude() + " Long : " + location.getLongitude(),
+//                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         setImage(getIntent().getStringExtra(url));
         kategori.setText(nama);
         rvRestaurant.setLayoutManager(new LinearLayoutManager(HalalFoodRestaurantActivity.this));
@@ -59,11 +82,15 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Restoran, HalalFoodRestaurantViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull HalalFoodRestaurantViewHolder halalFoodRestaurantViewHolder, int i, @NonNull Restoran halalFoodRestaurant) {
-
+                String LatLong = halalFoodRestaurant.getAlamatRestoran();
+                String getLatLong[] = LatLong.split(",");
+                String getLat= getLatLong[0], getLong=getLatLong[1];
+                DecimalFormat df = new DecimalFormat("#.##");
+                double jarak = getJarak(Double.parseDouble(myLat), Double.parseDouble(getLat),Double.parseDouble(myLong), Double.parseDouble(getLong));
                 halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
                 halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
                 halalFoodRestaurantViewHolder.setRating("5.0");
-                halalFoodRestaurantViewHolder.setJarak("0.3 KM");
+                halalFoodRestaurantViewHolder.setJarak(df.format(jarak)+" KM");
 
                 id = halalFoodRestaurant.getId();
 
@@ -134,6 +161,11 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
+    }
+
+    private double getJarak(double lat1, double lat2, double long1, double long2){
+        Distance distance = new Distance();
+        return distance.distance(lat1, lat2, long1, long2);
     }
 
     public class HalalFoodRestaurantViewHolder extends RecyclerView.ViewHolder {

@@ -12,16 +12,22 @@ import com.rtchagas.pingplacepicker.PingPlacePicker;
 public class SetAddressActivity extends AppCompatActivity {
 
     private static final int REQUEST_PLACE_PICKER = 1;
-    public static String Jenis= "jenis", Kategori= "kategori";
+    public static String Jenis= "jenis", Kategori= "kategori", NamaRestoran= "nama", Deskripsi= "desk";
     private String lat, lang, nama;
-    private String jenis, kategori;
+    private String jenis, kategori, namaRestoran, deskripsi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_address);
+
+        namaRestoran = getIntent().getStringExtra(NamaRestoran);
+        deskripsi = getIntent().getStringExtra(Deskripsi);
         jenis = getIntent().getStringExtra(Jenis);
         kategori = getIntent().getStringExtra(Kategori);
+
+        Toast.makeText(SetAddressActivity.this, namaRestoran+", "+deskripsi, Toast.LENGTH_SHORT).show();
+
         showPlacePicker();
     }
     private void showPlacePicker() {
@@ -59,6 +65,8 @@ public class SetAddressActivity extends AppCompatActivity {
                 in.putExtra(RestoranActivity.nama, nama);
                 in.putExtra(RestoranActivity.Jenis, jenis);
                 in.putExtra(RestoranActivity.kategori, kategori);
+                in.putExtra(RestoranActivity.namaRestoran, namaRestoran);
+                in.putExtra(RestoranActivity.deskripsi, deskripsi);
                 startActivity(in);
                 finish();
             }
