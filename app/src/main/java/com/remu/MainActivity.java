@@ -1,8 +1,12 @@
 package com.remu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -10,12 +14,16 @@ import androidx.cardview.widget.CardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.remu.POJO.LatLngRetriever;
+import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String latitude, longitude;
+    LatLngRetriever latLngRetriever = new LatLngRetriever();
     private static final String TAG = "MainActivity";
 
     private PrayerTime prayerTime;
@@ -26,10 +34,42 @@ public class MainActivity extends AppCompatActivity {
     TextView jamSolatSelanjutnya;
     private FirebaseAuth mAuth;
 
+    public LocationResult locationResult = new LocationResult() {
+
+        @Override
+        public void gotLocation(Location location) {
+            // TODO Auto-generated method stub
+            double Longitude = location.getLongitude();
+            double Latitude = location.getLatitude();
+
+            Log.d(TAG,"Got Location");
+
+            try {
+                SharedPreferences locationpref = getApplication()
+                        .getSharedPreferences("location", MODE_PRIVATE);
+                SharedPreferences.Editor prefsEditor = locationpref.edit();
+                prefsEditor.putString("Longitude", Longitude + "");
+                prefsEditor.putString("Latitude", Latitude + "");
+                prefsEditor.commit();
+                System.out.println("SHARE PREFERENCE ME PUT KAR DIYA.");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        latLngRetriever.getLocation(getApplicationContext(), locationResult);
+
+        boolean r = latLngRetriever.getLocation(getApplicationContext(), locationResult);
+
+        latitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null);
+        longitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null);
 
         //initialize uI
         initializeUI();
@@ -43,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         //go to mosque activity
         mosqueCardView.setOnClickListener(view -> {
             Intent viewMosque = new Intent(MainActivity.this, MosqueActivity.class);
+            viewMosque.putExtra("latitude", latitude);
+            viewMosque.putExtra("longitude", longitude);
             startActivity(viewMosque);
         });
 
@@ -77,15 +119,15 @@ public class MainActivity extends AppCompatActivity {
         nama = findViewById(R.id.nama);
         jamSolatSelanjutnya = findViewById(R.id.jamSolatSelanjutnya);
         ArrayList<TextView> textViews = new ArrayList<TextView>() {{
-           add(jamSolatSelanjutnya);
+            add(jamSolatSelanjutnya);
         }};
-        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, textViews);
+        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews);
         prayerTime.execute();
     }
 
-    private void getCurrentUser(FirebaseUser user){
-        if(user !=null){
-            String name =user.getDisplayName();
+    private void getCurrentUser(FirebaseUser user) {
+        if (user != null) {
+            String name = user.getDisplayName();
             nama.setText(name);
         }
     }

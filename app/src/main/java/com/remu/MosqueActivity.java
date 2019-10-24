@@ -43,6 +43,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
     private PrayerTime prayerTime;
 
+    private String latitude, longitude;
+
     ExpandableCardView jamSolat;
     RelativeLayout someInformation;
     TextView jamSolatSelanjutnya, solatSelanjutnya, timeFajr, timeDhuhr, timeAsr, timeMahgrib, timeIsha;
@@ -72,6 +74,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mosque);
+
+        latitude = getIntent().getStringExtra("latitude");
+        longitude = getIntent().getStringExtra("longitude");
+
+        Log.e(TAG, latitude);
+        Log.e(TAG, longitude);
 
         //initialize ui
         initializeUI();
@@ -241,7 +249,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             add(layoutMaghrib);
             add(layoutIsha);
         }};
-        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, textViews, linearLayouts);
+        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, latitude, textViews, linearLayouts);
         prayerTime.execute();
     }
 

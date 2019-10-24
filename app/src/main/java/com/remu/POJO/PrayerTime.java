@@ -27,22 +27,24 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
 
     private String TAG;
     private Context context;
-    private static String url = "http://api.aladhan.com/v1/timingsByCity?city=Selangor&country=Malaysia&method=3";
-    private static ArrayList<HashMap<String, String>> prayerList;
+    private String url;
+    private ArrayList<HashMap<String, String>> prayerList;
     private ArrayList<TextView> textViews = new ArrayList<>();
     private ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
 
-    public PrayerTime(Context context, String TAG, ArrayList<TextView> textViews) {
+    public PrayerTime(Context context, String TAG, String latitude, String longitude, ArrayList<TextView> textViews) {
         this.context = context;
         this.TAG = TAG;
         this.textViews = textViews;
+        setURL(latitude, longitude);
     }
 
-    public PrayerTime(Context context, String TAG, ArrayList<TextView> textViews, ArrayList<LinearLayout> linearLayouts) {
+    public PrayerTime(Context context, String TAG, String latitude, String longitude, ArrayList<TextView> textViews, ArrayList<LinearLayout> linearLayouts) {
         this.context = context;
         this.TAG = TAG;
         this.textViews = textViews;
         this.linearLayouts = linearLayouts;
+        setURL(latitude, longitude);
     }
 
     @Override
@@ -155,6 +157,10 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
 
         Typeface typeface = ResourcesCompat.getFont(context, R.font.osbold);
         nextPrayerTime.setTypeface(typeface);
+    }
+
+    private void setURL(String latitude, String longitude) {
+        url = "http://api.aladhan.com/v1/timings?latitude=" + latitude + "&longitude=" + longitude + "&method=3";
     }
 
 }

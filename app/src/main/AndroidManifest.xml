@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".SetAddressActivity"></activity>
+        <activity android:name=".SetAddressActivity" />
         <activity android:name=".HalalFastFoodRestaurantActivity" />
         <activity android:name=".HalalGiftActivity" />
         <activity android:name=".TourismDetail" />
