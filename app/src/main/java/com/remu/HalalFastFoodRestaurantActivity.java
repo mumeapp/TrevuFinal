@@ -1,8 +1,9 @@
 package com.remu;
 
-import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,23 +19,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.remu.POJO.HalalFood;
-import com.remu.POJO.HalalFoodRestaurant;
+import com.remu.POJO.Distance;
 import com.remu.POJO.Restoran;
+
+import java.text.DecimalFormat;
 
 public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
 
-    public static String Nama= "Nama", gambar = "gambar";
-    private String nama = null;
+    public static String Nama = "Nama", gambar = "gambar";
+    private String nama = null, myLat= null, myLong=null;
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<Restoran, HalalFastFoodRestaurantActivity.HalalFastFoodRestaurantViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvRestaurant;
     private CardView cd;
     private Intent getID;
-    private String id, Gambar;
+    private String id, Gambar, jarak;
     private ImageView img;
     private TextView tv;
 
@@ -44,6 +49,25 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
         setContentView(R.layout.activity_restoran);
 
         initializeUI();
+
+
+
+        FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null){
+                    myLat = Double.toString(location.getLatitude());
+                    myLong = Double.toString(location.getLongitude());
+                    // Do it all with location
+                    Log.d("My Current location", "Lat : " + location.getLatitude() + " Long : " + location.getLongitude());
+                    // Display in Toast
+//                    Toast.makeText(HalalFastFoodRestaurantActivity.this,
+//                            "Lat : " + location.getLatitude() + " Long : " + location.getLongitude(),
+//                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         setImage(Gambar);
         tv.setText(nama);
@@ -58,12 +82,15 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Restoran, HalalFastFoodRestaurantViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull HalalFastFoodRestaurantViewHolder halalFoodRestaurantViewHolder, int i, @NonNull Restoran halalFoodRestaurant) {
-
+                String LatLong = halalFoodRestaurant.getAlamatRestoran();
+                String getLatLong[] = LatLong.split(",");
+                String getLat= getLatLong[0], getLong=getLatLong[1];
+                DecimalFormat df = new DecimalFormat("#.##");
+                double jarak = getJarak(Double.parseDouble(myLat), Double.parseDouble(getLat),Double.parseDouble(myLong), Double.parseDouble(getLong));
                 halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
-
                 halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
                 halalFoodRestaurantViewHolder.setRating("5.0");
-                halalFoodRestaurantViewHolder.setJarak("0.3 KM");
+                halalFoodRestaurantViewHolder.setJarak(df.format(jarak)+" KM");
 
                 id = halalFoodRestaurant.getId();
 
@@ -100,14 +127,14 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
         this.img = findViewById(R.id.Gambarkategoi);
     }
 
-    private void setImage(String url){
+    private void setImage(String url) {
         img = findViewById(R.id.kategoriGambar);
         Glide.with(HalalFastFoodRestaurantActivity.this)
                 .load(url)
                 .into(img);
     }
 
-    private void addFood(){
+    private void addFood() {
         String Jenis = "HalalFastFood";
         Intent intent = new Intent(HalalFastFoodRestaurantActivity.this, RestoranActivity.class);
         intent.putExtra(RestoranActivity.kategori, nama);
@@ -121,7 +148,7 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
         super.onStart();
         try {
             firebaseRecyclerAdapter.startListening();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -132,9 +159,14 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
         super.onStop();
         try {
             firebaseRecyclerAdapter.stopListening();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
+    }
+
+    private double getJarak(double lat1, double lat2, double long1, double long2){
+        Distance distance = new Distance();
+        return distance.distance(lat1, lat2, long1, long2);
     }
 
     public class HalalFastFoodRestaurantViewHolder extends RecyclerView.ViewHolder {
@@ -172,5 +204,7 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
             jarak.setText(text);
         }
     }
+
+
 
 }
