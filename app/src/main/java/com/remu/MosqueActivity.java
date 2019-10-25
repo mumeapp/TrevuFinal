@@ -249,7 +249,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             add(layoutMaghrib);
             add(layoutIsha);
         }};
-        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, latitude, textViews, linearLayouts);
+        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews, linearLayouts);
         prayerTime.execute();
     }
 
