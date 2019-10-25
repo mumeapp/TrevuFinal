@@ -2,6 +2,7 @@ package com.remu;
 
 import android.Manifest;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,11 +32,17 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.remu.POJO.Mosque;
 import com.remu.POJO.PrayerTime;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallback {
 
@@ -67,7 +74,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     private Location mLastKnownLocation;
 
     RecyclerView.Adapter mAdapter;
-    ArrayList<String> mDataSet;
+    ArrayList<Mosque> mDataSet;
 
 
     @Override
@@ -109,19 +116,13 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+//        mDataSet = new ArrayList<>();
+//        for (int i = 0; i < 30; i++) {
+//            mDataSet.add("Title #" + i);
+//        }
 
-        mDataSet = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            mDataSet.add("Title #" + i);
-        }
+        new GetData().execute();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        listMasjid.setLayoutManager(layoutManager);
-        mAdapter = new MosqueAdapter(mDataSet);
-        listMasjid.setAdapter(mAdapter);
-        listMasjid.setOnSnapListener(position -> {
-
-        });
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
@@ -221,6 +222,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         jamSolat = findViewById(R.id.jamSolat);
         someInformation = findViewById(R.id.someInformation);
         listMasjid = findViewById(R.id.listMasjid);
+        mDataSet = new ArrayList<>();
         jamSolatSelanjutnya = someInformation.findViewById(R.id.jamSolatSelanjutnya);
         solatSelanjutnya = someInformation.findViewById(R.id.solatSelanjutnya);
         timeFajr = jamSolat.findViewById(R.id.time_fajr);
@@ -228,7 +230,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         timeAsr = jamSolat.findViewById(R.id.time_asr);
         timeMahgrib = jamSolat.findViewById(R.id.time_maghrib);
         timeIsha = jamSolat.findViewById(R.id.time_isha);
-        ArrayList<TextView> textViews = new ArrayList<TextView>(){{
+        ArrayList<TextView> textViews = new ArrayList<TextView>() {{
             add(jamSolatSelanjutnya);
             add(solatSelanjutnya);
             add(timeFajr);
@@ -242,7 +244,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         layoutAsr = jamSolat.findViewById(R.id.layout_asr);
         layoutMaghrib = jamSolat.findViewById(R.id.layout_maghrib);
         layoutIsha = jamSolat.findViewById(R.id.layout_isha);
-        ArrayList<LinearLayout> linearLayouts = new ArrayList<LinearLayout>(){{
+        ArrayList<LinearLayout> linearLayouts = new ArrayList<LinearLayout>() {{
             add(layoutFajr);
             add(layoutDhuhr);
             add(layoutAsr);
@@ -251,6 +253,76 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         }};
         prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews, linearLayouts);
         prayerTime.execute();
+    }
+
+    private class GetData extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler httpHandler = new HttpHandler();
+            Bundle bundle = getApplicationInfo().metaData;
+            String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=masjid+nearby&key="
+                    + bundle.getString("com.google.android.geo.API_KEY");
+
+            String jsonStr = httpHandler.makeServiceCall(url);
+
+            Log.e(TAG, url);
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
+
+                    for (int i = 0; i < results.length(); i++) {
+                        JSONObject row = results.getJSONObject(i);
+
+                        mDataSet.add(new Mosque(
+                                row.getString("formatted_address"),
+                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
+                                new HashMap<String, LatLng>(){{
+                                    put("northeast", new LatLng(row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("northeast").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("northeast").getDouble("lng")));
+                                    put("southwest", new LatLng(row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("southwest").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("southwest").getDouble("lng")));
+                                }},
+                                row.getString("icon"),
+                                row.getString("id"),
+                                row.getString("name"),
+                                row.getJSONArray("photos"),
+                                row.getString("place_id"),
+                                row.getJSONObject("plus_code").getString("compound_code"),
+                                row.getJSONObject("plus_code").getString("global_code"),
+                                row.getString("rating"),
+                                row.getString("reference"),
+                                row.getJSONArray("types"),
+                                row.getString("user_ratings_total")
+                        ));
+                    }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(MosqueActivity.this, LinearLayoutManager.HORIZONTAL, false);
+            listMasjid.setLayoutManager(layoutManager);
+            mAdapter = new MosqueAdapter(getApplication(), mDataSet);
+            listMasjid.setAdapter(mAdapter);
+            listMasjid.setOnSnapListener(position -> {
+
+            });
+        }
     }
 
 }
