@@ -53,6 +53,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.karumi:dexter:6.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
 }

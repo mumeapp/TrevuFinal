@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private PrayerTime prayerTime;
 
     CardView mosqueCardView, foodButton, dictionaryButton, friendButton, tourButton;
+    ImageView profil;
     String name;
     TextView nama;
     TextView jamSolatSelanjutnya;
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(viewDictonary);
         });
         friendButton.setOnClickListener(view -> {
-            Intent viewFriend = new Intent(MainActivity.this, FindFriendsActivity.class);
+            Intent viewFriend = new Intent(MainActivity.this, ListOnline.class);
             startActivity(viewFriend);
         });
         tourButton.setOnClickListener(view -> {
@@ -108,10 +110,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(viewTour);
         });
 
+        profil.setOnClickListener(view -> {
+            Intent viewTour = new Intent(MainActivity.this, Profil.class);
+            startActivity(viewTour);
+        });
+
+
     }
 
     private void initializeUI() {
         mosqueCardView = findViewById(R.id.MosqueCardView);
+        profil = findViewById(R.id.profil_photo);
         foodButton = findViewById(R.id.foodButton);
         dictionaryButton = findViewById(R.id.dictionaryButton);
         friendButton = findViewById(R.id.findFriendsButton);

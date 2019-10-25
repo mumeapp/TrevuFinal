@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             String userID = user.getUid();
 
-                            User userr = new User("", "", "", "", "", email, "default");
+                            User userr = new User("", "", "", "", "", email, "default","");
 
                             databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(userID);
                             databaseReference.setValue(userr).addOnCompleteListener(new OnCompleteListener<Void>() {
