@@ -32,15 +32,14 @@ import java.text.DecimalFormat;
 
 public class HalalFoodRestaurantActivity extends AppCompatActivity {
 
-    public static final String ID = "HalalFOodRestaurantActivity";
+    public static final String ID = "HalalFOodRestaurantActivity", Jenis = "HalalFood";
     public static String Nama= "Nama", url= "url";
     private String nama = null, myLat, myLong;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, getId;
     private FirebaseRecyclerAdapter<Restoran, HalalFoodRestaurantActivity.HalalFoodRestaurantViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvRestaurant;
     private CardView cd;
     private Intent getID;
-    private String id;
     private ImageView img;
     private TextView kategori;
 
@@ -86,17 +85,20 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
                 String getLatLong[] = LatLong.split(",");
                 String getLat= getLatLong[0], getLong=getLatLong[1];
                 DecimalFormat df = new DecimalFormat("#.##");
+                String id;
                 double jarak = getJarak(Double.parseDouble(myLat), Double.parseDouble(getLat),Double.parseDouble(myLong), Double.parseDouble(getLong));
                 halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
                 halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
                 halalFoodRestaurantViewHolder.setRating("5.0");
                 halalFoodRestaurantViewHolder.setJarak(df.format(jarak)+" KM");
-
-                id = halalFoodRestaurant.getId();
+                id = halalFoodRestaurant.getID();
 
                 halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
-                    Intent intent = new Intent(HalalFoodRestaurantActivity.this, HalalRestaurantDetailActivity.class);
-                    intent.putExtra(HalalRestaurantDetailActivity.ID, id);
+
+                    Intent intent = new Intent(HalalFoodRestaurantActivity.this, PlaceDetailActivity.class);
+                    intent.putExtra(PlaceDetailActivity.Nama, nama);
+                    intent.putExtra(PlaceDetailActivity.ID,id);
+                    intent.putExtra(PlaceDetailActivity.Jenis, Jenis);
                     startActivity(intent);
                 });
             }
@@ -127,7 +129,6 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
     }
 
     private void addFood(){
-        String Jenis = "HalalFood";
         Intent intent = new Intent(HalalFoodRestaurantActivity.this, RestoranActivity.class);
         intent.putExtra(RestoranActivity.kategori, nama);
         intent.putExtra(RestoranActivity.Jenis, Jenis);

@@ -14,15 +14,12 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.remu.POJO.HalalFood;
-import com.remu.POJO.HalalFoodRestaurant;
 import com.remu.POJO.Restoran;
 
 public class HalalGiftDetail extends AppCompatActivity {
@@ -65,7 +62,7 @@ public class HalalGiftDetail extends AppCompatActivity {
                 halalFoodRestaurantViewHolder.setRating("5.0");
                 halalFoodRestaurantViewHolder.setJarak("0.3 KM");
 
-                id = halalFoodRestaurant.getId();
+                id = halalFoodRestaurant.getID();
 
                 halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
 

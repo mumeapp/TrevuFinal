@@ -12,7 +12,6 @@ import androidx.cardview.widget.CardView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.remu.POJO.LatLngRetriever;
 import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
@@ -119,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<TextView> textViews = new ArrayList<TextView>() {{
             add(jamSolatSelanjutnya);
         }};
-        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews);
-        prayerTime.execute();
+//        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews);
+//        prayerTime.execute();
     }
 
     private void getCurrentUser(FirebaseUser user) {

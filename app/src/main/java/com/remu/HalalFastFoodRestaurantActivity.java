@@ -92,7 +92,7 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
                 halalFoodRestaurantViewHolder.setRating("5.0");
                 halalFoodRestaurantViewHolder.setJarak(df.format(jarak)+" KM");
 
-                id = halalFoodRestaurant.getId();
+                id = halalFoodRestaurant.getID();
 
                 halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(HalalFastFoodRestaurantActivity.this, HalalRestaurantDetailActivity.class);
