@@ -33,7 +33,7 @@ import java.io.IOException;
 public class RestoranActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
-    public static String kategori= "kategori",Jenis = "jenis", nama= "nama", lang="lang", lat = "lat", namaRestoran= "nama", deskripsi = "desk";
+    public static String kategori = "kategori", Jenis = "jenis", tempat = "tempat", lang = "lang", lat = "lat", namaRestoran = "nama", deskripsi = "desk", gambar = "uri";
     private EditText Namarestoran, Deskripsi;
     private Button Next, AlamatRestoran;
     private ImageView foto;
@@ -44,6 +44,7 @@ public class RestoranActivity extends AppCompatActivity {
     private UploadTask uploadTask;
     private DatabaseReference databaseReference;
     private String idUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,22 @@ public class RestoranActivity extends AppCompatActivity {
         this.foto = findViewById(R.id.imageLogo);
 
         AlamatRestoran.setOnClickListener(View -> setAlamat());
+        try {
+            String Gambar = getIntent().getStringExtra(gambar);
+            if (Gambar != null) {
+                filePath = Uri.parse(Gambar);
+            }
+        } catch (Exception e) {
+            Toast.makeText(RestoranActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            System.out.println(e.getMessage());
+        }
+
+        if (getIntent().getStringExtra(tempat) == null) {
+            AlamatRestoran.setHint("Where can I find it?");
+        } else {
+            AlamatRestoran.setHint("");
+            AlamatRestoran.setText(getIntent().getStringExtra(tempat));
+        }
 
         Namarestoran.setText(getIntent().getStringExtra(namaRestoran));
         Deskripsi.setText((getIntent().getStringExtra(deskripsi)));
@@ -105,27 +122,27 @@ public class RestoranActivity extends AppCompatActivity {
 
 
                                 Restoran restoran = new Restoran(nama, alamat, foto1, deskripsi);
-                                try{
-                                databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child(jenis).child(Kategori).push();
-                                databaseReference.setValue(restoran).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(RestoranActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                            Intent in = new Intent(RestoranActivity.this, FoodActivity.class);
-                                            startActivity(in);
-                                            finish();
+                                try {
+                                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child(jenis).child(Kategori).push();
+                                    databaseReference.setValue(restoran).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(RestoranActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                                Intent in = new Intent(RestoranActivity.this, FoodActivity.class);
+                                                startActivity(in);
+                                                finish();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
 
-                            }catch (Exception e){
+                                } catch (Exception e) {
                                     Toast.makeText(RestoranActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(RestoranActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
@@ -134,15 +151,19 @@ public class RestoranActivity extends AppCompatActivity {
 
     }
 
-    private void setAlamat(){
+    private void setAlamat() {
         String jenis = getIntent().getStringExtra(Jenis);
         String kate = getIntent().getStringExtra(kategori);
         Intent in = new Intent(this, SetAddressActivity.class);
         in.putExtra(SetAddressActivity.NamaRestoran, Namarestoran.getText().toString());
         in.putExtra(SetAddressActivity.Deskripsi, Deskripsi.getText().toString());
-        in.putExtra(SetAddressActivity.Jenis,jenis);
+        in.putExtra(SetAddressActivity.Jenis, jenis);
         in.putExtra(SetAddressActivity.Kategori, kate);
+        if (filePath != null) {
+            in.putExtra(SetAddressActivity.Gambar, filePath.toString());
+        }
         startActivity(in);
+        finish();
     }
 
     @Override
@@ -151,14 +172,13 @@ public class RestoranActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             filePath = data.getData();
+            Bitmap bitmap;
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 foto.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
-
 }

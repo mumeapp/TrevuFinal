@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 prefsEditor.putString("Longitude", Longitude + "");
                 prefsEditor.putString("Latitude", Latitude + "");
                 prefsEditor.commit();
-                System.out.println("SHARE PREFERENCE ME PUT KAR DIYA.");
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -67,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         latLngRetriever.getLocation(getApplicationContext(), locationResult);
-
-        boolean r = latLngRetriever.getLocation(getApplicationContext(), locationResult);
-
         latitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null);
         longitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null);
+
+        Log.e(TAG, "Latitude: " + latitude);
+        Log.e(TAG, "Longitude: " + longitude);
 
         //initialize uI
         initializeUI();

@@ -3,8 +3,7 @@ package com.remu.POJO;
 public class Distance {
     public static double distance(double lat1,
                                   double lat2, double lon1,
-                                  double lon2)
-    {
+                                  double lon2) {
 
         // The math module contains a function
         // named toRadians which converts from
@@ -19,7 +18,7 @@ public class Distance {
         double dlat = lat2 - lat1;
         double a = Math.pow(Math.sin(dlat / 2), 2)
                 + Math.cos(lat1) * Math.cos(lat2)
-                * Math.pow(Math.sin(dlon / 2),2);
+                * Math.pow(Math.sin(dlon / 2), 2);
 
         double c = 2 * Math.asin(Math.sqrt(a));
 
@@ -28,6 +27,6 @@ public class Distance {
         double r = 6371;
 
         // calculate the result
-        return(c * r);
+        return (c * r);
     }
 }
