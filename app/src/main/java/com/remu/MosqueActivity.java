@@ -255,6 +255,10 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         prayerTime.execute();
     }
 
+    public static String getTAG() {
+        return TAG;
+    }
+
     private class GetData extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -265,9 +269,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
-            Bundle bundle = getApplicationInfo().metaData;
             String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=masjid+nearby&key="
-                    + bundle.getString("com.google.android.geo.API_KEY");
+                    + getApplicationInfo().metaData.getString("com.google.android.geo.API_KEY");
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
