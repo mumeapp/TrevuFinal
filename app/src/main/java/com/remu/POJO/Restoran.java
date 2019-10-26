@@ -1,7 +1,7 @@
 package com.remu.POJO;
 
 public class Restoran {
-    private String namaRestoran, alamatRestoran, foto, deskripsi, id;
+    private String namaRestoran, alamatRestoran, foto, deskripsi, ID;
 
     public Restoran(){
 
@@ -14,12 +14,12 @@ public class Restoran {
         this.deskripsi = deskripsi;
     }
 
-    public String getId() {
-        return id;
+    public String getID() {
+        return ID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public String getNamaRestoran() {

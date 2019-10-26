@@ -52,7 +52,8 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
                 url = "https://maps.googleapis.com/maps/api/place/photo?" +
                         "maxwidth=" + mDataset.get(position).getPhotos().getJSONObject(0).getString("width") +
                         "&photoreference=" + mDataset.get(position).getPhotos().getJSONObject(0).getString("photo_reference") +
-                        "&key=" + app.getApplicationInfo().metaData.getString("com.google.android.geo.API_KEY");
+                        "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+//                + app.getApplicationInfo().metaData.getString("com.google.android.geo.API_KEY");
             } catch (JSONException e) {
                 Log.e(MosqueActivity.getTAG(), "Json parsing error: " + e.getMessage());
             }

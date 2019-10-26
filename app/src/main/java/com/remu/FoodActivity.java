@@ -22,8 +22,7 @@ public class FoodActivity extends AppCompatActivity {
 
         //set intent to back to previous activity
         buttonBack.setOnClickListener(view -> {
-            Intent BackToMenu = new Intent(FoodActivity.this, MainActivity.class);
-            startActivity(BackToMenu);
+            finish();
         });
 
         //set intent for halal food category list

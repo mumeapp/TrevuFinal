@@ -112,7 +112,6 @@ public class RestoranActivity extends AppCompatActivity {
                             Intent get = getIntent();
                             if (task.isSuccessful()) {
                                 Uri downloadUri = task.getResult();
-                                String id;
                                 String nama = Namarestoran.getText().toString();
                                 String alamat = get.getStringExtra(lat) + ", " + get.getStringExtra(lang);
                                 String deskripsi = Deskripsi.getText().toString();
@@ -124,13 +123,13 @@ public class RestoranActivity extends AppCompatActivity {
                                 Restoran restoran = new Restoran(nama, alamat, foto1, deskripsi);
                                 try {
                                     databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child(jenis).child(Kategori).push();
+                                    String id = databaseReference.getKey();
                                     databaseReference.setValue(restoran).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                databaseReference.child("ID").setValue(id);
                                                 Toast.makeText(RestoranActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                                Intent in = new Intent(RestoranActivity.this, FoodActivity.class);
-                                                startActivity(in);
                                                 finish();
                                             }
                                         }

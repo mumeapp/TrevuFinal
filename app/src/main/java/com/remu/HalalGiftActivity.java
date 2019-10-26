@@ -85,7 +85,7 @@ public class HalalGiftActivity extends AppCompatActivity {
                 halalGiftViewHolder.setJarak(df.format(jarak)+" KM");
                 halalGiftViewHolder.setRating("5,0");
 
-                String id = halalGift.getId();
+                String id = halalGift.getID();
 
                 halalGiftViewHolder.itemView.setOnClickListener(view -> {
                     String gambar = halalGift.getFoto();
