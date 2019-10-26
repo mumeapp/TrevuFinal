@@ -1,6 +1,7 @@
 package com.remu;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -269,9 +270,14 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
-            Bundle bundle = getApplicationInfo().metaData;
+            Bundle metaData = new Bundle();
+            try {
+                metaData = getApplicationContext().getPackageManager().getApplicationInfo(getApplicationContext().getPackageName(), PackageManager.GET_META_DATA).metaData;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
             String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=nearby+mosque&key="
-                    + bundle.getString("com.google.android.geo.API_KEY");
+                    + metaData.getString("com.google.android.geo.API_KEY");
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
