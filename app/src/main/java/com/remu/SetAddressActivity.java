@@ -2,7 +2,6 @@ package com.remu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,9 +11,11 @@ import com.rtchagas.pingplacepicker.PingPlacePicker;
 public class SetAddressActivity extends AppCompatActivity {
 
     private static final int REQUEST_PLACE_PICKER = 1;
-    public static String Jenis= "jenis", Kategori= "kategori", NamaRestoran= "nama", Deskripsi= "desk";
+    public static String Jenis= "jenis", Kategori= "kategori", NamaRestoran= "kajkad", Deskripsi= "desk";
+    public static String Gambar = "uri";
     private String lat, lang, nama;
     private String jenis, kategori, namaRestoran, deskripsi;
+    private String gambar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +26,13 @@ public class SetAddressActivity extends AppCompatActivity {
         deskripsi = getIntent().getStringExtra(Deskripsi);
         jenis = getIntent().getStringExtra(Jenis);
         kategori = getIntent().getStringExtra(Kategori);
+        gambar = getIntent().getStringExtra(Gambar);
 
-        Toast.makeText(SetAddressActivity.this, namaRestoran+", "+deskripsi, Toast.LENGTH_SHORT).show();
 
         showPlacePicker();
     }
+
+
     private void showPlacePicker() {
         PingPlacePicker.IntentBuilder builder = new PingPlacePicker.IntentBuilder();
         builder.setAndroidApiKey("AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
@@ -58,17 +61,19 @@ public class SetAddressActivity extends AppCompatActivity {
                 lat = Double.toString(place.getLatLng().latitude);
                 lang = Double.toString(place.getLatLng().longitude);
                 nama = place.getName();
-                Toast.makeText(this, place.getAddress(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, gambar, Toast.LENGTH_SHORT).show();
                 Intent in = new Intent(this, RestoranActivity.class);
                 in.putExtra(RestoranActivity.lat, lat);
                 in.putExtra(RestoranActivity.lang, lang);
-                in.putExtra(RestoranActivity.nama, nama);
+                in.putExtra(RestoranActivity.tempat, nama);
                 in.putExtra(RestoranActivity.Jenis, jenis);
                 in.putExtra(RestoranActivity.kategori, kategori);
                 in.putExtra(RestoranActivity.namaRestoran, namaRestoran);
                 in.putExtra(RestoranActivity.deskripsi, deskripsi);
+                in.putExtra(RestoranActivity.gambar, gambar);
                 startActivity(in);
                 finish();
+
             }
         }
     }
