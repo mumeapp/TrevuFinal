@@ -1,8 +1,13 @@
 package com.remu;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,9 +15,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.alespero.expandablecardview.ExpandableCardView;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -24,6 +34,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
@@ -42,6 +55,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -58,6 +75,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     TextView jamSolatSelanjutnya, solatSelanjutnya, timeFajr, timeDhuhr, timeAsr, timeMahgrib, timeIsha;
     LinearLayout layoutFajr, layoutDhuhr, layoutAsr, layoutMaghrib, layoutIsha;
 
+    LinearLayoutManager layoutManager;
     MultiSnapRecyclerView listMasjid;
 
     //sydney, change later to malang
@@ -92,6 +110,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         //initialize ui
         initializeUI();
 
+        new GetData(this.getApplicationContext()).execute();
+
         //set title for expandable card
         jamSolat.setOnExpandedListener((v, isExpanded) -> {
             if (isExpanded) {
@@ -122,7 +142,21 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 //            mDataSet.add("Title #" + i);
 //        }
 
-        new GetData().execute();
+        final SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(listMasjid);
+
+        listMasjid.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    View centerView = snapHelper.findSnapView(layoutManager);
+                    int pos = layoutManager.getPosition(centerView);
+                    Log.e("Snapped Item Position", "" + pos);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDataSet.get(pos).getGeoLocation(), 17));
+                }
+            }
+        });
 
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
@@ -135,6 +169,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        UiSettings uiSettings = googleMap.getUiSettings();
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
@@ -146,10 +181,31 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
         if (latLng != null) {
             //mMap.clear();
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Current Location"));
+            uiSettings.setAllGesturesEnabled(true);
+            uiSettings.setMapToolbarEnabled(false);
+
+            mMap.setMyLocationEnabled(true);
+//            mMap.setOnMyLocationButtonClickListener(this);
+//            mMap.setOnMyLocationClickListener(this);
+
+//            mCurrLocationMarker.setVisible(true);
+//            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Current Location"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, Zoomlevel));
         }
     }
+
+//    @Override
+//    public void onMyLocationClick(@NonNull Location location) {
+//        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+//    }
+//
+//    @Override
+//    public boolean onMyLocationButtonClick() {
+//        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+//        // Return false so that we don't consume the event and the default behavior still occurs
+//        // (the camera animates to the user's current position).
+//        return false;
+//    }
 
     private void getLocationPermission() {
         //WILL BE MOVED TO PERMISSIONACTIVITY LATER!
@@ -224,6 +280,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         someInformation = findViewById(R.id.someInformation);
         listMasjid = findViewById(R.id.listMasjid);
         mDataSet = new ArrayList<>();
+        latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
         jamSolatSelanjutnya = someInformation.findViewById(R.id.jamSolatSelanjutnya);
         solatSelanjutnya = someInformation.findViewById(R.id.solatSelanjutnya);
         timeFajr = jamSolat.findViewById(R.id.time_fajr);
@@ -262,6 +319,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
     private class GetData extends AsyncTask<Void, Void, Void> {
 
+        private Context context;
+
+        public GetData(Context context) {
+            this.context = context;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -278,6 +341,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 //            }
             String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=nearby+mosque&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 //                    + metaData.getString("com.google.android.geo.API_KEY");
+//            https://maps.googleapis.com/maps/api/directions/json?origin=Universitas%20Brawijaya&destination=Alun-alun%20Malang&avoid=highways&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
@@ -294,7 +358,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                         mDataSet.add(new Mosque(
                                 row.getString("formatted_address"),
                                 new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
-                                new HashMap<String, LatLng>(){{
+                                new HashMap<String, LatLng>() {{
                                     put("northeast", new LatLng(row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("northeast").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("northeast").getDouble("lng")));
                                     put("southwest", new LatLng(row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("southwest").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("southwest").getDouble("lng")));
                                 }},
@@ -325,13 +389,20 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(MosqueActivity.this, LinearLayoutManager.HORIZONTAL, false);
+            layoutManager = new LinearLayoutManager(MosqueActivity.this, LinearLayoutManager.HORIZONTAL, false);
             listMasjid.setLayoutManager(layoutManager);
             mAdapter = new MosqueAdapter(getApplication(), mDataSet);
             listMasjid.setAdapter(mAdapter);
             listMasjid.setOnSnapListener(position -> {
 
             });
+
+            for (Mosque a : mDataSet) {
+                mMap.addMarker(new MarkerOptions()
+                        .position(a.getGeoLocation())
+                        .title(a.getName()));
+            }
+
         }
     }
 
