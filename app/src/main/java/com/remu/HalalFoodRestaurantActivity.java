@@ -42,6 +42,8 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
     private Intent getID;
     private ImageView img;
     private TextView kategori;
+    private Double akumulasi=0.0;
+    private int count=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,15 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
                 String getLat= getLatLong[0], getLong=getLatLong[1];
                 DecimalFormat df = new DecimalFormat("#.##");
                 String id;
+
                 double jarak = getJarak(Double.parseDouble(myLat), Double.parseDouble(getLat),Double.parseDouble(myLong), Double.parseDouble(getLong));
                 halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
                 halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
-                halalFoodRestaurantViewHolder.setRating("5.0");
                 halalFoodRestaurantViewHolder.setJarak(df.format(jarak)+" KM");
+                halalFoodRestaurantViewHolder.setRating(Double.toString(halalFoodRestaurant.getAkumulasiRating()));
                 id = halalFoodRestaurant.getID();
+                //Toast.makeText(HalalFoodRestaurantActivity.this, restoran,Toast.LENGTH_LONG).show();
+
 
                 halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
 

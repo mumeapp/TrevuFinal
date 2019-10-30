@@ -2,8 +2,6 @@ package com.remu;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,10 +17,7 @@ import com.remu.POJO.LatLngRetriever;
 import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,17 +69,17 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(TAG, "Latitude: " + latitude);
         Log.e(TAG, "Longitude: " + longitude);
-
-        try {
-            List<Address> addresses = new Geocoder(getBaseContext(), Locale.getDefault()).getFromLocation(Double.parseDouble(latitude), Double.parseDouble(longitude), 1);
-            if (!addresses.isEmpty()) {
-                country = addresses.get(0).getCountryName();
-            }
-
-            Log.e(TAG, "Country: " + country);
-        } catch (IOException e) {
-            // do something..
-        }
+//
+//        try {
+//            List<Address> addresses = new Geocoder(getBaseContext(), Locale.getDefault()).getFromLocation(Double.parseDouble(latitude), Double.parseDouble(longitude), 1);
+//            if (!addresses.isEmpty()) {
+//                country = addresses.get(0).getCountryName();
+//            }
+//
+//            Log.e(TAG, "Country: " + country);
+//        } catch (IOException e) {
+//            // do something..
+//        }
 
         //initialize uI
         initializeUI();
