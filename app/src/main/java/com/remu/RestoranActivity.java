@@ -129,6 +129,7 @@ public class RestoranActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 databaseReference.child("ID").setValue(id);
+                                                databaseReference.child("akumulasiRating").setValue(0.0);
                                                 Toast.makeText(RestoranActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                                 finish();
                                             }

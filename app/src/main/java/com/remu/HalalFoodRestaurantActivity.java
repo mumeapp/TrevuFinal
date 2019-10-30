@@ -93,7 +93,7 @@ public class HalalFoodRestaurantActivity extends AppCompatActivity {
                 halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
                 halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
                 halalFoodRestaurantViewHolder.setJarak(df.format(jarak)+" KM");
-                halalFoodRestaurantViewHolder.setRating(Double.toString(halalFoodRestaurant.getAkumulasiRating()));
+                halalFoodRestaurantViewHolder.setRating(df.format(halalFoodRestaurant.getAkumulasiRating()));
                 id = halalFoodRestaurant.getID();
                 //Toast.makeText(HalalFoodRestaurantActivity.this, restoran,Toast.LENGTH_LONG).show();
 
