@@ -89,14 +89,16 @@ public class HalalFastFoodRestaurantActivity extends AppCompatActivity {
                 double jarak = getJarak(Double.parseDouble(myLat), Double.parseDouble(getLat),Double.parseDouble(myLong), Double.parseDouble(getLong));
                 halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
                 halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
-                halalFoodRestaurantViewHolder.setRating("5.0");
+                halalFoodRestaurantViewHolder.setRating(df.format(halalFoodRestaurant.getAkumulasiRating()));
                 halalFoodRestaurantViewHolder.setJarak(df.format(jarak)+" KM");
 
                 id = halalFoodRestaurant.getID();
 
                 halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
-                    Intent intent = new Intent(HalalFastFoodRestaurantActivity.this, HalalRestaurantDetailActivity.class);
-                    intent.putExtra(HalalRestaurantDetailActivity.ID, id);
+                    Intent intent = new Intent(HalalFastFoodRestaurantActivity.this, PlaceDetailActivity.class);
+                    intent.putExtra(PlaceDetailActivity.ID, id);
+                    intent.putExtra(PlaceDetailActivity.Nama, nama);
+                    intent.putExtra(PlaceDetailActivity.Jenis,"HalalFastFood");
                     startActivity(intent);
                 });
             }
