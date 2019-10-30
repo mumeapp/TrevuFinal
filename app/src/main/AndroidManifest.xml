@@ -13,7 +13,6 @@
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but are recommended.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -24,10 +23,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CommentActivity"></activity>
-        <activity android:name=".RatingActivity" />
-        <activity android:name=".QiblaActivity" />
+        <activity android:name=".ProfileFriend"></activity>
+        <activity android:name=".ConfirmScannerActivity" />
+        <activity android:name=".QrCodeScannerActivity" />
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".UpdateProfil" />
         <activity android:name=".PlaceDetailActivity" />
+        <activity android:name=".QiblaActivity" />
         <activity android:name=".SetAddressActivity" />
         <activity android:name=".HalalFastFoodRestaurantActivity" />
         <activity android:name=".HalalGiftActivity" />
@@ -42,6 +44,8 @@
         <activity android:name=".RestoranActivity" />
         <activity android:name=".FoodKategoriActivity" />
         <activity android:name=".HalalFoodActivity" />
+        <activity android:name=".ListOnline" />
+        <activity android:name=".Profil" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddDictionary" />
         <activity android:name=".DictionaryActivity" />
@@ -62,6 +66,10 @@
 
         <activity android:name=".MosqueActivity" />
         <activity android:name=".MainActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
     </application>
 
 </manifest>

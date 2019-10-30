@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,17 +20,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String latitude, longitude, country;
+    private String latitude, longitude;
     LatLngRetriever latLngRetriever = new LatLngRetriever();
     private static final String TAG = "MainActivity";
 
     private PrayerTime prayerTime;
 
-    private ImageView placeIllustration;
-    private CardView mosqueCardView, foodButton, dictionaryButton, friendButton, tourButton;
-    private String name;
-    private TextView nama;
-    private TextView jamSolatSelanjutnya;
+    CardView mosqueCardView, foodButton, dictionaryButton, friendButton, tourButton;
+    String name;
+    TextView nama;
+    TextView jamSolatSelanjutnya;
     private FirebaseAuth mAuth;
 
     public LocationResult locationResult = new LocationResult() {
@@ -42,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             double Longitude = location.getLongitude();
             double Latitude = location.getLatitude();
 
-            Log.d(TAG, "Got Location");
+            Log.d(TAG,"Got Location");
 
             try {
                 SharedPreferences locationpref = getApplication()
@@ -69,17 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(TAG, "Latitude: " + latitude);
         Log.e(TAG, "Longitude: " + longitude);
-//
-//        try {
-//            List<Address> addresses = new Geocoder(getBaseContext(), Locale.getDefault()).getFromLocation(Double.parseDouble(latitude), Double.parseDouble(longitude), 1);
-//            if (!addresses.isEmpty()) {
-//                country = addresses.get(0).getCountryName();
-//            }
-//
-//            Log.e(TAG, "Country: " + country);
-//        } catch (IOException e) {
-//            // do something..
-//        }
 
         //initialize uI
         initializeUI();
@@ -110,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(viewDictonary);
         });
         friendButton.setOnClickListener(view -> {
-            Intent viewFriend = new Intent(MainActivity.this, FindFriendsActivity.class);
+            Intent viewFriend = new Intent(MainActivity.this, ConfirmScannerActivity.class);
             startActivity(viewFriend);
         });
         tourButton.setOnClickListener(view -> {
@@ -121,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        placeIllustration = findViewById(R.id.placeIllustration);
-        setPlaceIllustration(country);
         mosqueCardView = findViewById(R.id.MosqueCardView);
         foodButton = findViewById(R.id.foodButton);
         dictionaryButton = findViewById(R.id.dictionaryButton);
@@ -133,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<TextView> textViews = new ArrayList<TextView>() {{
             add(jamSolatSelanjutnya);
         }};
-        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews);
-        prayerTime.execute();
+//        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews);
+//        prayerTime.execute();
     }
 
     private void getCurrentUser(FirebaseUser user) {
@@ -142,10 +127,6 @@ public class MainActivity extends AppCompatActivity {
             String name = user.getDisplayName();
             nama.setText(name);
         }
-    }
-
-    private void setPlaceIllustration(String country) {
-
     }
 
 }
