@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PlaceDetailActivity"></activity>
+        <activity android:name=".QiblaActivity" />
+        <activity android:name=".PlaceDetailActivity" />
         <activity android:name=".SetAddressActivity" />
         <activity android:name=".HalalFastFoodRestaurantActivity" />
         <activity android:name=".HalalGiftActivity" />
