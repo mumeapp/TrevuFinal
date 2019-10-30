@@ -2,6 +2,7 @@ package com.remu.POJO;
 
 public class Restoran {
     private String namaRestoran, alamatRestoran, foto, deskripsi, ID;
+    private Double akumulasiRating;
 
     public Restoran(){
 
@@ -12,6 +13,14 @@ public class Restoran {
         this.alamatRestoran = alamatRestoran;
         this.foto = foto;
         this.deskripsi = deskripsi;
+    }
+
+    public Double getAkumulasiRating() {
+        return akumulasiRating;
+    }
+
+    public void setAkumulasiRating(Double akumulasiRating) {
+        this.akumulasiRating = akumulasiRating;
     }
 
     public String getID() {
