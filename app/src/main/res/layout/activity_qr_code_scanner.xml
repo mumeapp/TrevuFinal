@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    tools:context="com.remu.QrCodeScannerActivity">
+
+
+    <SurfaceView
+        android:id="@+id/cameraPreview"
+        android:layout_width="377dp"
+        android:layout_height="314dp" />
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@+id/cameraPreview"
+        android:id="@+id/txtResult"
+        android:layout_marginTop="20dp"
+        android:text="@string/result_text_default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
