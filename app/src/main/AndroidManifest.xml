@@ -23,8 +23,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".QiblaActivity" />
+        <activity android:name=".ProfileFriend"></activity>
+        <activity android:name=".ConfirmScannerActivity" />
+        <activity android:name=".QrCodeScannerActivity" />
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".UpdateProfil" />
         <activity android:name=".PlaceDetailActivity" />
+        <activity android:name=".QiblaActivity" />
         <activity android:name=".SetAddressActivity" />
         <activity android:name=".HalalFastFoodRestaurantActivity" />
         <activity android:name=".HalalGiftActivity" />
@@ -61,6 +66,10 @@
 
         <activity android:name=".MosqueActivity" />
         <activity android:name=".MainActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
     </application>
 
 </manifest>

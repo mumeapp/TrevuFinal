@@ -1,12 +1,13 @@
 package com.remu.POJO;
 
 public class User {
-    private String nama, gender, age, tanggal, deskripsi, email, foto, status;
+    private String nama, gender, age, tanggal, deskripsi, email, foto, LatLong, id;
 
-    public User() {
+    public User(){
+
     }
 
-    public User(String nama, String gender, String age, String tanggal, String deskripsi, String email, String foto,String status) {
+    public User(String nama, String gender, String age, String tanggal, String deskripsi, String email, String foto,String LatLong, String id) {
         this.nama = nama;
         this.gender = gender;
         this.age = age;
@@ -14,7 +15,16 @@ public class User {
         this.deskripsi = deskripsi;
         this.email = email;
         this.foto = foto;
-        this.status = status;
+        this.LatLong = LatLong;
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNama() {
@@ -73,12 +83,14 @@ public class User {
         this.foto = foto;
     }
 
-    public String getStatus() {
-        return status;
+    public String getLatLong() {
+        return LatLong;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setLatLong(String LatLong) {
+        this.LatLong = LatLong;
     }
+
+
 
 }
