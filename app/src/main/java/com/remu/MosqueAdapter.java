@@ -36,7 +36,7 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
     @Override
     public MosqueAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_mosque, parent, false);
+                .inflate(R.layout.adapter_mosque, parent, false);
         return new ViewHolder(v);
     }
 
@@ -76,7 +76,7 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
         LatLng currentLatLng = new LatLng(Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null)), Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null)));
         Distance distance = new Distance();
 
-        return distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
+        return Distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -86,10 +86,10 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
 
         ViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.gbr1);
-            textTitle = itemView.findViewById(R.id.tul1);
-            textRating = itemView.findViewById(R.id.tul2);
-            textDistance = itemView.findViewById(R.id.tul3);
+//            imageView = itemView.findViewById(R.id.gbr1);
+//            textTitle = itemView.findViewById(R.id.tul1);
+//            textRating = itemView.findViewById(R.id.tul2);
+//            textDistance = itemView.findViewById(R.id.dis);
         }
     }
 }

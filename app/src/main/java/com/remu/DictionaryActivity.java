@@ -62,7 +62,7 @@ public class DictionaryActivity extends AppCompatActivity {
             @NonNull
             @Override
             public TextProcessViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.template_dictionary, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_dictionary_result, parent, false);
 
                 return new TextProcessViewHolder(view);
             }

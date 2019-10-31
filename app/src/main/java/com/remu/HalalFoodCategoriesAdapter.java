@@ -22,7 +22,7 @@ class HalalFoodCategoriesAdapter extends RecyclerView.Adapter<HalalFoodCategorie
     @Override
     public HalalFoodCategoriesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_mosque, parent, false);
+                .inflate(R.layout.adapter_mosque, parent, false);
         return new ViewHolder(v);
     }
 
