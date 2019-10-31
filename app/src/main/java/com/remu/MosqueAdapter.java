@@ -1,8 +1,6 @@
 package com.remu;
 
 import android.app.Application;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.Distance;
 import com.remu.POJO.Mosque;
