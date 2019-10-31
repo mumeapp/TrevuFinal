@@ -38,7 +38,7 @@
                 android:drawablePadding="15dp"
                 android:elevation="5dp"
                 android:fontFamily="@font/osregular"
-                android:hint="Mau makan apa hari ini?"
+                android:hint="Type something!"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp" />
 
@@ -80,7 +80,8 @@
             <ImageView
                 android:layout_width="300dp"
                 android:layout_height="200dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:scaleType="fitXY"
                 android:background="@drawable/ic_food_logo" />
         </RelativeLayout>
 
