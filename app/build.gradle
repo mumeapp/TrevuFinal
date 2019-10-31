@@ -46,27 +46,39 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
-    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-database:19.2.0'
-    implementation 'com.google.firebase:firebase-firestore:21.2.0'
+    implementation 'com.google.firebase:firebase-firestore:21.2.1'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.karumi:dexter:6.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'com.google.zxing:core:3.2.1'
     implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:25.2.0'
 //    compile project(':QRGenearator')
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
 
+    //---start library implementation for social login---
+    implementation 'com.jaychang:simpleauth:2.1.4'
+    // if you want to use facebook auth
+    implementation 'com.jaychang:simpleauth-facebook:2.1.4'
+    // if you want to use google auth
+    implementation 'com.jaychang:simpleauth-google:2.1.4'
+    // if you want to use twitter auth
+    implementation 'com.jaychang:simpleauth-twitter:2.1.4'
+    //---end of library implementation---
+
+    //for ahoy! onboarding
+    implementation 'com.codemybrainsout.onboarding:onboarder:1.0.4'
+    //end of library implementation
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
 
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
