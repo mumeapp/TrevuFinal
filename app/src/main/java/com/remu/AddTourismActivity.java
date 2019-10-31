@@ -26,12 +26,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.remu.POJO.Restoran;
+import com.remu.POJO.Tourism;
 
 import java.io.IOException;
 
 
-public class RestoranActivity extends AppCompatActivity {
+public class AddTourismActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
     public static String kategori = "kategori", Jenis = "jenis", tempat = "tempat", lang = "lang", lat = "lat", namaRestoran = "nama", deskripsi = "desk", gambar = "uri";
@@ -50,7 +50,7 @@ public class RestoranActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_halal_food_restaurant);
+        setContentView(R.layout.activity_add_tourism);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -70,7 +70,7 @@ public class RestoranActivity extends AppCompatActivity {
                 filePath = Uri.parse(Gambar);
             }
         } catch (Exception e) {
-            Toast.makeText(RestoranActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddTourismActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             System.out.println(e.getMessage());
         }
 
@@ -98,15 +98,20 @@ public class RestoranActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    StorageReference restoran = storageReference.child("Food").child("Restoran").child(getIntent().getStringExtra(Jenis));
-                    uploadTask = restoran.putFile(filePath);
+                    loading = ProgressDialog.show(AddTourismActivity.this,
+                            null,
+                            "please wait...",
+                            true,
+                            false);
+                    StorageReference tour = storageReference.child("Wisata");
+                    uploadTask = tour.putFile(filePath);
                     Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                             if (!task.isSuccessful()) {
-                                Toast.makeText(RestoranActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddTourismActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
                             }
-                            return restoran.getDownloadUrl();
+                            return tour.getDownloadUrl();
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
@@ -118,40 +123,33 @@ public class RestoranActivity extends AppCompatActivity {
                                 String alamat = get.getStringExtra(lat) + ", " + get.getStringExtra(lang);
                                 String deskripsi = Deskripsi.getText().toString();
                                 String foto1 = downloadUri.toString();
-                                String Kategori = get.getStringExtra(kategori);
-                                String jenis = get.getStringExtra(Jenis);
 
 
-                                Restoran restoran = new Restoran(nama, alamat, foto1, deskripsi);
+                                Tourism tourism = new Tourism(nama, foto1, deskripsi, alamat);
                                 try {
-                                    loading = ProgressDialog.show(RestoranActivity.this,
-                                            null,
-                                            "please wait...",
-                                            true,
-                                            false);
-                                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child(jenis).child(Kategori).push();
+                                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Wisata").push();
                                     String id = databaseReference.getKey();
-                                    databaseReference.setValue(restoran).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    databaseReference.setValue(tourism).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 loading.dismiss();
                                                 databaseReference.child("ID").setValue(id);
-                                                databaseReference.child("akumulasiRating").setValue(0.0);
-                                                Toast.makeText(RestoranActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                                databaseReference.child("Rating").setValue(0.0);
+                                                Toast.makeText(AddTourismActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                                 finish();
                                             }
                                         }
                                     });
 
                                 } catch (Exception e) {
-                                    Toast.makeText(RestoranActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(AddTourismActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
                     });
                 } catch (Exception e) {
-                    Toast.makeText(RestoranActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddTourismActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
             }

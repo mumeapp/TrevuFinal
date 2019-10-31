@@ -1,94 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".TourismDetailActivity">
 
     <ImageView
-        android:id="@+id/imgFoto1"
+        android:id="@+id/gambarTempat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:scaleType="fitXY" />
+        android:layout_height="200dp"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/shade_black_bot"
-        android:orientation="vertical"
-        tools:context="com.ube.remuapp.DetailFastFood">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="220dp" />
 
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_keyboard_arrow_left_black_24dp" />
+    <Button
+        android:id="@+id/addReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:text="Review"
+        />
+    <Button
+        android:id="@+id/maps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="maps"
+        android:layout_marginTop="300dp"/>
 
-        <TextView
-            android:id="@+id/tvNama1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginBottom="200dp"
-            android:text="Nama Restoran"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginBottom="160dp"
-            android:background="@drawable/ic_star_white_24dp" />
-
-        <TextView
-            android:id="@+id/tvRating1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="60dp"
-            android:layout_marginBottom="160dp"
-            android:text="Rating"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:textStyle="normal" />
-
-        <TextView
-            android:id="@+id/tvDeskripsi1"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="65dp"
-            android:textSize="24sp"
-            android:textStyle="normal" />
-
-
-        <Button
-            android:id="@+id/goMaps1"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/button_blue"
-            android:text="Find Maps"
-            android:textAllCaps="false"
-            android:textColor="@color/quantum_yellow"
-            android:textStyle="normal" />
-
-
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/loadReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Review"
+        android:layout_marginTop="350dp"/>
+    <TextView
+        android:id="@+id/nama"
+        android:layout_marginTop="370dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nama"/>
+    <TextView
+        android:id="@+id/rating"
+        android:layout_marginTop="390dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rating"/>
 </RelativeLayout>
-

@@ -1,5 +1,6 @@
 package com.remu;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ public class CommentActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private RecyclerView rvComment;
     private FirebaseRecyclerAdapter<Rating, CommentActivity.CommentViewHolder> firebaseRecyclerAdapter;
+    private ProgressDialog loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

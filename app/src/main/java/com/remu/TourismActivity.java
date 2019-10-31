@@ -1,7 +1,9 @@
 package com.remu;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +15,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.remu.POJO.Tourism;
+import com.remu.POJO.Distance;
+import com.remu.POJO.Restoran;
+
+import java.text.DecimalFormat;
 
 public class TourismActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
-    private FirebaseRecyclerAdapter<Tourism, TourismActivity.TourismViewHolder> firebaseRecyclerAdapter;
+    private FirebaseRecyclerAdapter<Restoran, TourismActivity.TourismViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvTour;
+    private CardView cvTour;
+    private String myLat, myLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,27 +51,54 @@ public class TourismActivity extends AppCompatActivity {
 
         initializeUI();
 
+        FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null){
+                    myLat = Double.toString(location.getLatitude());
+                    myLong = Double.toString(location.getLongitude());
+                    // Do it all with location
+                    Log.d("My Current location", "Lat : " + location.getLatitude() + " Long : " + location.getLongitude());
+                    // Display in Toast
+//                    Toast.makeText(HalalFastFoodRestaurantActivity.this,
+//                            "Lat : " + location.getLatitude() + " Long : " + location.getLongitude(),
+//                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         rvTour.setLayoutManager(new LinearLayoutManager(TourismActivity.this));
 
         Query query = databaseReference.orderByKey();
 
-        FirebaseRecyclerOptions<Tourism> options = new FirebaseRecyclerOptions.Builder<Tourism>()
-                .setQuery(query, Tourism.class).build();
+        FirebaseRecyclerOptions<Restoran> options = new FirebaseRecyclerOptions.Builder<Restoran>()
+                .setQuery(query, Restoran.class).build();
 
 
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Tourism, TourismActivity.TourismViewHolder>(options) {
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Restoran, TourismActivity.TourismViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull TourismActivity.TourismViewHolder tourismViewHolder, int i, @NonNull Tourism tourism) {
-                tourismViewHolder.setGambar(tourism.getGambar());
-                tourismViewHolder.setNama(tourism.getNama());
-                tourismViewHolder.setTempat(tourism.getTempat());
-                tourismViewHolder.setRating(tourism.getRating());
+            protected void onBindViewHolder(@NonNull TourismActivity.TourismViewHolder tourismViewHolder, int i, @NonNull Restoran tourism) {
+                String LatLong = tourism.getAlamatRestoran();
+                String getLatLong[] = LatLong.split(",");
+                String getLat= getLatLong[0], getLong=getLatLong[1];
+                DecimalFormat df = new DecimalFormat("#.##");
+                double jarak = getJarak(Double.parseDouble(myLat), Double.parseDouble(getLat),Double.parseDouble(myLong), Double.parseDouble(getLong));
 
-                String ID = tourism.getId();
+
+                tourismViewHolder.setGambar(tourism.getFoto());
+                tourismViewHolder.setNama(tourism.getNamaRestoran());
+                tourismViewHolder.setTempat(df.format(tourism.getAkumulasiRating()));
+                tourismViewHolder.setRating(df.format(jarak)+" KM");
+
+                String ID = tourism.getID();
 
                 tourismViewHolder.itemView.setOnClickListener(view -> {
-                    Intent intent = new Intent(TourismActivity.this, TourismDetail.class);
-                    intent.putExtra(TourismDetail.ID, ID);
+                    Intent intent = new Intent(TourismActivity.this, TourismDetailActivity.class);
+                    intent.putExtra(TourismDetailActivity.gambar, tourism.getFoto());
+                    intent.putExtra(TourismDetailActivity.id, ID);
+                    intent.putExtra(TourismDetailActivity.nama, tourism.getNamaRestoran());
+                    intent.putExtra(TourismDetailActivity.rating, tourism.getAkumulasiRating());
                     startActivity(intent);
                 });
             }
@@ -69,11 +113,13 @@ public class TourismActivity extends AppCompatActivity {
         };
 
         rvTour.setAdapter(firebaseRecyclerAdapter);
+        cvTour.setOnClickListener(View->addTour());
     }
 
     private void initializeUI() {
-        //rvTour = findViewById(R.id.TourismCategorize);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Wisata");
+        //rvTour = findViewById(R.id.TourismCategories);
+        cvTour = findViewById(R.id.addTour);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("Wisata").child("Wisata");
     }
     @Override
     protected void onStart() {
@@ -94,6 +140,18 @@ public class TourismActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
+    }
+
+    private void addTour(){
+        Intent in = new Intent(TourismActivity.this, AddTourismActivity.class);
+        in.putExtra(AddTourismActivity.Jenis, "Wisata");
+        in.putExtra(AddTourismActivity.kategori, "Wisata");
+        startActivity(in);
+    }
+
+    private double getJarak(double lat1, double lat2, double long1, double long2){
+        Distance distance = new Distance();
+        return distance.distance(lat1, lat2, long1, long2);
     }
 
     public class TourismViewHolder extends RecyclerView.ViewHolder {

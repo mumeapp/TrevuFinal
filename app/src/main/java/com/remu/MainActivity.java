@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(viewDictonary);
         });
         friendButton.setOnClickListener(view -> {
-            Intent viewFriend = new Intent(MainActivity.this, ConfirmScannerActivity.class);
+            Intent viewFriend = new Intent(MainActivity.this, ListOnline.class);
             startActivity(viewFriend);
         });
         tourButton.setOnClickListener(view -> {

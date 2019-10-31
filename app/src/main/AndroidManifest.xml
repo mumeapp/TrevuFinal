@@ -23,6 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".AddTourismActivity"></activity>
+        <activity android:name=".TourismDetailActivity" />
         <activity android:name=".ProfileFriend" />
         <activity android:name=".RatingActivity" />
         <activity android:name=".CommentActivity" />
@@ -35,7 +37,6 @@
         <activity android:name=".SetAddressActivity" />
         <activity android:name=".HalalFastFoodRestaurantActivity" />
         <activity android:name=".HalalGiftActivity" />
-        <activity android:name=".TourismDetail" />
         <activity android:name=".HalalFastFoodActivity" />
         <activity android:name=".TourismActivity" />
         <activity android:name=".FastFoodActivity" />
