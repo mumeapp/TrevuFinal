@@ -1,18 +1,18 @@
 package com.remu.POJO;
 
 public class Tourism {
-    private String id, nama, tempat, rating, gambar;
+    private String id, nama, gambar, deskripsi, alamatTempat;
+    private double rating;
 
     public Tourism(){
 
     }
 
-    public Tourism(String id, String nama, String tempat, String gambar, String rating){
-        this.id = id;
+    public Tourism(String nama, String gambar, String deskripsi, String alamatTempat){
         this.nama = nama;
-        this.tempat = tempat;
         this.gambar = gambar;
-        this.rating = rating;
+        this.alamatTempat = alamatTempat;
+        this.deskripsi = deskripsi;
     }
 
     public String getGambar() {
@@ -39,19 +39,11 @@ public class Tourism {
         this.nama = nama;
     }
 
-    public String getTempat() {
-        return tempat;
-    }
-
-    public void setTempat(String lokasi) {
-        this.tempat = lokasi;
-    }
-
-    public String getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 }

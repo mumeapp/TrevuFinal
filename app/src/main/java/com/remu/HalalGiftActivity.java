@@ -83,15 +83,16 @@ public class HalalGiftActivity extends AppCompatActivity {
                 halalGiftViewHolder.setGambar(halalGift.getFoto());
                 halalGiftViewHolder.setJudul(halalGift.getNamaRestoran());
                 halalGiftViewHolder.setJarak(df.format(jarak)+" KM");
-                halalGiftViewHolder.setRating("5,0");
+                halalGiftViewHolder.setRating(df.format(halalGift.getAkumulasiRating()));
 
                 String id = halalGift.getID();
 
                 halalGiftViewHolder.itemView.setOnClickListener(view -> {
                     String gambar = halalGift.getFoto();
-                    Intent intent = new Intent(HalalGiftActivity.this, HalalFoodRestaurantActivity.class);
-                    intent.putExtra(HalalFoodRestaurantActivity.Nama, id);
-                    intent.putExtra(HalalFoodRestaurantActivity.url,gambar);
+                    Intent intent = new Intent(HalalGiftActivity.this, PlaceDetailActivity.class);
+                    intent.putExtra(PlaceDetailActivity.Nama, "Gift");
+                    intent.putExtra(PlaceDetailActivity.Jenis,"Gift");
+                    intent.putExtra(PlaceDetailActivity.ID, id);
                     startActivity(intent);
                 });
             }
