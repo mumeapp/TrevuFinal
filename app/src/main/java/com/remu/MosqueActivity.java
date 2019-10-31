@@ -379,9 +379,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             listMasjid.setLayoutManager(layoutManager);
             mAdapter = new MosqueAdapter(getApplication(), mDataSet);
             listMasjid.setAdapter(mAdapter);
-            listMasjid.setOnSnapListener(position -> {
-
-            });
 
             for (Mosque a : mDataSet) {
                 mMap.addMarker(new MarkerOptions()
