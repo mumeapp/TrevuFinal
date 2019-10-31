@@ -1,5 +1,6 @@
 package com.remu;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ public class RatingActivity extends AppCompatActivity {
     private DatabaseReference reference;
     private double ratingSekarang;
     private Double akumulasiRating=0.0;
+    private ProgressDialog loading;
     private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
@@ -74,6 +76,11 @@ public class RatingActivity extends AppCompatActivity {
         });
     }
     public void simpan(){
+        loading = ProgressDialog.show(RatingActivity.this,
+                null,
+                "please wait...",
+                true,
+                false);
         nilaiBiaya = biaya.getText().toString();
         nilaiLama = biaya.getText().toString();
         nilaiReview = review.getText().toString();
@@ -100,6 +107,7 @@ public class RatingActivity extends AppCompatActivity {
 
                         }
                     });
+                    loading.dismiss();
                     finish();
                 }
                 else{

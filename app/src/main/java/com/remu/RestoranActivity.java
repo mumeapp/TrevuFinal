@@ -1,5 +1,6 @@
 package com.remu;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -35,6 +36,7 @@ public class RestoranActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 71;
     public static String kategori = "kategori", Jenis = "jenis", tempat = "tempat", lang = "lang", lat = "lat", namaRestoran = "nama", deskripsi = "desk", gambar = "uri";
     private EditText Namarestoran, Deskripsi;
+    private ProgressDialog loading;
     private Button Next, AlamatRestoran;
     private ImageView foto;
     private Uri filePath;
@@ -122,12 +124,18 @@ public class RestoranActivity extends AppCompatActivity {
 
                                 Restoran restoran = new Restoran(nama, alamat, foto1, deskripsi);
                                 try {
+                                    loading = ProgressDialog.show(RestoranActivity.this,
+                                            null,
+                                            "please wait...",
+                                            true,
+                                            false);
                                     databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child(jenis).child(Kategori).push();
                                     String id = databaseReference.getKey();
                                     databaseReference.setValue(restoran).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
+                                                loading.dismiss();
                                                 databaseReference.child("ID").setValue(id);
                                                 databaseReference.child("akumulasiRating").setValue(0.0);
                                                 Toast.makeText(RestoranActivity.this, "Success", Toast.LENGTH_SHORT).show();
