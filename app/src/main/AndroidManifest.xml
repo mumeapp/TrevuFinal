@@ -15,6 +15,7 @@
     -->
 
     <application
+
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".ProfileFriend" />
         <activity android:name=".RatingActivity" />
         <activity android:name=".CommentActivity" />
