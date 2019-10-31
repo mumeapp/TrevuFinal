@@ -91,7 +91,7 @@
             android:layout_height="wrap_content" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/addFood"
+            android:id="@+id/addTour"
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:layout_marginLeft="25dp"
