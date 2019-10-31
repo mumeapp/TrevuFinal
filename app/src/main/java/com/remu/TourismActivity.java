@@ -12,11 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,7 +25,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.remu.POJO.Tourism;
 import com.remu.POJO.Distance;
 import com.remu.POJO.Restoran;
 
@@ -117,7 +111,7 @@ public class TourismActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        //rvTour = findViewById(R.id.TourismCategories);
+        rvTour = findViewById(R.id.TourismCategories);
         cvTour = findViewById(R.id.addTour);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("Wisata").child("Wisata");
     }
