@@ -111,7 +111,7 @@ public class TourismActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        rvTour = findViewById(R.id.TourismCategorize);
+        rvTour = findViewById(R.id.TourismCategories);
         cvTour = findViewById(R.id.addTour);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("Wisata").child("Wisata");
     }
