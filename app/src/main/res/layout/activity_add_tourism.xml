@@ -4,11 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddTourismActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -42,7 +37,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/osregular"
-                    android:text="Tambah restoran"
+                    android:text="Add Tourism Place"
                     android:textColor="#000000"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -53,7 +48,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/osregular"
-                android:text="Nama restoran"
+                android:text="Place name"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -78,7 +73,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/osregular"
-                android:text="Alamat restoran"
+                android:text="Place Address"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -103,7 +98,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/osregular"
-                android:text="Deskripsi singkat"
+                android:text="Short description"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -117,7 +112,7 @@
                 android:background="@drawable/input_grey"
                 android:fontFamily="@font/osregular"
                 android:gravity="top"
-                android:hint="Short brief about the restaurant"
+                android:hint="Short brief about the place"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
@@ -149,13 +144,8 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="15dp"
                     android:fontFamily="@font/osregular"
-                    android:text="Batal"
+                    android:text="Cancel"
                     android:textSize="16sp" />
             </RelativeLayout>
-
-
         </LinearLayout>
-    </RelativeLayout>
-
-
 </ScrollView>
