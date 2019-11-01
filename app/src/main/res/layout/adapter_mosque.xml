@@ -52,33 +52,33 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/ic_dist" />
 
-            <TextView
-                android:id="@+id/distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
-                android:fontFamily="@font/osregular"
-                android:text="0.00 km" />
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="55dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/osregular"
+            android:text="0.00 km" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="125dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/ic_star_yellow_24dp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="125dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/ic_star_yellow_24dp" />
 
-            <TextView
-                android:id="@+id/rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="rating"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="150dp"
-                android:layout_marginBottom="15dp"
-                android:fontFamily="@font/osregular" />
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="150dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/osregular"
+            android:text="rating" />
 
         <Button
             android:layout_width="100dp"
@@ -88,10 +88,10 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/input_blue"
-                android:fontFamily="@font/osregular"
+            android:fontFamily="@font/osregular"
             android:text="Discover"
-                android:textColor="#ffffff"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textColor="#ffffff" />
 
 
     </RelativeLayout>

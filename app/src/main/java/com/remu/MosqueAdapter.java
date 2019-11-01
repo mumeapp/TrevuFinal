@@ -44,24 +44,10 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull MosqueAdapter.ViewHolder holder, int position) {
         //ntr ganti
         try {
-            String url = null;
-            try {
-                url = "https://maps.googleapis.com/maps/api/place/photo?" +
-                        "maxwidth=" + mDataset.get(position).getPhotos().getJSONObject(0).getString("width") +
-                        "&photoreference=" + mDataset.get(position).getPhotos().getJSONObject(0).getString("photo_reference") +
-                        "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-//                + app.getApplicationInfo().metaData.getString("com.google.android.geo.API_KEY");
-            } catch (JSONException e) {
-                Log.e(MosqueActivity.getTAG(), "Json parsing error: " + e.getMessage());
-            }
-
-            Glide.with(app)
-                    .load(url)
-                    .placeholder(R.drawable.bg_loading)
-                    .into(holder.imageView);
-            holder.textTitle.setText(mDataset.get(position).getName());
-            holder.textRating.setText(mDataset.get(position).getRating());
-            holder.textDistance.setText(String.format("%.2f km", countDistance(mDataset.get(position).getGeoLocation())));
+            holder.mosqueName.setText(mDataset.get(position).getName());
+            holder.targetAddress.setText(mDataset.get(position).getVicinity());
+            holder.distance.setText(String.format("%.2f km", countDistance(mDataset.get(position).getGeoLocation())));
+            holder.rating.setText(String.format("%.1f", Double.parseDouble(mDataset.get(position).getRating())));
         } catch (NullPointerException e) {
 
         }
@@ -76,20 +62,19 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
         LatLng currentLatLng = new LatLng(Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null)), Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null)));
         Distance distance = new Distance();
 
-        return Distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
+        return distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageView;
-        TextView textTitle, textRating, textDistance;
+        TextView mosqueName, targetAddress, distance, rating;
 
         ViewHolder(View itemView) {
             super(itemView);
-//            imageView = itemView.findViewById(R.id.gbr1);
-//            textTitle = itemView.findViewById(R.id.tul1);
-//            textRating = itemView.findViewById(R.id.tul2);
-//            textDistance = itemView.findViewById(R.id.dis);
+            mosqueName = itemView.findViewById(R.id.MosqueName);
+            targetAddress = itemView.findViewById(R.id.TargetAddress);
+            distance = itemView.findViewById(R.id.distance);
+            rating = itemView.findViewById(R.id.rating);
         }
     }
 }

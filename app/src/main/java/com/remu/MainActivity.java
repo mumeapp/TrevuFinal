@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<TextView> textViews = new ArrayList<TextView>() {{
             add(jamSolatSelanjutnya);
         }};
-        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews);
+        prayerTime = new PrayerTime(this, TAG, latitude, longitude, textViews);
         prayerTime.execute();
     }
 

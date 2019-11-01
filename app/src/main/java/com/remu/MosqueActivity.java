@@ -169,6 +169,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             //mMap.clear();
             uiSettings.setAllGesturesEnabled(true);
             uiSettings.setMapToolbarEnabled(false);
+            uiSettings.setMyLocationButtonEnabled(true);
+            View locationButton = ((View) findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+            RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+// position on right bottom
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            rlp.setMargins(0, 0, 0, 100);
 
             mMap.setMyLocationEnabled(true);
 //            mMap.setOnMyLocationButtonClickListener(this);
@@ -295,7 +301,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             add(layoutMaghrib);
             add(layoutIsha);
         }};
-        prayerTime = new PrayerTime(this.getApplicationContext(), TAG, latitude, longitude, textViews, linearLayouts);
+        prayerTime = new PrayerTime(this, TAG, latitude, longitude, textViews, linearLayouts);
         prayerTime.execute();
     }
 
@@ -319,13 +325,9 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
-//            Bundle metaData = new Bundle();
-//            try {
-//                metaData = getApplicationContext().getPackageManager().getApplicationInfo(getApplicationContext().getPackageName(), PackageManager.GET_META_DATA).metaData;
-//            } catch (PackageManager.NameNotFoundException e) {
-//                e.printStackTrace();
-//            }
-            String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=nearby+mosque&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+
+            String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +"&rankby=distance&type=mosque&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+//            String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=nearby+mosque&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 //                    + metaData.getString("com.google.android.geo.API_KEY");
 //            https://maps.googleapis.com/maps/api/directions/json?origin=Universitas%20Brawijaya&destination=Alun-alun%20Malang&avoid=highways&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8
 
@@ -342,7 +344,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                         JSONObject row = results.getJSONObject(i);
 
                         mDataSet.add(new Mosque(
-                                row.getString("formatted_address"),
                                 new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
                                 new HashMap<String, LatLng>() {{
                                     put("northeast", new LatLng(row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("northeast").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("northeast").getDouble("lng")));
@@ -351,14 +352,16 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                                 row.getString("icon"),
                                 row.getString("id"),
                                 row.getString("name"),
-                                row.getJSONArray("photos"),
+                                row.getJSONObject("opening_hours").getBoolean("open_now"),
                                 row.getString("place_id"),
                                 row.getJSONObject("plus_code").getString("compound_code"),
                                 row.getJSONObject("plus_code").getString("global_code"),
                                 row.getString("rating"),
                                 row.getString("reference"),
+                                row.getString("scope"),
                                 row.getJSONArray("types"),
-                                row.getString("user_ratings_total")
+                                row.getString("user_ratings_total"),
+                                row.getString("vicinity")
                         ));
                     }
                 } catch (final JSONException e) {

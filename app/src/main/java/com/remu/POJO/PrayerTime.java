@@ -1,5 +1,6 @@
 package com.remu.POJO;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -31,6 +32,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     private ArrayList<HashMap<String, String>> prayerList;
     private ArrayList<TextView> textViews = new ArrayList<>();
     private ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
+    private ProgressDialog progressDialog;
 
     public PrayerTime(Context context, String TAG, String latitude, String longitude, ArrayList<TextView> textViews) {
         this.context = context;
@@ -48,7 +50,13 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onPreExecute() { super.onPreExecute(); }
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
 
     @Override
     protected Void doInBackground(Void... voids) {
@@ -97,6 +105,11 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+
         switch (TAG) {
             case "MosqueActivity":
                 setNextPrayerTime(textViews.get(0));

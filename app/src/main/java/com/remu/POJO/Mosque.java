@@ -8,40 +8,38 @@ import java.util.HashMap;
 
 public class Mosque {
 
-    private String formattedAddress;
     private LatLng geoLocation;
     private HashMap<String, LatLng> geoViewport;
     private String icon;
     private String id;
     private String name;
-    private JSONArray photos;
+    private boolean openNow;
     private String placeId;
     private String compoundCode;
     private String globalCode;
     private String rating;
     private String reference;
+    private String scope;
     private JSONArray types;
     private String userRatingsTotal;
+    private String vicinity;
 
-    public Mosque(String formattedAddress, LatLng geoLocation, HashMap<String, LatLng> geoViewport, String icon, String id, String name, JSONArray photos, String placeId, String compoundCode, String globalCode, String rating, String reference, JSONArray types, String userRatingsTotal) {
-        this.formattedAddress = formattedAddress;
+    public Mosque(LatLng geoLocation, HashMap<String, LatLng> geoViewport, String icon, String id, String name, boolean openNow, String placeId, String compoundCode, String globalCode, String rating, String reference, String scope, JSONArray types, String userRatingsTotal, String vicinity) {
         this.geoLocation = geoLocation;
         this.geoViewport = geoViewport;
         this.icon = icon;
         this.id = id;
         this.name = name;
-        this.photos = photos;
+        this.openNow = openNow;
         this.placeId = placeId;
         this.compoundCode = compoundCode;
         this.globalCode = globalCode;
         this.rating = rating;
         this.reference = reference;
+        this.scope = scope;
         this.types = types;
         this.userRatingsTotal = userRatingsTotal;
-    }
-
-    public String getFormattedAddress() {
-        return formattedAddress;
+        this.vicinity = vicinity;
     }
 
     public LatLng getGeoLocation() {
@@ -64,9 +62,7 @@ public class Mosque {
         return name;
     }
 
-    public JSONArray getPhotos() {
-        return photos;
-    }
+    public boolean getOpenNow() { return openNow; }
 
     public String getPlaceId() {
         return placeId;
@@ -88,6 +84,8 @@ public class Mosque {
         return reference;
     }
 
+    public String getScope() { return scope; }
+
     public JSONArray getTypes() {
         return types;
     }
@@ -95,5 +93,7 @@ public class Mosque {
     public String getUserRatingsTotal() {
         return userRatingsTotal;
     }
+
+    public String getVicinity() { return vicinity; }
 
 }
