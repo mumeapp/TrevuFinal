@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,20 +28,29 @@ public class DictionaryActivity extends AppCompatActivity {
 
 
     private DatabaseReference databaseReference;
+    public static String hasilAw = "hasil", hasilAk= "asa";
     private FirebaseRecyclerAdapter<TextProcess, TextProcessViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvDictionary;
-    private Button btn1, btn2;
-    private Spinner spinAwal, spinAkhir;
+    private Button btn1;
+    private ImageView awal, akhir;
     private String textAw, textAk;
     private int check, check2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
+
+        awal = findViewById(R.id.awal);
+        akhir = findViewById(R.id.akhir);
+
         rvDictionary = findViewById(R.id.rv_listDictionary);
         rvDictionary.setHasFixedSize(true);
         rvDictionary.setLayoutManager(new LinearLayoutManager(DictionaryActivity.this));
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("jepang-inggris");
+        if(getIntent().getStringExtra(hasilAk)!=null&& getIntent().getStringExtra(hasilAw)!=null){
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child(getIntent().getStringExtra(hasilAw)+"-"+getIntent().getStringExtra(hasilAk));
+
+        }
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("melayu-inggris");
 
 
         Query query = databaseReference.orderByKey();
@@ -69,7 +78,7 @@ public class DictionaryActivity extends AppCompatActivity {
         };
 
         rvDictionary.setAdapter(firebaseRecyclerAdapter);
-        btn1 = findViewById(R.id.addButton);
+        btn1 = findViewById(R.id.ButtonAdd);
         btn1.setOnClickListener(view -> buttonAdd());
 
     }
@@ -136,6 +145,19 @@ public class DictionaryActivity extends AppCompatActivity {
             });
         }
     }
+
+    private void awal(){
+        Intent in = new Intent(DictionaryActivity.this, chooseLanguageActivity.class);
+        in.putExtra(chooseLanguageActivity.test, "a");
+        startActivity(in);
+    }
+
+    private void akhir(){
+        Intent in = new Intent(DictionaryActivity.this, chooseLanguageActivity.class);
+        in.putExtra(chooseLanguageActivity.test, "b");
+        startActivity(in);
+    }
+
     private void buttonAdd() {
         Intent intent = new Intent(DictionaryActivity.this, AddDictionary.class);
         startActivity(intent);
