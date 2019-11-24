@@ -79,7 +79,7 @@ public class DictionaryActivity extends AppCompatActivity {
 
         rvDictionary.setAdapter(firebaseRecyclerAdapter);
         btn1 = findViewById(R.id.ButtonAdd);
-        btn1.setOnClickListener(view -> buttonAdd());
+//        btn1.setOnClickListener(view -> buttonAdd());
 
     }
 
@@ -158,8 +158,8 @@ public class DictionaryActivity extends AppCompatActivity {
         startActivity(in);
     }
 
-    private void buttonAdd() {
-        Intent intent = new Intent(DictionaryActivity.this, AddDictionary.class);
-        startActivity(intent);
-    }
+//    private void buttonAdd() {
+//        Intent intent = new Intent(DictionaryActivity.this, AddDictionary.class);
+//        startActivity(intent);
+//    }
 }

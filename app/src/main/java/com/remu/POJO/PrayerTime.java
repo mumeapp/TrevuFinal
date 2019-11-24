@@ -121,6 +121,10 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         }
     }
 
+    public ArrayList<HashMap<String, String>> getPrayerList() {
+        return this.prayerList;
+    }
+
     private void setPrayerList(TextView fajr, TextView dhuhr, TextView asr, TextView maghrib, TextView isha) {
         fajr.setText(prayerList.get(0).get("time"));
         dhuhr.setText(prayerList.get(1).get("time"));
