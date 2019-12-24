@@ -8,4 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MainActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#FF7587</item>
+        <item name="colorPrimaryDark">#FF7587</item>
+        <item name="colorAccent">#FF7587</item>
+    </style>
+
+    <style name="FoodActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#FFAC00</item>
+        <item name="colorPrimaryDark">#FFAC00</item>
+        <item name="colorAccent">#FFAC00</item>
+    </style>
+
 </resources>

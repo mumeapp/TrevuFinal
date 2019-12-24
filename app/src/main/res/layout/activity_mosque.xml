@@ -27,7 +27,7 @@
             android:id="@+id/jamSolat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:animationDuration="200"
             app:expandOnClick="true"
             app:inner_view="@layout/activity_salat_time"
@@ -37,7 +37,7 @@
             android:id="@+id/someInformation"
             android:layout_width="match_parent"
             android:layout_height="125dp"
-            android:paddingLeft="10dp">
+            android:paddingStart="10dp">
 
             <TextView
                 android:id="@+id/jamSolatSelanjutnya"
@@ -69,8 +69,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
+        android:clipToPadding="false"
+        android:paddingStart="20dp"
+        android:paddingEnd="15dp"
         app:msrv_gravity="center"
-        app:msrv_snap_count="1" />
+        app:msrv_interval="1" />
 
 </RelativeLayout>

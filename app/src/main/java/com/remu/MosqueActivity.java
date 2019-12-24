@@ -2,15 +2,18 @@ package com.remu;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -129,6 +132,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 //        }
 
         final SnapHelper snapHelper = new LinearSnapHelper();
+        listMasjid.setOnFlingListener(null);
         snapHelper.attachToRecyclerView(listMasjid);
 
         listMasjid.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -173,8 +177,9 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             View locationButton = ((View) findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
             RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
 // position on right bottom
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
             rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            rlp.setMargins(0, 0, 0, 100);
+            rlp.setMargins(0, 0, 30, (int) getPixelFromDp(165, this) + 30);
 
             mMap.setMyLocationEnabled(true);
 //            mMap.setOnMyLocationButtonClickListener(this);
@@ -269,6 +274,9 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
     private void initializeUI() {
         jamSolat = findViewById(R.id.jamSolat);
+        CardView cardJamSolat = jamSolat.findViewById(R.id.card);
+        cardJamSolat.setRadius(getPixelFromDp(12, this));
+        cardJamSolat.setElevation(0);
         someInformation = findViewById(R.id.someInformation);
         listMasjid = findViewById(R.id.listMasjid);
         mDataSet = new ArrayList<>();
@@ -307,6 +315,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
     public static String getTAG() {
         return TAG;
+    }
+
+    public float getPixelFromDp(float dp, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * (metrics.densityDpi / 160f);
     }
 
     private class GetData extends AsyncTask<Void, Void, Void> {

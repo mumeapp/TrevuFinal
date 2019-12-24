@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".chooseLanguageActivity"></activity>
+        <activity android:name=".chooseLanguageActivity" />
         <activity android:name=".AddTourismActivity" />
         <activity android:name=".TourismDetailActivity" />
         <activity android:name=".ProfileFriend" />
@@ -47,7 +47,7 @@
         <activity android:name=".ListOnline" />
         <activity android:name=".Profil" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".AddDictionary" />
+        <!--        <activity android:name=".AddDictionary" />-->
         <activity android:name=".DictionaryActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -58,15 +58,17 @@
         </activity>
         <activity android:name=".OnboardingActivity" />
         <activity android:name=".SplashscreenActivity" />
-        <activity android:name=".FoodActivity" />
+        <activity
+            android:name=".FoodActivity"
+            android:theme="@style/FoodActivityTheme" />
+        <activity android:name=".MosqueActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/MainActivityTheme" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8" />
-
-        <activity android:name=".MosqueActivity" />
-        <activity android:name=".MainActivity" />
-
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />

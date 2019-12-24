@@ -1,27 +1,27 @@
 package com.remu;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.remu.POJO.Article;
 import com.remu.POJO.LatLngRetriever;
 import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
+import com.remu.POJO.Tips;
+import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,11 +31,21 @@ public class MainActivity extends AppCompatActivity {
 
     private PrayerTime prayerTime;
 
-    CardView mosqueCardView, foodButton, dictionaryButton, friendButton, tourButton;
+    CardView mosqueCardView, foodButton, dictionaryButton, tourButton;
     String name;
     TextView nama;
     TextView jamSolatSelanjutnya;
     private FirebaseAuth mAuth;
+
+    LinearLayoutManager articleLayoutManager;
+    MultiSnapRecyclerView listArticle;
+    RecyclerView.Adapter articleAdapter;
+    ArrayList<Article> articleDataSet;
+
+    LinearLayoutManager tipsLayoutManager;
+    MultiSnapRecyclerView listTips;
+    RecyclerView.Adapter tipsAdapter;
+    ArrayList<Tips> tipsDataSet;
 
     public LocationResult locationResult = new LocationResult() {
 
@@ -75,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
         //initialize uI
         initializeUI();
+        initializeArticle();
+        initializeTips();
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -101,10 +113,6 @@ public class MainActivity extends AppCompatActivity {
             Intent viewDictonary = new Intent(MainActivity.this, DictionaryActivity.class);
             startActivity(viewDictonary);
         });
-        friendButton.setOnClickListener(view -> {
-            Intent viewFriend = new Intent(MainActivity.this, ListOnline.class);
-            startActivity(viewFriend);
-        });
         tourButton.setOnClickListener(view -> {
             Intent viewTour = new Intent(MainActivity.this, TourismActivity.class);
             startActivity(viewTour);
@@ -116,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
         mosqueCardView = findViewById(R.id.MosqueCardView);
         foodButton = findViewById(R.id.foodButton);
         dictionaryButton = findViewById(R.id.dictionaryButton);
-        friendButton = findViewById(R.id.findFriendsButton);
         tourButton = findViewById(R.id.tourismButton);
         nama = findViewById(R.id.nama);
         jamSolatSelanjutnya = findViewById(R.id.jamSolatSelanjutnya);
@@ -125,6 +132,31 @@ public class MainActivity extends AppCompatActivity {
         }};
         prayerTime = new PrayerTime(this, TAG, latitude, longitude, textViews);
         prayerTime.execute();
+        listArticle = findViewById(R.id.listArticle);
+        articleDataSet = new ArrayList<Article>() {{
+            add(new Article(getDrawable(R.drawable.img_article), "Discover the relic!", "There was no mention of any time period, or the context of the conflict that took the purported and so on. "));
+            add(new Article(getDrawable(R.drawable.img_article), "Discover the relic!", "There was no mention of any time period, or the context of the conflict that took the purported and so on. "));
+        }};
+        listTips = findViewById(R.id.listTips);
+        tipsDataSet = new ArrayList<Tips>() {{
+            add(new Tips(getDrawable(R.drawable.ic_img_tips), "Tips #1", ""));
+            add(new Tips(getDrawable(R.drawable.ic_img_tips), "Tips #2", ""));
+            add(new Tips(getDrawable(R.drawable.ic_img_tips), "Tips #3", ""));
+        }};
+    }
+
+    private void initializeArticle() {
+        articleLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        listArticle.setLayoutManager(articleLayoutManager);
+        articleAdapter = new ArticleAdapter(getApplication(), articleDataSet);
+        listArticle.setAdapter(articleAdapter);
+    }
+
+    private void initializeTips() {
+        tipsLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        listTips.setLayoutManager(tipsLayoutManager);
+        tipsAdapter = new TipsAdapter(getApplication(), tipsDataSet);
+        listTips.setAdapter(tipsAdapter);
     }
 
     private void getCurrentUser(FirebaseUser user) {

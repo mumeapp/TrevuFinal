@@ -20,33 +20,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/bgjapan" />
+                android:background="@drawable/ic_bg_main" />
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:background="@drawable/shade_black" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="70dp"
-                android:fontFamily="@font/osregular"
-                android:text="Halo"
-                android:textColor="#ffffff"
-                android:textSize="30sp" />
+                android:layout_marginTop="80dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/nama"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="100sp"
-                android:fontFamily="@font/osextrabold"
-                android:text="Remu"
-                android:textColor="#ffffff"
-                android:textSize="40sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/osregular"
+                    android:text="Halo"
+                    android:textColor="#000000"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/nama"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/osextrabold"
+                    android:text="Guest"
+                    android:textColor="#000000"
+                    android:textSize="40sp" />
+
+            </LinearLayout>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/MosqueCardView"
@@ -54,36 +55,38 @@
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="200dp"
+                android:layout_marginTop="190dp"
                 android:layout_marginEnd="25dp"
                 android:layout_marginBottom="10dp"
-                android:elevation="6dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_bg_sholat_card">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="10dp"
-                        android:fontFamily="@font/oslight"
+                        android:fontFamily="@font/osregular"
                         android:text="Jadwal Sholat Selanjutnya"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/jamSolatSelanjutnya"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="40dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginBottom="20dp"
                         android:fontFamily="@font/osextrabold"
                         android:text=""
                         android:textColor="#000000"
-                        android:textSize="48sp" />
+                        android:textSize="52sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -92,181 +95,268 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="10dp"
-                        android:text="Selengkapnya" />
+                        android:fontFamily="@font/osregular"
+                        android:text="Selengkapnya"
+                        android:textColor="#ffffff" />
+
                 </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
+
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/foodButton"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="50"
-                android:elevation="8dp"
-                app:cardCornerRadius="12dp">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="30dp"
-                        android:background="@drawable/ic_food_logo" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="15dp"
-                        android:fontFamily="@font/osregular"
-                        android:text="Food"
-                        android:textColor="#000000"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/tourismButton"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="25dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="50"
-                android:elevation="8dp"
-                app:cardCornerRadius="12dp">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                android:fontFamily="@font/osextrabold"
+                android:text="What can we help you find?"
+                android:textColor="#000000"
+                android:textSize="24sp" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="30dp"
-                        android:background="@drawable/ic_tourism_logo" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:scrollbars="none">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="15dp"
-                        android:fontFamily="@font/osregular"
-                        android:text="Tourism"
-                        android:textColor="#000000"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        </LinearLayout>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/foodButton"
+                        android:layout_width="150dp"
+                        android:layout_height="130dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/dictionaryButton"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="50"
-                android:elevation="8dp"
-                app:cardCornerRadius="12dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="7.3"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/food" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="2.7">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="30dp"
-                        android:background="@drawable/ic_dictionary_logo" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginEnd="12dp"
+                                    android:fontFamily="@font/osextrabold"
+                                    android:text="Food"
+                                    android:textColor="#000000"
+                                    android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="15dp"
-                        android:fontFamily="@font/osregular"
-                        android:text="Dictionary"
-                        android:textColor="#000000"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+                            </RelativeLayout>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/findFriendsButton"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="50"
-                android:elevation="8dp"
-                app:cardCornerRadius="12dp">
+                        </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    </androidx.cardview.widget.CardView>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="30dp"
-                        android:background="@drawable/ic_find_friends_logo" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/tourismButton"
+                        android:layout_width="150dp"
+                        android:layout_height="130dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="15dp"
-                        android:fontFamily="@font/osregular"
-                        android:text="Find Friends"
-                        android:textColor="#000000"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="7.3"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/tourism" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="2.7">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginEnd="12dp"
+                                    android:fontFamily="@font/osextrabold"
+                                    android:text="Tourism"
+                                    android:textColor="#000000"
+                                    android:textSize="15sp" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/dictionaryButton"
+                        android:layout_width="150dp"
+                        android:layout_height="130dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="7.3"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/dictionary" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="2.7">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginEnd="12dp"
+                                    android:fontFamily="@font/osextrabold"
+                                    android:text="Dictionary"
+                                    android:textColor="#000000"
+                                    android:textSize="15sp" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
         </LinearLayout>
 
         <com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView
             android:id="@+id/listArticle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
+            android:paddingStart="20dp"
+            android:paddingEnd="15dp"
             app:msrv_gravity="center"
-            app:msrv_snap_count="1" />
+            app:msrv_interval="1" />
 
-        <com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView
-            android:id="@+id/listTips"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:msrv_gravity="center"
-            app:msrv_snap_count="3" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:fontFamily="@font/osextrabold"
+                android:text="Tips"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView
+                android:id="@+id/listTips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="20dp"
+                android:paddingEnd="15dp"
+                app:msrv_gravity="center"
+                app:msrv_interval="3" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_marginStart="-75dp"
+                android:layout_weight="6"
+                android:src="@drawable/ic_img_need_help" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/osregular"
+                    android:text="Need help?"
+                    android:textColor="#000000"
+                    android:textSize="22sp" />
+
+                <Button
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/button_green"
+                    android:fontFamily="@font/osregular"
+                    android:text="contact us"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
+
 </ScrollView>
