@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     MultiSnapRecyclerView listTips;
     RecyclerView.Adapter tipsAdapter;
     ArrayList<Tips> tipsDataSet;
+
+    ScrollView mainScrollView;
 
     public LocationResult locationResult = new LocationResult() {
 
@@ -94,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
         //set nama
         getCurrentUser(currentUser);
 
+        mainScrollView = findViewById(R.id.main_scroll);
+        mainScrollView.post(() -> {
+            mainScrollView.scrollTo(0, 0);
+        });
+
         //go to mosque activity
         mosqueCardView.setOnClickListener(view -> {
             Intent viewMosque = new Intent(MainActivity.this, MosqueActivity.class);
@@ -105,17 +113,23 @@ public class MainActivity extends AppCompatActivity {
         //go to food activity
         foodButton.setOnClickListener(view -> {
             Intent viewFood = new Intent(MainActivity.this, FoodActivity.class);
+            viewFood.putExtra("latitude", latitude);
+            viewFood.putExtra("longitude", longitude);
             startActivity(viewFood);
+        });
+
+        //go to tourism activity
+        tourButton.setOnClickListener(view -> {
+            Intent viewTour = new Intent(MainActivity.this, TourismActivity.class);
+            viewTour.putExtra("latitude", latitude);
+            viewTour.putExtra("longitude", longitude);
+            startActivity(viewTour);
         });
 
         //go to Dictionary Activity
         dictionaryButton.setOnClickListener(view -> {
             Intent viewDictonary = new Intent(MainActivity.this, DictionaryActivity.class);
             startActivity(viewDictonary);
-        });
-        tourButton.setOnClickListener(view -> {
-            Intent viewTour = new Intent(MainActivity.this, TourismActivity.class);
-            startActivity(viewTour);
         });
 
     }

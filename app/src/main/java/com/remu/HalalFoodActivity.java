@@ -51,7 +51,7 @@ public class HalalFoodActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood halalFood) {
                 halalFoodViewHolder.setGambar(halalFood.getGambar());
                 halalFoodViewHolder.setJudul(halalFood.getNama());
-                halalFoodViewHolder.setJumlah( halalFood.getJarak());
+                halalFoodViewHolder.setJumlah(halalFood.getJarak());
                 halalFoodViewHolder.setJarak(halalFood.getJarak());
 
                 String nama = halalFood.getNama();

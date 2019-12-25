@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".chooseLanguageActivity" />
         <activity android:name=".AddTourismActivity" />
         <activity android:name=".TourismDetailActivity" />
@@ -33,9 +34,15 @@
         <activity android:name=".QiblaActivity" />
         <activity android:name=".SetAddressActivity" />
         <activity android:name=".HalalFastFoodRestaurantActivity" />
-        <activity android:name=".HalalGiftActivity" />
-        <activity android:name=".HalalFastFoodActivity" />
-        <activity android:name=".TourismActivity" />
+        <activity
+            android:name=".HalalGiftActivity"
+            android:theme="@style/BlueTheme" />
+        <activity
+            android:name=".HalalFastFoodActivity"
+            android:theme="@style/DarkRedTheme" />
+        <activity
+            android:name=".TourismActivity"
+            android:theme="@style/BlueTheme" />
         <activity android:name=".FastFoodActivity" />
         <activity android:name=".FindFriendsActivity" />
         <activity android:name=".FindFriends" />
@@ -43,28 +50,44 @@
         <activity android:name=".HalalFoodRestaurantActivity" />
         <activity android:name=".RestoranActivity" />
         <activity android:name=".FoodKategoriActivity" />
-        <activity android:name=".HalalFoodActivity" />
+        <activity
+            android:name=".HalalFoodActivity"
+            android:theme="@style/YellowTheme" />
         <activity android:name=".ListOnline" />
         <activity android:name=".Profil" />
-        <activity android:name=".RegisterActivity" />
-        <!--        <activity android:name=".AddDictionary" />-->
-        <activity android:name=".DictionaryActivity" />
-        <activity android:name=".LoginActivity">
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/BlueTheme" />
+        <activity
+            android:name=".AddDictionary"
+            android:theme="@style/LightPinkTheme" />
+        <activity
+            android:name=".DictionaryActivity"
+            android:theme="@style/LightPinkTheme" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/BlueTheme" />
+        <activity
+            android:name=".OnboardingActivity"
+            android:theme="@style/BlueTheme" />
+        <activity
+            android:name=".SplashscreenActivity"
+            android:theme="@style/WhiteTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".OnboardingActivity" />
-        <activity android:name=".SplashscreenActivity" />
         <activity
             android:name=".FoodActivity"
-            android:theme="@style/FoodActivityTheme" />
-        <activity android:name=".MosqueActivity" />
+            android:theme="@style/YellowTheme" />
+        <activity
+            android:name=".MosqueActivity"
+            android:theme="@style/GreenTheme" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/MainActivityTheme" />
+            android:theme="@style/MidPinkTheme" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

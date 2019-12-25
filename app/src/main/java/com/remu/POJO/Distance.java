@@ -1,9 +1,8 @@
 package com.remu.POJO;
 
 public class Distance {
-    public static double distance(double lat1,
-                                  double lat2, double lon1,
-                                  double lon2) {
+
+    public static double distance(double lat1, double lat2, double lon1, double lon2) {
 
         // The math module contains a function
         // named toRadians which converts from
@@ -29,4 +28,5 @@ public class Distance {
         // calculate the result
         return (c * r);
     }
+
 }

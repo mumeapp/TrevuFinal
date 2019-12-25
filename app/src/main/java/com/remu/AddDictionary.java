@@ -1,85 +1,85 @@
-//package com.remu;
-//
-//import android.Manifest;
-//import android.annotation.SuppressLint;
-//import android.app.ProgressDialog;
-//import android.content.Intent;
-//import android.content.pm.PackageManager;
-//import android.media.MediaRecorder;
-//import android.net.Uri;
-//import android.os.Bundle;
-//import android.os.Environment;
-//import android.util.Log;
-//import android.view.MotionEvent;
-//import android.view.View;
-//import android.widget.AdapterView;
-//import android.widget.ArrayAdapter;
-//import android.widget.Button;
-//import android.widget.EditText;
-//import android.widget.Spinner;
-//import android.widget.Toast;
-//
-//import androidx.annotation.NonNull;
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.core.app.ActivityCompat;
-//
-//import com.google.android.gms.tasks.OnSuccessListener;
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
-//import com.google.firebase.storage.FirebaseStorage;
-//import com.google.firebase.storage.StorageReference;
-//import com.google.firebase.storage.UploadTask;
-//import com.remu.POJO.TextProcess;
-//
-//import java.io.File;
-//import java.io.IOException;
-//import java.util.Objects;
-//import java.util.UUID;
-//
-//public class AddDictionary extends AppCompatActivity {
-//
-//    private DatabaseReference database;
-//
-//    private EditText etTextAwal;
-//    private EditText etTextTranslete;
-//    private String Audio;
-//    private ProgressDialog loading;
-//
-//    private Button mbtnRecord;
-//    private MediaRecorder recorder;
-//    private String fileName = null;
-//    private static final String LOG_TAG = "Record_Log";
-//    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-//    private boolean permissionToRecordAccepted = false;
-//    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
-//    private StorageReference mStorage;
-//    private String uniqueID = UUID.randomUUID().toString();
-//
-//    private Spinner spinAwal, spinAkhir;
-//    private Awal awal;
-//    private Akhir akhir;
-//    private String textAwal;
-//    private String textAkhir;
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        switch (requestCode){
-//            case REQUEST_RECORD_AUDIO_PERMISSION:
-//                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-//                break;
-//        }
-//        if (!permissionToRecordAccepted ) finish();
-//    }
-//
-//    @SuppressLint("ClickableViewAccessibility")
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_add_dictionary);
-//
+package com.remu;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.MediaRecorder;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.remu.POJO.TextProcess;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.UUID;
+
+public class AddDictionary extends AppCompatActivity {
+
+    private DatabaseReference database;
+
+    private EditText etTextAwal;
+    private EditText etTextTranslete;
+    private String Audio;
+    private ProgressDialog loading;
+
+    private Button mbtnRecord;
+    private MediaRecorder recorder;
+    private String fileName = null;
+    private static final String LOG_TAG = "Record_Log";
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private boolean permissionToRecordAccepted = false;
+    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
+    private StorageReference mStorage;
+    private String uniqueID = UUID.randomUUID().toString();
+
+    private Spinner spinAwal, spinAkhir;
+    private Awal awal;
+    private Akhir akhir;
+    private String textAwal;
+    private String textAkhir;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_RECORD_AUDIO_PERMISSION:
+                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                break;
+        }
+        if (!permissionToRecordAccepted ) finish();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_dictionary);
+
 //        awal = new Awal();
 //        akhir = new Akhir();
 //
@@ -182,106 +182,106 @@
 //                return false;
 //            }
 //        });
-//    }
-//    private void submitUser(TextProcess requests, String child){
-//        database.child("Dictionary").child(child).push().setValue(requests).addOnSuccessListener(this, new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                loading.dismiss();
-//
-//                etTextAwal.setText("");
-//                etTextTranslete.setText("");
-//
-//
-//                Toast.makeText(AddDictionary.this, "data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//    private void link(){
-//        Intent intent = new Intent(AddDictionary.this, DictionaryActivity.class);
-//        startActivity(intent);
-//    }
-//
-//    private void startRecording() {
-//        recorder = new MediaRecorder();
-//        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-//        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-//        recorder.setOutputFile(fileName);
-//        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-//
-//        try {
-//            recorder.prepare();
-//            recorder.start();
-//        } catch (IOException e) {
-//            Log.e(LOG_TAG, "prepare() failed");
-//        }
-//
-////        recorder.start();
-//    }
-//
-//    private void stopRecording() {
-//        try {
-//            recorder.stop();
-//            recorder.release();
-//            recorder = null;
-//            uploadAudio();
-//        }
-//        catch (Exception e){
-//            Log.e(LOG_TAG, "failed to save");
-//        }
-//
-//    }
-//
-//    private void uploadAudio(){
-//
-//        loading = ProgressDialog.show(AddDictionary.this,
-//                null,
-//                "please wait...",
-//                true,
-//                false);
-//        StorageReference filepath = mStorage.child("Audio").child(uniqueID+".mp3");
-//        Uri uri = Uri.fromFile(new File(fileName));
-//        filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                loading.dismiss();
-//                Audio = uri.toString();
-//            }
-//        });
-//    }
-//
-//}
-//
-//class Awal implements AdapterView.OnItemSelectedListener{
-//    private String text;
-//    @Override
-//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        text = adapterView.getItemAtPosition(i).toString();
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
-//
-//    public String getText() {
-//        return text;
-//    }
-//}
-//
-//class Akhir implements AdapterView.OnItemSelectedListener{
-//    private String text;
-//    @Override
-//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        text = adapterView.getItemAtPosition(i).toString();
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
-//
-//    public String getText() {
-//        return text;
-//    }
-//}
+    }
+    private void submitUser(TextProcess requests, String child){
+        database.child("Dictionary").child(child).push().setValue(requests).addOnSuccessListener(this, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                loading.dismiss();
+
+                etTextAwal.setText("");
+                etTextTranslete.setText("");
+
+
+                Toast.makeText(AddDictionary.this, "data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void link(){
+        Intent intent = new Intent(AddDictionary.this, DictionaryActivity.class);
+        startActivity(intent);
+    }
+
+    private void startRecording() {
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFile(fileName);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        try {
+            recorder.prepare();
+            recorder.start();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+
+//        recorder.start();
+    }
+
+    private void stopRecording() {
+        try {
+            recorder.stop();
+            recorder.release();
+            recorder = null;
+            uploadAudio();
+        }
+        catch (Exception e){
+            Log.e(LOG_TAG, "failed to save");
+        }
+
+    }
+
+    private void uploadAudio(){
+
+        loading = ProgressDialog.show(AddDictionary.this,
+                null,
+                "please wait...",
+                true,
+                false);
+        StorageReference filepath = mStorage.child("Audio").child(uniqueID+".mp3");
+        Uri uri = Uri.fromFile(new File(fileName));
+        filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                loading.dismiss();
+                Audio = uri.toString();
+            }
+        });
+    }
+
+}
+
+class Awal implements AdapterView.OnItemSelectedListener{
+    private String text;
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        text = adapterView.getItemAtPosition(i).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    public String getText() {
+        return text;
+    }
+}
+
+class Akhir implements AdapterView.OnItemSelectedListener{
+    private String text;
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        text = adapterView.getItemAtPosition(i).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    public String getText() {
+        return text;
+    }
+}

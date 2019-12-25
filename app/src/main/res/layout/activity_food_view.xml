@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/ic_chef" />
+                android:src="@drawable/ic_chef" />
 
             <TextView
                 android:layout_width="wrap_content"

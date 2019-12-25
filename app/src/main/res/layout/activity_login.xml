@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
     tools:context=".LoginActivity">
 
@@ -93,31 +93,30 @@
 
             <Button
                 android:id="@+id/LoginWithGoogle"
-                android:layout_width="25dp"
+                android:layout_width="24.4dp"
                 android:layout_height="25dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="310dp"
                 android:background="@drawable/ic_google_plus"
-                android:onClick="loginWithGoogle"/>
+                android:onClick="loginWithGoogle" />
 
             <Button
                 android:id="@+id/LoginWithTwitter"
-                android:layout_width="25dp"
+                android:layout_width="30.5dp"
                 android:layout_height="25dp"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="44.5dp"
                 android:layout_marginTop="310dp"
                 android:background="@drawable/ic_twitter" />
 
             <Button
                 android:id="@+id/LoginWithFacebook"
-                android:layout_width="25dp"
+                android:layout_width="12.6dp"
                 android:layout_height="25dp"
-                android:layout_marginStart="275dp"
+                android:layout_marginStart="285.4dp"
                 android:layout_marginTop="310dp"
                 android:background="@drawable/ic_facebook" />
 
         </RelativeLayout>
-
 
     </androidx.cardview.widget.CardView>
 
@@ -140,8 +139,9 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_blue_border"
         android:fontFamily="@font/osregular"
+        android:onClick="register_clicked"
         android:text="Create your account"
         android:textAllCaps="false"
-        android:textColor="#0984E3"
-        android:onClick="register_clicked"/>
+        android:textColor="#0984E3" />
+
 </RelativeLayout>
