@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
     public void register_clicked(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void loginWithGoogle(View view) {
@@ -123,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                 user.updateProfile(profileUpdates);
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
 
@@ -149,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "Login failed!", Toast.LENGTH_LONG).show();
                     }

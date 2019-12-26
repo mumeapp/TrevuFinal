@@ -79,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void have_account(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void registerNewUser() {
@@ -104,16 +105,15 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateName(user);
 
-
                             String userID = user.getUid();
 
-                            User userr = new User("", "", "", "", "", email, "default","", userID);
+                            User userr = new User("", "", "", "", "", email, "default", "", userID);
 
                             databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(userID);
                             databaseReference.setValue(userr).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         updateUI(user);
                                     } else {
                                         Toast.makeText(RegisterActivity.this, "Register gagal", Toast.LENGTH_SHORT).show();
@@ -151,6 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
             Toast.makeText(getApplicationContext(), "Please login!", Toast.LENGTH_LONG).show();
         }
 
