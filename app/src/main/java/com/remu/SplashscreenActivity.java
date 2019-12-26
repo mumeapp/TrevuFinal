@@ -1,6 +1,7 @@
 package com.remu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -30,16 +31,26 @@ public class SplashscreenActivity extends AppCompatActivity {
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {
+            SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
             FirebaseUser user = mAuth.getCurrentUser();
 
-            if (user != null) {
-                Intent intent = new Intent(SplashscreenActivity.this, MainActivity.class);
+            if (sharedPreferences.getBoolean("isFirstTime", true)) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isFirstTime", false).apply();
+
+                Intent intent = new Intent(SplashscreenActivity.this, OnboardingActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                Intent intent = new Intent(SplashscreenActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                if (user != null) {
+                    Intent intent = new Intent(SplashscreenActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(SplashscreenActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }, 1000);
     }

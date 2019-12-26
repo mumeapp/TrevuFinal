@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor prefsEditor = locationpref.edit();
                 prefsEditor.putString("Longitude", Longitude + "");
                 prefsEditor.putString("Latitude", Latitude + "");
-                prefsEditor.commit();
+                prefsEditor.apply();
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

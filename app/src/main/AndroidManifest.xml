@@ -70,6 +70,7 @@
         <activity
             android:name=".OnboardingActivity"
             android:theme="@style/BlueTheme" />
+        <activity android:name=".PermissionActivity" />
         <activity
             android:name=".SplashscreenActivity"
             android:theme="@style/WhiteTheme">
