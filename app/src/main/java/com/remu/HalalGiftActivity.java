@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -42,8 +43,8 @@ public class HalalGiftActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_halal_gift);
 
-
         initializeUI();
+        Animatoo.animateSlideLeft(this);
 
         //Get Current Location
         FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
@@ -108,6 +109,12 @@ public class HalalGiftActivity extends AppCompatActivity {
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
         addGift.setOnClickListener(View -> addGift());
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {

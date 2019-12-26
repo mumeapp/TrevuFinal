@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -69,8 +70,8 @@ public class RegisterActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-
         initializeUI();
+        Animatoo.animateSlideLeft(this);
 
         registerButton = findViewById(R.id.registerButton);
         registerButton.setOnClickListener(view -> registerNewUser());
@@ -127,6 +128,12 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {

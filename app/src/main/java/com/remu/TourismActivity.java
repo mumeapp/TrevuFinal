@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -55,6 +56,7 @@ public class TourismActivity extends AppCompatActivity {
         currentPosition = new LatLng(Double.parseDouble(intent.getStringExtra("latitude")), Double.parseDouble(intent.getStringExtra("longitude")));
 
         initializeUI();
+        Animatoo.animateSlideLeft(this);
 
         FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -131,6 +133,12 @@ public class TourismActivity extends AppCompatActivity {
         tourScrollView.post(() -> {
             tourScrollView.scrollTo(0, 0);
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {

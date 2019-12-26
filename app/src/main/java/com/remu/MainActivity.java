@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.remu.POJO.Article;
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         initializeUI();
         initializeArticle();
         initializeTips();
+        Animatoo.animateSlideLeft(this);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -131,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
             Intent viewDictonary = new Intent(MainActivity.this, DictionaryActivity.class);
             startActivity(viewDictonary);
         });
-
     }
 
     private void initializeUI() {

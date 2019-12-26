@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -80,6 +81,7 @@ public class AddDictionary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_dictionary);
 
+        Animatoo.animateSlideDown(this);
 //        awal = new Awal();
 //        akhir = new Akhir();
 //
@@ -248,6 +250,12 @@ public class AddDictionary extends AppCompatActivity {
                 Audio = uri.toString();
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideUp(this);
     }
 
 }

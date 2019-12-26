@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -70,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         latLngRetriever.getLocation(getApplicationContext(), locationResult);
 
         initializeUI();
+        Animatoo.animateSlideLeft(this);
         mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder().requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
@@ -156,6 +158,12 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Login failed!", Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {

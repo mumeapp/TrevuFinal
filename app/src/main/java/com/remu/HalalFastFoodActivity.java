@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -38,8 +39,7 @@ public class HalalFastFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_halal_fast_food);
 
         initializeUI();
-
-
+        Animatoo.animateSlideLeft(this);
 
         rvFood.setLayoutManager(new LinearLayoutManager(HalalFastFoodActivity.this));
 
@@ -77,6 +77,12 @@ public class HalalFastFoodActivity extends AppCompatActivity {
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
         cd.setOnClickListener(view -> addFood());
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {

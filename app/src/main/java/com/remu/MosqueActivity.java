@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.alespero.expandablecardview.ExpandableCardView;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
@@ -104,6 +105,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
         //initialize ui
         initializeUI();
+        Animatoo.animateSlideLeft(this);
 
         new GetData(this.getApplicationContext()).execute();
 
@@ -276,6 +278,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.toString());
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {

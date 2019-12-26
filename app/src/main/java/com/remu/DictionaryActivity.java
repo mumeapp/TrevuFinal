@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +36,7 @@ public class DictionaryActivity extends AppCompatActivity {
     private ImageView awal, akhir;
     private String textAw, textAk;
     private int check, check2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,7 @@ public class DictionaryActivity extends AppCompatActivity {
 
 //        awal = findViewById(R.id.awal);
 //        akhir = findViewById(R.id.akhir);
+        Animatoo.animateSlideLeft(this);
 
         rvDictionary = findViewById(R.id.rv_listDictionary);
         rvDictionary.setHasFixedSize(true);
@@ -80,7 +83,6 @@ public class DictionaryActivity extends AppCompatActivity {
         rvDictionary.setAdapter(firebaseRecyclerAdapter);
         btn1 = findViewById(R.id.ButtonAdd);
         btn1.setOnClickListener(view -> buttonAdd());
-
     }
 
     @Override
@@ -144,6 +146,12 @@ public class DictionaryActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void awal(){

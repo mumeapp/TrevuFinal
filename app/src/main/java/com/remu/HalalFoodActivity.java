@@ -37,7 +37,7 @@ public class HalalFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_halal_food);
 
         initializeUI();
-        Animatoo.animateSlideUp(this);
+        Animatoo.animateSlideLeft(this);
         rvFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this));
 
         Query query = databaseReference.orderByKey();
@@ -78,6 +78,11 @@ public class HalalFoodActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
+    }
 
     private void initializeUI() {
         rvFood = findViewById(R.id.HalalFoodCategories);

@@ -3,7 +3,6 @@ package com.remu.ui.onboard.onboard3;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -14,8 +13,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -23,14 +20,11 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.annotations.NotNull;
 import com.remu.LoginActivity;
 import com.remu.MainActivity;
-import com.remu.OnboardingActivity;
-import com.remu.POJO.FragmentChangeListener;
 import com.remu.PermissionActivity;
 import com.remu.R;
-
-import org.jetbrains.annotations.NotNull;
 
 public class OnBoarding3Fragment extends Fragment {
 

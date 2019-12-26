@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+
 public class FoodActivity extends AppCompatActivity {
 
     ImageView buttonBack;
@@ -19,6 +21,7 @@ public class FoodActivity extends AppCompatActivity {
 
         //initialize ui
         initializeUI();
+        Animatoo.animateSlideLeft(this);
 
         //set intent to back to previous activity
         buttonBack.setOnClickListener(view -> {
@@ -42,6 +45,12 @@ public class FoodActivity extends AppCompatActivity {
             Intent BackToMenu = new Intent(FoodActivity.this, HalalGiftActivity.class);
             startActivity(BackToMenu);
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {
