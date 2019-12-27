@@ -173,7 +173,7 @@ public class AddDictionary extends SlideBackActivity {
                 "please wait...",
                 true,
                 false);
-        StorageReference filepath = mStorage.child("Audio").child(uniqueID+".3gp");
+        StorageReference filepath = mStorage.child("Audio").child(uniqueID+".mp3");
         getFilePath = filepath;
         Uri uri = Uri.fromFile(new File(fileName));
         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -189,7 +189,7 @@ public class AddDictionary extends SlideBackActivity {
         ActivityCompat.requestPermissions(AddDictionary.this, permissions,REQUEST_RECORD_AUDIO_PERMISSION);
         mbtnRecord = findViewById(R.id.btnRecord);
         fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        fileName += "/"+uniqueID+".3gp";
+        fileName += "/"+uniqueID+".mp3";
 
         mbtnRecord.setOnTouchListener(new View.OnTouchListener() {
             @Override
