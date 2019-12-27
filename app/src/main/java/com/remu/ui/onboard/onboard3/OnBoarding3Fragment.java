@@ -3,6 +3,7 @@ package com.remu.ui.onboard.onboard3;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.remu.LoginActivity;
 import com.remu.MainActivity;
 import com.remu.PermissionActivity;
 import com.remu.R;
+
 
 public class OnBoarding3Fragment extends Fragment {
 

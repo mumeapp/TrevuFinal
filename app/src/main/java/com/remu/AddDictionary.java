@@ -67,9 +67,8 @@ public class AddDictionary extends SlideBackActivity {
     private StorageReference mStorage;
     private String uniqueID = UUID.randomUUID().toString();
 
-    private Spinner spinAwal, spinAkhir;
-    private Awal awal;
-    private Akhir akhir;
+//    private Spinner spinAwal, spinAkhir;
+    private String awal, akhir;
     private String textAwal;
     private String textAkhir;
 
@@ -99,9 +98,8 @@ public class AddDictionary extends SlideBackActivity {
         initializeClickListener();
 
         Animatoo.animateSlideDown(this);
-//        awal = new Awal();
-//        akhir = new Akhir();
-//
+
+
 //        spinAwal = findViewById(R.id.bhsawal1);
 //        spinAkhir = findViewById(R.id.bhstrans1);
 //        ArrayAdapter<CharSequence> adaptAwal = ArrayAdapter.createFromResource(this, R.array.bahasaAwal, android.R.layout.simple_spinner_item);
@@ -113,94 +111,97 @@ public class AddDictionary extends SlideBackActivity {
 //        adaptAkhir.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        spinAkhir.setAdapter(adaptAkhir);
 //        spinAkhir.setOnItemSelectedListener(akhir);
-//
-//        mStorage= FirebaseStorage.getInstance().getReference();
-//        ActivityCompat.requestPermissions(AddDictionary.this, permissions,REQUEST_RECORD_AUDIO_PERMISSION);
-//        mbtnRecord = findViewById(R.id.btnRecord);
-//        fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-//        fileName += "/"+uniqueID+".mp3";
-//
-//        database = FirebaseDatabase.getInstance().getReference();
-//
-//        final Button btn = findViewById(R.id.okButton);
-//        etTextAwal = findViewById(R.id.textAwal);
-//        etTextTranslete = findViewById(R.id.textTranslete);
-//
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//                String StextAwal = etTextAwal.getText().toString();
-//                String StextTranslete = etTextTranslete.getText().toString();
-//
-//                String id = currentUser.getUid();
-//
-//                if (StextAwal.equals("")){
-//                    etTextAwal.setError("Field Tidak Boleh Kosong");
-//                    etTextAwal.requestFocus();
-//                }
-//                else if (StextTranslete.equals("")){
-//                    etTextTranslete.setError("Field Tidak Boleh Kosong");
-//                    etTextTranslete.requestFocus();
-//                }
-//                else {
-//                    loading = ProgressDialog.show(AddDictionary.this,
-//                            null,
-//                            "please wait...",
-//                            true,
-//                            false);
-//
-//                    String child = null;
-//                    if ((awal.getText().equalsIgnoreCase("jepang") && akhir.getText().equalsIgnoreCase("Indonesia")) || (awal.getText().equalsIgnoreCase("indonesia") && akhir.getText().equalsIgnoreCase("jepang"))) {
-//                        child = "indonesia-jepang";
-//                        textAwal = "Jepang";
-//                        textAkhir = "Indonesia";
-//                        submitUser(new TextProcess(
-//                                StextAwal.toLowerCase(),
-//                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
-//                        link();
-//                    } else if ((awal.getText().equalsIgnoreCase("jepang") && akhir.getText().equalsIgnoreCase("Inggris")) || (awal.getText().equalsIgnoreCase("ingris") && akhir.getText().equalsIgnoreCase("jepang"))) {
-//                        child = "jepang-inggris";
-//                        textAwal = "Jepang";
-//                        textAkhir = "Inggris";
-//                        submitUser(new TextProcess(
-//                                StextAwal.toLowerCase(),
-//                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
-//                        link();
-//                    } else if ((awal.getText().equalsIgnoreCase("inggris")&&akhir.getText().equalsIgnoreCase("Indonesia"))||(awal.getText().equalsIgnoreCase("indonesia")&&akhir.getText().equalsIgnoreCase("inggris"))) {
-//                        child = "inggris-indonesia";
-//                        textAwal = "Inggris";
-//                        textAkhir = "Indonesia";
-//                        submitUser(new TextProcess(
-//                                StextAwal.toLowerCase(),
-//                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
-//                        link();
-//                    }else{
-//                        Toast.makeText(getApplicationContext(), "Tidak bisa menggunakan bahasa yang sama", Toast.LENGTH_LONG).show();
-//                        loading.dismiss();
-//                    }
-//
-//                }
-//            }
-//        });
-//        mbtnRecord.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//
-//                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-//
-//                    startRecording();
-//                    Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
-//
-//                }else if(motionEvent.getAction()==MotionEvent.ACTION_UP){
-//
-//                    stopRecording();
-//                    Toast.makeText(getApplicationContext(), "Audio Recorder successfully", Toast.LENGTH_LONG).show();
-//                }
-//
-//                return false;
-//            }
-//        });
+
+        mStorage= FirebaseStorage.getInstance().getReference();
+        ActivityCompat.requestPermissions(AddDictionary.this, permissions,REQUEST_RECORD_AUDIO_PERMISSION);
+        mbtnRecord = findViewById(R.id.btnRecord);
+        fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        fileName += "/"+uniqueID+".mp3";
+
+        database = FirebaseDatabase.getInstance().getReference();
+
+        awal = languageOrigin.getText().toString();
+        akhir = languageDestination.getText().toString();
+
+        final Button btn = findViewById(R.id.submitButton);
+        etTextAwal = findViewById(R.id.textAwal);
+        etTextTranslete = findViewById(R.id.textTranslete);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                String StextAwal = etTextAwal.getText().toString();
+                String StextTranslete = etTextTranslete.getText().toString();
+
+                String id = currentUser.getUid();
+
+                if (StextAwal.equals("")){
+                    etTextAwal.setError("Field Tidak Boleh Kosong");
+                    etTextAwal.requestFocus();
+                }
+                else if (StextTranslete.equals("")){
+                    etTextTranslete.setError("Field Tidak Boleh Kosong");
+                    etTextTranslete.requestFocus();
+                }
+                else {
+                    loading = ProgressDialog.show(AddDictionary.this,
+                            null,
+                            "please wait...",
+                            true,
+                            false);
+
+                    String child = null;
+                    if ((awal.equalsIgnoreCase("japanese") && akhir.equalsIgnoreCase("Indonesian")) || (awal.equalsIgnoreCase("indonesian") && akhir.equalsIgnoreCase("japanese"))) {
+                        child = "indonesia-jepang";
+                        textAwal = "Jepang";
+                        textAkhir = "Indonesia";
+                        submitUser(new TextProcess(
+                                StextAwal.toLowerCase(),
+                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
+                        link();
+                    } else if ((awal.equalsIgnoreCase("japanese") && akhir.equalsIgnoreCase("english")) || (awal.equalsIgnoreCase("english") && akhir.equalsIgnoreCase("japanese"))) {
+                        child = "jepang-inggris";
+                        textAwal = "Jepang";
+                        textAkhir = "Inggris";
+                        submitUser(new TextProcess(
+                                StextAwal.toLowerCase(),
+                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
+                        link();
+                    } else if ((awal.equalsIgnoreCase("english")&&akhir.equalsIgnoreCase("Indonesian"))||(awal.equalsIgnoreCase("indonesian")&&akhir.equalsIgnoreCase("english"))) {
+                        child = "inggris-indonesia";
+                        textAwal = "Inggris";
+                        textAkhir = "Indonesia";
+                        submitUser(new TextProcess(
+                                StextAwal.toLowerCase(),
+                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
+                        link();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Tidak bisa menggunakan bahasa yang sama", Toast.LENGTH_LONG).show();
+                        loading.dismiss();
+                    }
+
+                }
+            }
+        });
+        mbtnRecord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+
+                    startRecording();
+                    Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
+
+                }else if(motionEvent.getAction()==MotionEvent.ACTION_UP){
+
+                    stopRecording();
+                    Toast.makeText(getApplicationContext(), "Audio Recorder successfully", Toast.LENGTH_LONG).show();
+                }
+
+                return false;
+            }
+        });
 
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
@@ -227,6 +228,13 @@ public class AddDictionary extends SlideBackActivity {
     private void link(){
         Intent intent = new Intent(AddDictionary.this, DictionaryActivity.class);
         startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        link();
     }
 
     private void startRecording() {
@@ -382,36 +390,3 @@ public class AddDictionary extends SlideBackActivity {
 
 }
 
-class Awal implements AdapterView.OnItemSelectedListener{
-    private String text;
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        text = adapterView.getItemAtPosition(i).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
-    public String getText() {
-        return text;
-    }
-}
-
-class Akhir implements AdapterView.OnItemSelectedListener{
-    private String text;
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        text = adapterView.getItemAtPosition(i).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
-    public String getText() {
-        return text;
-    }
-}

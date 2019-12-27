@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,18 +62,83 @@ public class DictionaryActivity extends SlideBackActivity {
         initializeClickListener();
 
         //TODO remove later after connected with firebase
-        setDummyRecyclerView();
+//        setDummyRecyclerView();
 //        awal = findViewById(R.id.awal);
 //        akhir = findViewById(R.id.akhir);
         Animatoo.animateSlideLeft(this);
 
+        showDictionary();
+        btn1 = findViewById(R.id.ButtonAdd);
+        btn1.setOnClickListener(view -> buttonAdd());
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
+    }
+
+    //TODO remove later after connected with firebase
+//    private void setDummyRecyclerView() {
+//        ArrayList<HashMap<String, String>> mDataSet = new ArrayList<HashMap<String, String>>() {{
+//            add(new HashMap<String, String>() {{
+//                put("origin", "Where is the toilet?");
+//                put("destination", "トイレはどこですか？");
+//            }});
+//            add(new HashMap<String, String>() {{
+//                put("origin", "Where is the nearest restaurant?");
+//                put("destination", "最寄のレストランはどこですか？");
+//            }});
+//            add(new HashMap<String, String>() {{
+//                put("origin", "Where is the nearest mosque?");
+//                put("destination", "一番近いモスクはどこですか？");
+//            }});
+//            add(new HashMap<String, String>() {{
+//                put("origin", "Where is the nearest subway station?");
+//                put("destination", "最寄りの地下鉄の駅はどこですか？");
+//            }});
+//            add(new HashMap<String, String>() {{
+//                put("origin", "How to get to Shinjuku?");
+//                put("destination", "新宿への行き方");
+//            }});
+//        }};
+//
+//        rvDictionary = findViewById(R.id.rv_listDictionary);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(DictionaryActivity.this, LinearLayoutManager.VERTICAL, false);
+//        rvDictionary.setLayoutManager(layoutManager);
+//        TextProcessAdapter mAdapter = new TextProcessAdapter(getApplication(), mDataSet);
+//        rvDictionary.setAdapter(mAdapter);
+//    }
+
+    private void initializeUI() {
+        selectorOrigin = findViewById(R.id.selector_origin);
+        selectorDestination = findViewById(R.id.selector_destination);
+        imageOrigin = findViewById(R.id.img_origin);
+        imageDestination = findViewById(R.id.img_destination);
+        languageOrigin = findViewById(R.id.language_origin);
+        languageDestination = findViewById(R.id.language_destination);
+    }
+
+    private void showDictionary(){
         rvDictionary = findViewById(R.id.rv_listDictionary);
 //        rvDictionary.setHasFixedSize(true);
         rvDictionary.setLayoutManager(new LinearLayoutManager(DictionaryActivity.this, LinearLayoutManager.VERTICAL, false));
-        if (getIntent().getStringExtra(hasilAk) != null && getIntent().getStringExtra(hasilAw) != null) {
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child(getIntent().getStringExtra(hasilAw) + "-" + getIntent().getStringExtra(hasilAk));
+
+        if((languageOrigin.getText().toString().equals("Indonesian")&&languageDestination.getText().toString().equals("Japanese"))||(languageDestination.getText().toString().equals("Indonesian")&&languageOrigin.getText().toString().equals("Japanese"))){
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("indonesia-jepang");
         }
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("melayu-inggris");
+        else if((languageOrigin.getText().toString().equals("Indonesian")&&languageDestination.getText().toString().equals("English"))||(languageDestination.getText().toString().equals("Indonesian")&&languageOrigin.getText().toString().equals("English"))){
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("inggris-indonesia");
+        }
+        else if((languageOrigin.getText().toString().equals("English")&&languageDestination.getText().toString().equals("Japanese"))||(languageDestination.getText().toString().equals("English")&&languageOrigin.getText().toString().equals("Japanese"))){
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("jepang-inggris");
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Tidak bisa menggunakan bahasa yang sama", Toast.LENGTH_LONG).show();
+        }
+
+//        databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("melayu-inggris");
 
         Query query = databaseReference.orderByKey();
 
@@ -96,57 +162,7 @@ public class DictionaryActivity extends SlideBackActivity {
             }
         };
 
-//        rvDictionary.setAdapter(firebaseRecyclerAdapter);
-        btn1 = findViewById(R.id.ButtonAdd);
-        btn1.setOnClickListener(view -> buttonAdd());
-
-        setSlideBackDirection(SlideBackActivity.LEFT);
-    }
-
-    @Override
-    protected void slideBackSuccess() {
-        finish();
-    }
-
-    //TODO remove later after connected with firebase
-    private void setDummyRecyclerView() {
-        ArrayList<HashMap<String, String>> mDataSet = new ArrayList<HashMap<String, String>>() {{
-            add(new HashMap<String, String>() {{
-                put("origin", "Where is the toilet?");
-                put("destination", "トイレはどこですか？");
-            }});
-            add(new HashMap<String, String>() {{
-                put("origin", "Where is the nearest restaurant?");
-                put("destination", "最寄のレストランはどこですか？");
-            }});
-            add(new HashMap<String, String>() {{
-                put("origin", "Where is the nearest mosque?");
-                put("destination", "一番近いモスクはどこですか？");
-            }});
-            add(new HashMap<String, String>() {{
-                put("origin", "Where is the nearest subway station?");
-                put("destination", "最寄りの地下鉄の駅はどこですか？");
-            }});
-            add(new HashMap<String, String>() {{
-                put("origin", "How to get to Shinjuku?");
-                put("destination", "新宿への行き方");
-            }});
-        }};
-
-        rvDictionary = findViewById(R.id.rv_listDictionary);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(DictionaryActivity.this, LinearLayoutManager.VERTICAL, false);
-        rvDictionary.setLayoutManager(layoutManager);
-        TextProcessAdapter mAdapter = new TextProcessAdapter(getApplication(), mDataSet);
-        rvDictionary.setAdapter(mAdapter);
-    }
-
-    private void initializeUI() {
-        selectorOrigin = findViewById(R.id.selector_origin);
-        selectorDestination = findViewById(R.id.selector_destination);
-        imageOrigin = findViewById(R.id.img_origin);
-        imageDestination = findViewById(R.id.img_destination);
-        languageOrigin = findViewById(R.id.language_origin);
-        languageDestination = findViewById(R.id.language_destination);
+        rvDictionary.setAdapter(firebaseRecyclerAdapter);
     }
 
     private void initializeClickListener() {
@@ -248,6 +264,7 @@ public class DictionaryActivity extends SlideBackActivity {
 
                     break;
             }
+            showDictionary();
         }
     }
 
@@ -354,5 +371,6 @@ public class DictionaryActivity extends SlideBackActivity {
     private void buttonAdd() {
         Intent intent = new Intent(DictionaryActivity.this, AddDictionary.class);
         startActivity(intent);
+        finish();
     }
 }

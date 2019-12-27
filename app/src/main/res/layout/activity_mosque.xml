@@ -75,6 +75,6 @@
         android:paddingStart="20dp"
         android:paddingEnd="15dp"
         app:msrv_gravity="center"
-        app:msrv_interval="1" />
+        app:msrv_snap_count="1" />
 
 </RelativeLayout>
