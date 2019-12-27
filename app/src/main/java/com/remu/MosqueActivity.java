@@ -50,7 +50,8 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.remu.POJO.Mosque;
 import com.remu.POJO.PrayerTime;
 import com.saber.chentianslideback.SlideBackActivity;
-import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
+import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
+import com.takusemba.multisnaprecyclerview.SnapGravity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,7 +74,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     LinearLayout layoutFajr, layoutDhuhr, layoutAsr, layoutMaghrib, layoutIsha;
 
     LinearLayoutManager layoutManager;
-    MultiSnapRecyclerView listMasjid;
+    RecyclerView listMasjid;
 
     //sydney, change later to malang
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
@@ -140,16 +141,15 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 //            mDataSet.add("Title #" + i);
 //        }
 
-        final SnapHelper snapHelper = new LinearSnapHelper();
-        listMasjid.setOnFlingListener(null);
-        snapHelper.attachToRecyclerView(listMasjid);
+        MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
+        multiSnapHelper.attachToRecyclerView(listMasjid);
 
         listMasjid.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    View centerView = snapHelper.findSnapView(layoutManager);
+                    View centerView = multiSnapHelper.findSnapView(layoutManager);
                     int pos = layoutManager.getPosition(centerView);
                     Log.e("Snapped Item Position", "" + pos);
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDataSet.get(pos).getGeoLocation(), 17));
