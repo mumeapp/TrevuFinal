@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,9 +25,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.remu.POJO.TextProcess;
 import com.saber.chentianslideback.SlideBackActivity;
 
@@ -151,6 +155,7 @@ public class DictionaryActivity extends SlideBackActivity {
                 textProcessViewHolder.setText1(textProcess.getTextAwal());
                 textProcessViewHolder.setText2(textProcess.getTextTranslete());
                 textProcessViewHolder.setAudio(textProcess.getAudio());
+
             }
 
             @NonNull
@@ -337,16 +342,25 @@ public class DictionaryActivity extends SlideBackActivity {
         }
 
         void setAudio(String aud) {
-            audio.setOnClickListener(view -> {
-                MediaPlayer player = new MediaPlayer();
-                try {
-                    player.setDataSource(aud);
-                    player.setOnPreparedListener(MediaPlayer::start);
-                    player.prepare();
-                } catch (IOException i) {
-                    i.printStackTrace();
-                }
-            });
+            if (aud!=null) {
+                audio.setOnClickListener(view -> {
+
+                    MediaPlayer player = new MediaPlayer();
+
+                    try {
+                        player.setDataSource(aud);
+                        player.setOnPreparedListener(MediaPlayer::start);
+                        player.prepare();
+                        player.prepareAsync();
+                        player.start();
+                    } catch (IOException i) {
+                        i.printStackTrace();
+                    }
+                });
+            }
+            else{
+                audio.setVisibility(View.GONE);
+            }
         }
     }
 

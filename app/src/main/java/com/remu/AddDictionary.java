@@ -64,9 +64,8 @@ public class AddDictionary extends SlideBackActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
-    private StorageReference mStorage;
+    private StorageReference mStorage, getFilePath;
     private String uniqueID = UUID.randomUUID().toString();
-
 //    private Spinner spinAwal, spinAkhir;
     private String awal, akhir;
     private String textAwal;
@@ -100,43 +99,8 @@ public class AddDictionary extends SlideBackActivity {
         Animatoo.animateSlideDown(this);
 
 
-//        spinAwal = findViewById(R.id.bhsawal1);
-//        spinAkhir = findViewById(R.id.bhstrans1);
-//        ArrayAdapter<CharSequence> adaptAwal = ArrayAdapter.createFromResource(this, R.array.bahasaAwal, android.R.layout.simple_spinner_item);
-//        adaptAwal.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinAwal.setAdapter(adaptAwal);
-//        spinAwal.setOnItemSelectedListener(awal);
-//
-//        ArrayAdapter<CharSequence> adaptAkhir = ArrayAdapter.createFromResource(this, R.array.bahasaTrans, android.R.layout.simple_spinner_item);
-//        adaptAkhir.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinAkhir.setAdapter(adaptAkhir);
-//        spinAkhir.setOnItemSelectedListener(akhir);
         makeNewTranslation();
-        mStorage= FirebaseStorage.getInstance().getReference();
-        ActivityCompat.requestPermissions(AddDictionary.this, permissions,REQUEST_RECORD_AUDIO_PERMISSION);
-        mbtnRecord = findViewById(R.id.btnRecord);
-        fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        fileName += "/"+uniqueID+".mp3";
-
-
-        mbtnRecord.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-
-                    startRecording();
-                    Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
-
-                }else if(motionEvent.getAction()==MotionEvent.ACTION_UP){
-
-                    stopRecording();
-                    Toast.makeText(getApplicationContext(), "Audio Recorder successfully", Toast.LENGTH_LONG).show();
-                }
-
-                return false;
-            }
-        });
+        setAudio();
 
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
@@ -209,15 +173,43 @@ public class AddDictionary extends SlideBackActivity {
                 "please wait...",
                 true,
                 false);
-        StorageReference filepath = mStorage.child("Audio").child(uniqueID+".mp3");
+        StorageReference filepath = mStorage.child("Audio").child(uniqueID+".3gp");
+        getFilePath = filepath;
         Uri uri = Uri.fromFile(new File(fileName));
         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 loading.dismiss();
-                Audio = uri.toString();
+                Audio = taskSnapshot.getUploadSessionUri().toString();
             }
         });
+    }
+    private void setAudio(){
+        mStorage= FirebaseStorage.getInstance().getReference();
+        ActivityCompat.requestPermissions(AddDictionary.this, permissions,REQUEST_RECORD_AUDIO_PERMISSION);
+        mbtnRecord = findViewById(R.id.btnRecord);
+        fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        fileName += "/"+uniqueID+".3gp";
+
+        mbtnRecord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+
+                    startRecording();
+                    Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
+
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+
+                    stopRecording();
+                    Toast.makeText(getApplicationContext(), "Audio Recorder successfully", Toast.LENGTH_LONG).show();
+                }
+
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -390,6 +382,7 @@ public class AddDictionary extends SlideBackActivity {
                     break;
             }
             makeNewTranslation();
+            setAudio();
         }
     }
 
