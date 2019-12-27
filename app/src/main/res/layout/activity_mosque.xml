@@ -65,7 +65,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listMasjid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,8 +73,6 @@
         android:layout_marginBottom="10dp"
         android:clipToPadding="false"
         android:paddingStart="20dp"
-        android:paddingEnd="15dp"
-        app:msrv_gravity="center"
-        app:msrv_snap_count="1" />
+        android:paddingEnd="15dp" />
 
 </RelativeLayout>

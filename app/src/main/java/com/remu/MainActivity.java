@@ -21,7 +21,8 @@ import com.remu.POJO.LatLngRetriever;
 import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
 import com.remu.POJO.Tips;
-import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
+import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
+import com.takusemba.multisnaprecyclerview.SnapGravity;
 
 import java.util.ArrayList;
 
@@ -40,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     LinearLayoutManager articleLayoutManager;
-    MultiSnapRecyclerView listArticle;
+    RecyclerView listArticle;
     RecyclerView.Adapter articleAdapter;
     ArrayList<Article> articleDataSet;
 
     LinearLayoutManager tipsLayoutManager;
-    MultiSnapRecyclerView listTips;
+    RecyclerView listTips;
     RecyclerView.Adapter tipsAdapter;
     ArrayList<Tips> tipsDataSet;
 
@@ -165,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
         listArticle.setLayoutManager(articleLayoutManager);
         articleAdapter = new ArticleAdapter(getApplication(), articleDataSet);
         listArticle.setAdapter(articleAdapter);
+        MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
+        multiSnapHelper.attachToRecyclerView(listArticle);
     }
 
     private void initializeTips() {
@@ -172,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
         listTips.setLayoutManager(tipsLayoutManager);
         tipsAdapter = new TipsAdapter(getApplication(), tipsDataSet);
         listTips.setAdapter(tipsAdapter);
+        MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 3, 100);
+        multiSnapHelper.attachToRecyclerView(listTips);
     }
 
     private void getCurrentUser(FirebaseUser user) {
