@@ -111,79 +111,14 @@ public class AddDictionary extends SlideBackActivity {
 //        adaptAkhir.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        spinAkhir.setAdapter(adaptAkhir);
 //        spinAkhir.setOnItemSelectedListener(akhir);
-
+        makeNewTranslation();
         mStorage= FirebaseStorage.getInstance().getReference();
         ActivityCompat.requestPermissions(AddDictionary.this, permissions,REQUEST_RECORD_AUDIO_PERMISSION);
         mbtnRecord = findViewById(R.id.btnRecord);
         fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         fileName += "/"+uniqueID+".mp3";
 
-        database = FirebaseDatabase.getInstance().getReference();
 
-        awal = languageOrigin.getText().toString();
-        akhir = languageDestination.getText().toString();
-
-        final Button btn = findViewById(R.id.submitButton);
-        etTextAwal = findViewById(R.id.textAwal);
-        etTextTranslete = findViewById(R.id.textTranslete);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                String StextAwal = etTextAwal.getText().toString();
-                String StextTranslete = etTextTranslete.getText().toString();
-
-                String id = currentUser.getUid();
-
-                if (StextAwal.equals("")){
-                    etTextAwal.setError("Field Tidak Boleh Kosong");
-                    etTextAwal.requestFocus();
-                }
-                else if (StextTranslete.equals("")){
-                    etTextTranslete.setError("Field Tidak Boleh Kosong");
-                    etTextTranslete.requestFocus();
-                }
-                else {
-                    loading = ProgressDialog.show(AddDictionary.this,
-                            null,
-                            "please wait...",
-                            true,
-                            false);
-
-                    String child = null;
-                    if ((awal.equalsIgnoreCase("japanese") && akhir.equalsIgnoreCase("Indonesian")) || (awal.equalsIgnoreCase("indonesian") && akhir.equalsIgnoreCase("japanese"))) {
-                        child = "indonesia-jepang";
-                        textAwal = "Jepang";
-                        textAkhir = "Indonesia";
-                        submitUser(new TextProcess(
-                                StextAwal.toLowerCase(),
-                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
-                        link();
-                    } else if ((awal.equalsIgnoreCase("japanese") && akhir.equalsIgnoreCase("english")) || (awal.equalsIgnoreCase("english") && akhir.equalsIgnoreCase("japanese"))) {
-                        child = "jepang-inggris";
-                        textAwal = "Jepang";
-                        textAkhir = "Inggris";
-                        submitUser(new TextProcess(
-                                StextAwal.toLowerCase(),
-                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
-                        link();
-                    } else if ((awal.equalsIgnoreCase("english")&&akhir.equalsIgnoreCase("Indonesian"))||(awal.equalsIgnoreCase("indonesian")&&akhir.equalsIgnoreCase("english"))) {
-                        child = "inggris-indonesia";
-                        textAwal = "Inggris";
-                        textAkhir = "Indonesia";
-                        submitUser(new TextProcess(
-                                StextAwal.toLowerCase(),
-                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
-                        link();
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Tidak bisa menggunakan bahasa yang sama", Toast.LENGTH_LONG).show();
-                        loading.dismiss();
-                    }
-
-                }
-            }
-        });
         mbtnRecord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -300,6 +235,75 @@ public class AddDictionary extends SlideBackActivity {
         languageDestination = findViewById(R.id.language_destination);
     }
 
+    private void makeNewTranslation(){
+        database = FirebaseDatabase.getInstance().getReference();
+
+        awal = languageOrigin.getText().toString();
+        akhir = languageDestination.getText().toString();
+
+        final Button btn = findViewById(R.id.submitButton);
+        etTextAwal = findViewById(R.id.textAwal);
+        etTextTranslete = findViewById(R.id.textTranslete);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                String StextAwal = etTextAwal.getText().toString();
+                String StextTranslete = etTextTranslete.getText().toString();
+
+                String id = currentUser.getUid();
+
+                if (StextAwal.equals("")){
+                    etTextAwal.setError("Field Tidak Boleh Kosong");
+                    etTextAwal.requestFocus();
+                }
+                else if (StextTranslete.equals("")){
+                    etTextTranslete.setError("Field Tidak Boleh Kosong");
+                    etTextTranslete.requestFocus();
+                }
+                else {
+                    loading = ProgressDialog.show(AddDictionary.this,
+                            null,
+                            "please wait...",
+                            true,
+                            false);
+
+                    String child = null;
+                    if ((awal.equalsIgnoreCase("japanese") && akhir.equalsIgnoreCase("Indonesian")) || (awal.equalsIgnoreCase("indonesian") && akhir.equalsIgnoreCase("japanese"))) {
+                        child = "indonesia-jepang";
+                        textAwal = "Jepang";
+                        textAkhir = "Indonesia";
+                        submitUser(new TextProcess(
+                                StextAwal.toLowerCase(),
+                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
+                        link();
+                    } else if ((awal.equalsIgnoreCase("japanese") && akhir.equalsIgnoreCase("english")) || (awal.equalsIgnoreCase("english") && akhir.equalsIgnoreCase("japanese"))) {
+                        child = "jepang-inggris";
+                        textAwal = "Jepang";
+                        textAkhir = "Inggris";
+                        submitUser(new TextProcess(
+                                StextAwal.toLowerCase(),
+                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
+                        link();
+                    } else if ((awal.equalsIgnoreCase("english")&&akhir.equalsIgnoreCase("Indonesian"))||(awal.equalsIgnoreCase("indonesian")&&akhir.equalsIgnoreCase("english"))) {
+                        child = "inggris-indonesia";
+                        textAwal = "Inggris";
+                        textAkhir = "Indonesia";
+                        submitUser(new TextProcess(
+                                StextAwal.toLowerCase(),
+                                StextTranslete.toLowerCase(),textAwal,textAkhir,Audio,id),child);
+                        link();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Tidak bisa menggunakan bahasa yang sama", Toast.LENGTH_LONG).show();
+                        loading.dismiss();
+                    }
+
+                }
+            }
+        });
+    }
+
     private void initializeClickListener() {
         selectorOrigin.setOnClickListener(v -> {
             String currentLanguage = languageOrigin.getText().toString();
@@ -385,6 +389,7 @@ public class AddDictionary extends SlideBackActivity {
 
                     break;
             }
+            makeNewTranslation();
         }
     }
 
