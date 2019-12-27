@@ -18,14 +18,16 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="325dp"
-                android:background="@drawable/ic_bgfood" />
+                android:background="@drawable/ic_bgfood"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:src="@drawable/ic_chef" />
+                android:src="@drawable/ic_chef"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,7 +37,8 @@
                 android:fontFamily="@font/osextrabold"
                 android:text="What do you"
                 android:textColor="#ffffff"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,23 +48,9 @@
                 android:fontFamily="@font/osextrabold"
                 android:text="want to eat?"
                 android:textColor="#ffffff"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                tools:ignore="HardcodedText" />
 
-            <ImageView
-
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/back_circle_bg" />
-
-            <ImageView
-                android:id="@+id/ButtonBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/ic_keyboard_arrow_left_black_24dp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -90,7 +79,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:background="@drawable/ic_food_logo" />
+                        android:background="@drawable/ic_food_logo"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -101,8 +91,11 @@
                         android:fontFamily="@font/osregular"
                         android:text="Halal Food"
                         android:textColor="#000000"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText" />
+
                 </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -125,7 +118,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:background="@drawable/ic_fast_food" />
+                        android:background="@drawable/ic_fast_food"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -136,8 +130,10 @@
                         android:fontFamily="@font/osregular"
                         android:text="Halal fast food"
                         android:textColor="#000000"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText" />
                 </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
@@ -167,7 +163,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:background="@drawable/ic_gift" />
+                        android:background="@drawable/ic_gift"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -178,8 +175,11 @@
                         android:fontFamily="@font/osregular"
                         android:text="Gift ideas"
                         android:textColor="#000000"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText" />
+
                 </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -202,7 +202,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:background="@drawable/ic_halal" />
+                        android:background="@drawable/ic_halal"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -213,9 +214,14 @@
                         android:fontFamily="@font/osregular"
                         android:text="Halal certificate"
                         android:textColor="#000000"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="HardcodedText" />
                 </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
+
     </LinearLayout>
+
 </ScrollView>

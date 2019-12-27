@@ -41,7 +41,7 @@
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/osregular"
-                android:text="Username"
+                android:text="Email"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -53,7 +53,8 @@
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/input_grey"
-                android:hint="remuapp"
+                android:inputType="textEmailAddress"
+                android:hint="trevuapp@app.com"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp" />
 
@@ -91,30 +92,44 @@
                 android:textAllCaps="false"
                 android:textColor="#ffffff" />
 
-            <Button
-                android:id="@+id/LoginWithGoogle"
-                android:layout_width="24.4dp"
-                android:layout_height="25dp"
-                android:layout_centerHorizontal="true"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="310dp"
-                android:background="@drawable/ic_google_plus"
-                android:onClick="loginWithGoogle" />
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/LoginWithTwitter"
-                android:layout_width="30.5dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="44.5dp"
-                android:layout_marginTop="310dp"
-                android:background="@drawable/ic_twitter" />
+                <Button
+                    android:id="@+id/LoginWithTwitter"
+                    android:layout_width="30.5dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_twitter" />
 
-            <Button
-                android:id="@+id/LoginWithFacebook"
-                android:layout_width="12.6dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="285.4dp"
-                android:layout_marginTop="310dp"
-                android:background="@drawable/ic_facebook" />
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/LoginWithGoogle"
+                    android:layout_width="24.4dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_google_plus"
+                    android:onClick="loginWithGoogle" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.15"/>
+
+                <Button
+                    android:id="@+id/LoginWithFacebook"
+                    android:layout_width="12.6dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_facebook" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 

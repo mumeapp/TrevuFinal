@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -291,6 +292,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         CardView cardJamSolat = jamSolat.findViewById(R.id.card);
         cardJamSolat.setRadius(getPixelFromDp(12, this));
         cardJamSolat.setElevation(0);
+        TextView captionCardSholat = cardJamSolat.findViewById(R.id.title);
+        captionCardSholat.setTypeface(ResourcesCompat.getFont(this, R.font.osregular));
         someInformation = findViewById(R.id.someInformation);
         listMasjid = findViewById(R.id.listMasjid);
         mDataSet = new ArrayList<>();

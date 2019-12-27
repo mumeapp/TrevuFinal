@@ -2,16 +2,14 @@ package com.remu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.saber.chentianslideback.SlideBackActivity;
 
-public class FoodActivity extends AppCompatActivity {
+public class FoodActivity extends SlideBackActivity {
 
-    ImageView buttonBack;
     CardView buttonHalalFood, buttonFastFood, buttonGift;
 
     @Override
@@ -22,11 +20,6 @@ public class FoodActivity extends AppCompatActivity {
         //initialize ui
         initializeUI();
         Animatoo.animateSlideLeft(this);
-
-        //set intent to back to previous activity
-        buttonBack.setOnClickListener(view -> {
-            finish();
-        });
 
         //set intent for halal food category list
         buttonHalalFood.setOnClickListener(view -> {
@@ -45,6 +38,13 @@ public class FoodActivity extends AppCompatActivity {
             Intent BackToMenu = new Intent(FoodActivity.this, HalalGiftActivity.class);
             startActivity(BackToMenu);
         });
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
     }
 
     @Override
@@ -54,7 +54,6 @@ public class FoodActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        buttonBack = findViewById(R.id.ButtonBack);
         buttonHalalFood = findViewById(R.id.halalFoodButton);
         buttonFastFood = findViewById(R.id.HalalFastFoodButton);
         buttonGift = findViewById(R.id.GiftIdeaButton);

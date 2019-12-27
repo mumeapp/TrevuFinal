@@ -23,8 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.remu.POJO.HalalFood;
+import com.saber.chentianslideback.SlideBackActivity;
 
-public class HalalFastFoodActivity extends AppCompatActivity {
+public class HalalFastFoodActivity extends SlideBackActivity {
 
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<HalalFood, HalalFastFoodActivity.HalalFoodViewHolder> firebaseRecyclerAdapter;
@@ -77,6 +78,13 @@ public class HalalFastFoodActivity extends AppCompatActivity {
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
         cd.setOnClickListener(view -> addFood());
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
     }
 
     @Override

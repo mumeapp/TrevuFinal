@@ -31,10 +31,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.remu.POJO.TourPlace;
+import com.saber.chentianslideback.SlideBackActivity;
 
 import java.util.ArrayList;
 
-public class TourismActivity extends AppCompatActivity {
+public class TourismActivity extends SlideBackActivity {
 
 //    private DatabaseReference databaseReference;
 //    private FirebaseRecyclerAdapter<Restoran, TourismActivity.TourismViewHolder> firebaseRecyclerAdapter;
@@ -133,6 +134,12 @@ public class TourismActivity extends AppCompatActivity {
         tourScrollView.post(() -> {
             tourScrollView.scrollTo(0, 0);
         });
+        setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
     }
 
     @Override

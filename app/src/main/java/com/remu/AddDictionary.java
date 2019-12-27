@@ -2,6 +2,7 @@ package com.remu;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,10 +17,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -33,13 +38,17 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.remu.POJO.TextProcess;
+import com.saber.chentianslideback.SlideBackActivity;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AddDictionary extends AppCompatActivity {
+public class AddDictionary extends SlideBackActivity {
+
+    public static final int ORIGIN_REQUEST_CODE = 0;
+    public static final int DESTINATION_REQUEST_CODE = 1;
 
     private DatabaseReference database;
 
@@ -64,6 +73,11 @@ public class AddDictionary extends AppCompatActivity {
     private String textAwal;
     private String textAkhir;
 
+    // select language
+    private LinearLayout selectorOrigin, selectorDestination;
+    private ImageView imageOrigin, imageDestination;
+    private TextView languageOrigin, languageDestination;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -80,6 +94,9 @@ public class AddDictionary extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_dictionary);
+
+        initializeUI();
+        initializeClickListener();
 
         Animatoo.animateSlideDown(this);
 //        awal = new Awal();
@@ -184,7 +201,15 @@ public class AddDictionary extends AppCompatActivity {
 //                return false;
 //            }
 //        });
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
     }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
+    }
+
     private void submitUser(TextProcess requests, String child){
         database.child("Dictionary").child(child).push().setValue(requests).addOnSuccessListener(this, new OnSuccessListener<Void>() {
             @Override
@@ -256,6 +281,103 @@ public class AddDictionary extends AppCompatActivity {
     public void finish() {
         super.finish();
         Animatoo.animateSlideUp(this);
+    }
+
+    private void initializeUI() {
+        selectorOrigin = findViewById(R.id.selector_origin);
+        selectorDestination = findViewById(R.id.selector_destination);
+        imageOrigin = findViewById(R.id.img_origin);
+        imageDestination = findViewById(R.id.img_destination);
+        languageOrigin = findViewById(R.id.language_origin);
+        languageDestination = findViewById(R.id.language_destination);
+    }
+
+    private void initializeClickListener() {
+        selectorOrigin.setOnClickListener(v -> {
+            String currentLanguage = languageOrigin.getText().toString();
+
+            switch (currentLanguage) {
+                case "Indonesian":
+                    selectLanguageOrigin(ChooseLanguageActivity.INDONESIAN);
+                    break;
+                case "English":
+                    selectLanguageOrigin(ChooseLanguageActivity.ENGLISH);
+                    break;
+                case "Japanese":
+                    selectLanguageOrigin(ChooseLanguageActivity.JAPANESE);
+                    break;
+            }
+        });
+        selectorDestination.setOnClickListener(v -> {
+            String currentLanguage = languageDestination.getText().toString();
+
+            switch (currentLanguage) {
+                case "Indonesian":
+                    selectLanguageDestination(ChooseLanguageActivity.INDONESIAN);
+                    break;
+                case "English":
+                    selectLanguageDestination(ChooseLanguageActivity.ENGLISH);
+                    break;
+                case "Japanese":
+                    selectLanguageDestination(ChooseLanguageActivity.JAPANESE);
+                    break;
+            }
+        });
+    }
+
+    private void selectLanguageOrigin(int currentLanguage) {
+        Intent intent = new Intent(AddDictionary.this, ChooseLanguageActivity.class);
+        intent.putExtra("language", currentLanguage);
+        startActivityForResult(intent, ORIGIN_REQUEST_CODE);
+    }
+
+    private void selectLanguageDestination(int currentLanguage) {
+        Intent intent = new Intent(AddDictionary.this, ChooseLanguageActivity.class);
+        intent.putExtra("language", currentLanguage);
+        startActivityForResult(intent, DESTINATION_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            String languageSelected = data.getStringExtra("selected");
+            switch (requestCode) {
+                case ORIGIN_REQUEST_CODE:
+                    languageOrigin.setText(languageSelected);
+
+                    switch (languageSelected) {
+                        case "Indonesian":
+                            imageOrigin.setImageDrawable(getDrawable(R.drawable.indo_flag));
+                            break;
+                        case "English":
+                            imageOrigin.setImageDrawable(getDrawable(R.drawable.usa_flag));
+                            break;
+                        case "Japanese":
+                            imageOrigin.setImageDrawable(getDrawable(R.drawable.japan_flag));
+                            break;
+                    }
+
+                    break;
+                case DESTINATION_REQUEST_CODE:
+                    languageDestination.setText(languageSelected);
+
+                    switch (languageSelected) {
+                        case "Indonesian":
+                            imageDestination.setImageDrawable(getDrawable(R.drawable.indo_flag));
+                            break;
+                        case "English":
+                            imageDestination.setImageDrawable(getDrawable(R.drawable.usa_flag));
+                            break;
+                        case "Japanese":
+                            imageDestination.setImageDrawable(getDrawable(R.drawable.japan_flag));
+                            break;
+                    }
+
+                    break;
+            }
+        }
     }
 
 }

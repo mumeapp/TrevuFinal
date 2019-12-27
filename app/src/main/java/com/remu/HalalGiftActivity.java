@@ -27,10 +27,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.remu.POJO.Distance;
 import com.remu.POJO.Restoran;
+import com.saber.chentianslideback.SlideBackActivity;
 
 import java.text.DecimalFormat;
 
-public class HalalGiftActivity extends AppCompatActivity {
+public class HalalGiftActivity extends SlideBackActivity {
 
     private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<Restoran, HalalGiftActivity.HalalGiftViewHolder> firebaseRecyclerAdapter;
@@ -109,6 +110,13 @@ public class HalalGiftActivity extends AppCompatActivity {
 
         rvFood.setAdapter(firebaseRecyclerAdapter);
         addGift.setOnClickListener(View -> addGift());
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
     }
 
     @Override

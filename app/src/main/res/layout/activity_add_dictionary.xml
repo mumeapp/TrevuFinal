@@ -8,26 +8,6 @@
     android:orientation="vertical"
     tools:context=".AddDictionary">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:layout_weight="6">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/back_circle_bg" />
-
-        <ImageView
-            android:id="@+id/ButtonBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/ic_keyboard_arrow_left_black_24dp" />
-
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,11 +17,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/osbold"
             android:text="Translation"
             android:textColor="#ffffff"
-            android:textSize="41sp" />
+            android:textSize="41sp"
+            tools:ignore="HardcodedText" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,6 +33,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/selector_origin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
@@ -58,19 +41,24 @@
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="65dp"
-                    android:layout_height="50dp"
+                    android:layout_width="55dp"
+                    android:layout_height="40dp"
                     android:layout_margin="5dp"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="2dp">
 
                     <ImageView
+                        android:id="@+id/img_origin"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:src="@drawable/usa_flag"
+                        android:scaleType="fitXY"
+                        tools:ignore="ContentDescription" />
 
                 </androidx.cardview.widget.CardView>
 
                 <TextView
+                    android:id="@+id/language_origin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -78,7 +66,8 @@
                     android:fontFamily="@font/ossemibold"
                     android:text="English"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
@@ -86,38 +75,45 @@
                 android:layout_width="18.5dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="5dp"
-                android:src="@drawable/ic_arrow_translate" />
+                android:src="@drawable/ic_arrow_translate"
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
+                android:id="@+id/selector_destination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="15dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="65dp"
-                    android:layout_height="50dp"
+                    android:layout_width="55dp"
+                    android:layout_height="40dp"
                     android:layout_margin="5dp"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="2dp">
 
                     <ImageView
+                        android:id="@+id/img_destination"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:src="@drawable/japan_flag"
+                        android:scaleType="fitXY"
+                        tools:ignore="ContentDescription" />
 
                 </androidx.cardview.widget.CardView>
 
                 <TextView
+                    android:id="@+id/language_destination"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="25dp"
                     android:fontFamily="@font/ossemibold"
                     android:text="Japanese"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
@@ -136,7 +132,9 @@
         android:fontFamily="@font/osregular"
         android:gravity="top"
         android:hint="Origin language"
-        android:padding="25dp" />
+        android:padding="25dp"
+        tools:ignore="Autofill,HardcodedText"
+        android:inputType="textCapSentences" />
 
     <ImageView
         android:layout_width="50dp"
@@ -144,7 +142,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:layout_weight="5"
-        android:background="@drawable/arrow_down_white" />
+        android:background="@drawable/arrow_down_white"
+        tools:ignore="ContentDescription" />
 
     <EditText
         android:layout_width="match_parent"
@@ -157,7 +156,9 @@
         android:fontFamily="@font/osregular"
         android:gravity="top"
         android:hint="Translated language"
-        android:padding="25dp" />
+        android:padding="25dp"
+        android:inputType="textCapSentences"
+        tools:ignore="Autofill,HardcodedText" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -171,7 +172,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@drawable/ic_microphone" />
+            android:background="@drawable/ic_microphone"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:layout_width="0dp"
@@ -183,7 +185,8 @@
             android:text="Save translation"
             android:textAllCaps="false"
             android:textColor="#000000"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:ignore="ButtonStyle,HardcodedText,NestedWeights" />
 
     </LinearLayout>
 
