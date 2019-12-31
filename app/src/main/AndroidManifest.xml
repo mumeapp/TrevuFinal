@@ -23,7 +23,7 @@
         <!-- splash and on board activities -->
         <activity
             android:name=".SplashscreenActivity"
-            android:theme="@style/WhiteTheme">
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
