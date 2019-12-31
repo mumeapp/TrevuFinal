@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -351,10 +352,18 @@ public class DictionaryActivity extends SlideBackActivity {
                         player.setDataSource(aud);
                         player.setOnPreparedListener(MediaPlayer::start);
                         player.prepare();
-                        player.prepareAsync();
-                        player.start();
+//                        player.start();
+//                        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                            @Override
+//                            public void onPrepared(MediaPlayer mp) {
+//                                 mp.start();
+//                            }
+//                        });
+//                        player.prepare();
+                        Toast.makeText(getApplicationContext(), "Audio Started", Toast.LENGTH_LONG).show();
                     } catch (IOException i) {
                         i.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
                     }
                 });
             }
