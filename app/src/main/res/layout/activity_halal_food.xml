@@ -14,7 +14,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -26,27 +27,36 @@
                 android:layout_height="200dp"
                 android:background="@drawable/ic_halal_food_bg_obj" />
 
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/ic_food_logo" />
+
             <EditText
+                android:id="@+id/et_manual_category"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="175dp"
-                android:layout_marginEnd="50dp"
+                android:layout_marginEnd="25dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/input_search_white"
                 android:drawableStart="@drawable/ic_search_black_24dp"
                 android:drawablePadding="15dp"
                 android:elevation="5dp"
                 android:fontFamily="@font/osregular"
-                android:hint="Mau makan apa hari ini?"
+                android:hint="What would you like to eat?"
+                android:inputType="text"
+                android:maxLines="1"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="70dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="60dp"
                 android:fontFamily="@font/osextrabold"
                 android:text="Halal"
                 android:textColor="#ffffff"
@@ -55,61 +65,319 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="110dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="100dp"
                 android:fontFamily="@font/osextrabold"
                 android:text="Food"
                 android:textColor="#ffffff"
                 android:textSize="30sp" />
 
-            <ImageView
-                android:layout_width="300dp"
-                android:layout_height="200dp"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/ic_food_logo" />
         </RelativeLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:fontFamily="@font/osextrabold"
+            android:text="Explore from categories"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:clipToPadding="false"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="130dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="7.3"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/food" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.7">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="12dp"
+                                android:fontFamily="@font/ossemibold"
+                                android:text="Meatballs"
+                                android:textColor="#000000"
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="7.3"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/food" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.7">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="12dp"
+                                android:fontFamily="@font/ossemibold"
+                                android:text="Beef"
+                                android:textColor="#000000"
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="7.3"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/food" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.7">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="12dp"
+                                android:fontFamily="@font/ossemibold"
+                                android:text="Chicken Delight"
+                                android:textColor="#000000"
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="7.3"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/food" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.7">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="12dp"
+                                android:fontFamily="@font/ossemibold"
+                                android:text="Chinese"
+                                android:textColor="#000000"
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="7.3"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/food" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.7">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="12dp"
+                                android:fontFamily="@font/ossemibold"
+                                android:text="Ramen"
+                                android:textColor="#000000"
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/ly_midnight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:fontFamily="@font/osextrabold"
+                android:text="Midnight craving"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listOpenAtNight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:fontFamily="@font/osextrabold"
+            android:text="Recommended for you"
+            android:textColor="#000000"
+            android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/HalalFoodCategories"
+            android:id="@+id/listRecommendedFood"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:nestedScrollingEnabled="false"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/addFood"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="8dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/ic_plus" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="25dp"
-                    android:fontFamily="@font/osregular"
-                    android:text="Tambah baru"
-                    android:textColor="#000000" />
-            </RelativeLayout>
-
-        </androidx.cardview.widget.CardView>
-
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp"
+            android:src="@drawable/powered_by_google_light" />
 
     </LinearLayout>
 

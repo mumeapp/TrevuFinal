@@ -96,6 +96,6 @@
             android:textAllCaps="false"
             android:textColor="#ffffff" />
 
-
     </RelativeLayout>
+
 </androidx.cardview.widget.CardView>

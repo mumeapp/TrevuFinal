@@ -1,6 +1,7 @@
 package com.remu;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -20,9 +21,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 
 import com.alespero.expandablecardview.ExpandableCardView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
@@ -109,7 +108,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
-        new GetData(this.getApplicationContext()).execute();
+        new GetData().execute();
 
         //set title for expandable card
         jamSolat.setOnExpandedListener((v, isExpanded) -> {
@@ -330,23 +329,14 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         prayerTime.execute();
     }
 
-    public static String getTAG() {
-        return TAG;
-    }
-
     public float getPixelFromDp(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return dp * (metrics.densityDpi / 160f);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class GetData extends AsyncTask<Void, Void, Void> {
-
-        private Context context;
-
-        public GetData(Context context) {
-            this.context = context;
-        }
 
         @Override
         protected void onPreExecute() {
@@ -358,14 +348,11 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             HttpHandler httpHandler = new HttpHandler();
 
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +"&rankby=distance&type=mosque&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-//            String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=nearby+mosque&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-//                    + metaData.getString("com.google.android.geo.API_KEY");
-//            https://maps.googleapis.com/maps/api/directions/json?origin=Universitas%20Brawijaya&destination=Alun-alun%20Malang&avoid=highways&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
-            Log.e(TAG, url);
-            Log.e(TAG, "Response from url: " + jsonStr);
+            Log.d(TAG, url);
+            Log.d(TAG, "Response from url: " + jsonStr);
 
             if (jsonStr != null) {
                 try {
@@ -418,12 +405,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                 mMap.addMarker(new MarkerOptions()
                         .position(a.getGeoLocation())
                         .title(a.getName())
-                        .icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.ic_mosque_marker)));
+                        .icon(bitmapDescriptorFromVector(getApplicationContext())));
             }
         }
 
-        private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-            Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        private BitmapDescriptor bitmapDescriptorFromVector(Context context) {
+            Drawable vectorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_mosque_marker);
             vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
             Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);

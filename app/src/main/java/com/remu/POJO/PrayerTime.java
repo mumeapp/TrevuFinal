@@ -1,5 +1,6 @@
 package com.remu.POJO;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -30,7 +31,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     private Context context;
     private String url;
     private ArrayList<HashMap<String, String>> prayerList;
-    private ArrayList<TextView> textViews = new ArrayList<>();
+    private ArrayList<TextView> textViews;
     private ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
     private ProgressDialog progressDialog;
 
@@ -64,7 +65,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
 
         String jsonStr = httpHandler.makeServiceCall(url);
 
-        Log.e(TAG, "Response from url: " + jsonStr);
+        Log.d(TAG, "Response from url: " + jsonStr);
 
         if (jsonStr != null) {
             try {
@@ -121,10 +122,6 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    public ArrayList<HashMap<String, String>> getPrayerList() {
-        return this.prayerList;
-    }
-
     private void setPrayerList(TextView fajr, TextView dhuhr, TextView asr, TextView maghrib, TextView isha) {
         fajr.setText(prayerList.get(0).get("time"));
         dhuhr.setText(prayerList.get(1).get("time"));
@@ -143,7 +140,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
 
     private int getIndexNextPrayerTime() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("HH:mm");
         String currentTime = df.format(c.getTime());
 
         int index = 0;
@@ -154,7 +151,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
             int currentTimeMnt = (Integer.parseInt(currentTime.split(":")[0]) * 60) + Integer.parseInt(currentTime.split(":")[1]);
 
             try {
-                Range<Integer> myRange = new Range<Integer>(rangeBottom, rangeTop);
+                Range<Integer> myRange = new Range<>(rangeBottom, rangeTop);
                 if (myRange.contains(currentTimeMnt)) {
                     index = i + 1;
                     break;

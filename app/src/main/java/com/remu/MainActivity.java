@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView.Adapter tipsAdapter;
     ArrayList<Tips> tipsDataSet;
 
-    ScrollView mainScrollView;
+    NestedScrollView mainScrollView;
 
     public LocationResult locationResult = new LocationResult() {
 
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         listTips.setLayoutManager(tipsLayoutManager);
         tipsAdapter = new TipsAdapter(getApplication(), tipsDataSet);
         listTips.setAdapter(tipsAdapter);
-        MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 3, 100);
+        MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 2, 100);
         multiSnapHelper.attachToRecyclerView(listTips);
     }
 

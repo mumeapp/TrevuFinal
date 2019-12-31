@@ -41,70 +41,61 @@ public class HalalGiftDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restoran);
 
-        initializeUI();
-
-        setImage(getIntent().getStringExtra(gambar));
-        kategori.setText(nama);
-        rvRestaurant.setLayoutManager(new LinearLayoutManager(HalalGiftDetail.this));
-
-        Query query = databaseReference.orderByKey();
-
-        FirebaseRecyclerOptions<Restoran> options = new FirebaseRecyclerOptions.Builder<Restoran>()
-                .setQuery(query, Restoran.class).build();
-
-
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Restoran, HalalGiftDetailViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull HalalGiftDetailViewHolder halalFoodRestaurantViewHolder, int i, @NonNull Restoran halalFoodRestaurant) {
-
-                halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
-                halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
-                halalFoodRestaurantViewHolder.setRating("5.0");
-                halalFoodRestaurantViewHolder.setJarak("0.3 KM");
-
-                id = halalFoodRestaurant.getID();
-
-                halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
-
-                    Intent intent = new Intent(HalalGiftDetail.this, HalalRestaurantDetailActivity.class);
-                    intent.putExtra(HalalRestaurantDetailActivity.ID, id);
-
-                    startActivity(intent);
-                });
-            }
-
-            @NonNull
-            @Override
-            public HalalGiftDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_restoran, parent, false);
-
-                return new HalalGiftDetailViewHolder(view);
-            }
-        };
-
-        rvRestaurant.setAdapter(firebaseRecyclerAdapter);
-        cd.setOnClickListener(view -> addFood());
+//        initializeUI();
+//
+//        setImage(getIntent().getStringExtra(gambar));
+//        kategori.setText(nama);
+//        rvRestaurant.setLayoutManager(new LinearLayoutManager(HalalGiftDetail.this));
+//
+//        Query query = databaseReference.orderByKey();
+//
+//        FirebaseRecyclerOptions<Restoran> options = new FirebaseRecyclerOptions.Builder<Restoran>()
+//                .setQuery(query, Restoran.class).build();
+//
+//
+//        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Restoran, HalalGiftDetailViewHolder>(options) {
+//            @Override
+//            protected void onBindViewHolder(@NonNull HalalGiftDetailViewHolder halalFoodRestaurantViewHolder, int i, @NonNull Restoran halalFoodRestaurant) {
+//
+//                halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
+//                halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
+//                halalFoodRestaurantViewHolder.setRating("5.0");
+//                halalFoodRestaurantViewHolder.setJarak("0.3 KM");
+//
+//                id = halalFoodRestaurant.getID();
+//
+//                halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
+//
+//                    Intent intent = new Intent(HalalGiftDetail.this, HalalRestaurantDetailActivity.class);
+//                    intent.putExtra(HalalRestaurantDetailActivity.ID, id);
+//
+//                    startActivity(intent);
+//                });
+//            }
+//
+//            @NonNull
+//            @Override
+//            public HalalGiftDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_restoran, parent, false);
+//
+//                return new HalalGiftDetailViewHolder(view);
+//            }
+//        };
+//
+//        rvRestaurant.setAdapter(firebaseRecyclerAdapter);
+//        cd.setOnClickListener(view -> addFood());
 
     }
 
 
     private void initializeUI() {
-        getID = getIntent();
-        nama = getID.getStringExtra(Nama);
-        rvRestaurant = findViewById(R.id.HalalRestauran);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("Gift").child(nama);
-        cd = findViewById(R.id.addReastaurant);
-        img = findViewById(R.id.kategoriGambar);
-        kategori = findViewById(R.id.kategori);
-    }
-
-    private void addFood(){
-        String Jenis = "Gift";
-        Intent intent = new Intent(HalalGiftDetail.this, RestoranActivity.class);
-        intent.putExtra(RestoranActivity.kategori, nama);
-        intent.putExtra(RestoranActivity.Jenis, Jenis);
-        startActivity(intent);
-
+//        getID = getIntent();
+//        nama = getID.getStringExtra(Nama);
+//        rvRestaurant = findViewById(R.id.HalalRestauran);
+//        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("Gift").child(nama);
+//        cd = findViewById(R.id.addReastaurant);
+//        img = findViewById(R.id.kategoriGambar);
+//        kategori = findViewById(R.id.kategori);
     }
 
     private void setImage(String url){
@@ -112,27 +103,6 @@ public class HalalGiftDetail extends AppCompatActivity {
         Glide.with(HalalGiftDetail.this)
                 .load(url)
                 .into(img);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        try {
-            firebaseRecyclerAdapter.startListening();
-        }catch (Exception e){
-
-        }
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        try {
-            firebaseRecyclerAdapter.stopListening();
-        }catch (Exception e){
-
-        }
     }
 
     public class HalalGiftDetailViewHolder extends RecyclerView.ViewHolder {

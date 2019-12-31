@@ -1,22 +1,17 @@
 package com.remu;
 
 import android.app.Application;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.Distance;
 import com.remu.POJO.Mosque;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -60,9 +55,8 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
 
     private double countDistance(LatLng latLng) {
         LatLng currentLatLng = new LatLng(Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null)), Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null)));
-        Distance distance = new Distance();
 
-        return distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
+        return Distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

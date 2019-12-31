@@ -61,7 +61,8 @@
         <activity android:name=".FoodKategoriActivity" />
         <activity
             android:name=".HalalFoodActivity"
-            android:theme="@style/YellowTheme" />
+            android:theme="@style/YellowTheme"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- fast food activities -->
         <activity android:name=".HalalFastFoodRestaurantActivity" />
