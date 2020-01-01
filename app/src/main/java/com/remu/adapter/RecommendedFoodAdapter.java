@@ -7,14 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.remu.HalalGiftDetail;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
 import com.remu.R;
@@ -25,13 +24,13 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
+public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFoodAdapter.ViewHolder> {
 
     Application app;
     Activity activity;
     ArrayList<PlaceModel> mDataset;
 
-    public GiftAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset) {
+    public RecommendedFoodAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset) {
         this.app = app;
         this.activity = activity;
         this.mDataset = mDataset;
@@ -41,21 +40,22 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_toko, parent, false);
+                .inflate(R.layout.adapter_food_vertical_mode, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.giftName.setText(mDataset.get(position).getPlaceName());
+        holder.recommendedName.setText(mDataset.get(position).getPlaceName());
+        holder.recommendedAddress.setText(mDataset.get(position).getPlaceAddress());
 
         if (mDataset.get(position).getPlaceRating() == 0) {
-            holder.giftRating.setText("-");
+            holder.recommendedRating.setText("-");
         } else {
-            holder.giftRating.setText(String.format("%.1f", mDataset.get(position).getPlaceRating()));
+            holder.recommendedRating.setText(String.format("%.1f", mDataset.get(position).getPlaceRating()));
         }
 
-        holder.giftDistance.setText(String.format("%.2f km", countDistance(mDataset.get(position).getPlaceLocation())));
+        holder.recommendedDistance.setText(String.format("%.2f km", countDistance(mDataset.get(position).getPlaceLocation())));
 
         if (mDataset.get(position).getPlacePhotoUri() != null) {
             Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + mDataset.get(position).getPlacePhotoUri()
@@ -63,7 +63,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
                     .error(R.drawable.bg_loading)
                     .placeholder(R.drawable.bg_loading)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                    .into(holder.giftImage);
+                    .into(holder.recommendedImage);
         } else {
             LatLng location = mDataset.get(position).getPlaceLocation();
             Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
@@ -71,14 +71,14 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
                     .error(R.drawable.bg_loading)
                     .placeholder(R.drawable.bg_loading)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                    .into(holder.giftImage);
+                    .into(holder.recommendedImage);
         }
 
-        holder.giftCard.setOnClickListener((v) -> {
-            Intent intent = new Intent(activity.getBaseContext(), HalalGiftDetail.class);
-            intent.putExtra("place_id", mDataset.get(position).getPlaceId());
-            activity.startActivity(intent);
-        });
+//        holder.recommendeLayout.setOnClickListener((v) -> {
+//            Intent intent = new Intent(activity.getBaseContext(), HalalGiftDetail.class);
+//            intent.putExtra("place_id", mDataset.get(position).getPlaceId());
+//            activity.startActivity(intent);
+//        });
     }
 
     @Override
@@ -93,19 +93,19 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        CardView giftCard;
-        ImageView giftImage;
-        TextView giftName, giftRating, giftDistance;
+        LinearLayout recommendeLayout;
+        ImageView recommendedImage;
+        TextView recommendedName, recommendedAddress, recommendedRating, recommendedDistance;
 
         ViewHolder(View itemView) {
             super(itemView);
 
-            giftCard = itemView.findViewById(R.id.gift_card);
-            giftImage = itemView.findViewById(R.id.gift_image);
-            giftName = itemView.findViewById(R.id.gift_name);
-            giftRating = itemView.findViewById(R.id.gift_rating);
-            giftDistance = itemView.findViewById(R.id.gift_distance);
+            recommendeLayout = itemView.findViewById(R.id.food_layout);
+            recommendedImage = itemView.findViewById(R.id.food_image);
+            recommendedName = itemView.findViewById(R.id.food_name);
+            recommendedAddress = itemView.findViewById(R.id.food_description);
+            recommendedRating = itemView.findViewById(R.id.food_rating);
+            recommendedDistance = itemView.findViewById(R.id.food_distance);
         }
     }
-
 }

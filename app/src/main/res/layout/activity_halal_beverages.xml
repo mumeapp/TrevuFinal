@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".HalalFoodActivity">
+    tools:context=".HalalBeveragesActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,21 +19,16 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/bg_halal_food" />
+                android:background="@drawable/bg_halal_fast_food" />
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/ic_halal_food_bg_obj" />
-
-            <ImageView
-                android:layout_width="300dp"
+                android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/ic_food_logo" />
+                android:background="@drawable/ic_fast_food" />
 
             <EditText
-                android:id="@+id/et_manual_food_category"
+                android:id="@+id/et_manual_beverages_category"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="25dp"
@@ -45,7 +40,7 @@
                 android:drawablePadding="15dp"
                 android:elevation="5dp"
                 android:fontFamily="@font/osregular"
-                android:hint="What would you like to eat?"
+                android:hint="What would you like to drink?"
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingStart="15dp"
@@ -67,7 +62,7 @@
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="100dp"
                 android:fontFamily="@font/osextrabold"
-                android:text="Food"
+                android:text="Beverages"
                 android:textColor="#ffffff"
                 android:textSize="30sp" />
 
@@ -84,42 +79,13 @@
             android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listFoodCategory"
+            android:id="@+id/listBeveragesCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:clipToPadding="false"
             android:paddingStart="20dp"
             android:paddingEnd="15dp" />
-
-        <LinearLayout
-            android:id="@+id/ly_food_midnight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="25dp"
-                android:fontFamily="@font/osextrabold"
-                android:text="Midnight craving"
-                android:textColor="#000000"
-                android:textSize="20sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listFoodOpenAtNight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:clipToPadding="false"
-                android:paddingStart="20dp"
-                android:paddingEnd="15dp" />
-
-        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
@@ -132,7 +98,7 @@
             android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listRecommendedFood"
+            android:id="@+id/listRecommendedBeverages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"

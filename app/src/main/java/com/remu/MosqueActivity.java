@@ -47,6 +47,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.remu.POJO.Mosque;
+import com.remu.POJO.PlaceModel;
 import com.remu.POJO.PrayerTime;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
@@ -90,7 +91,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     private Location mLastKnownLocation;
 
     RecyclerView.Adapter mAdapter;
-    ArrayList<Mosque> mDataSet;
+    ArrayList<PlaceModel> mDataSet;
 
 
     @Override
@@ -151,7 +152,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                     View centerView = multiSnapHelper.findSnapView(layoutManager);
                     int pos = layoutManager.getPosition(centerView);
                     Log.e("Snapped Item Position", "" + pos);
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDataSet.get(pos).getGeoLocation(), 17));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDataSet.get(pos).getPlaceLocation(), 17));
                 }
             }
         });
@@ -347,7 +348,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
 
-            String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +"&rankby=distance&type=mosque&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "&rankby=distance&type=mosque&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
@@ -361,25 +363,13 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                     for (int i = 0; i < results.length(); i++) {
                         JSONObject row = results.getJSONObject(i);
 
-                        mDataSet.add(new Mosque(
-                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
-                                new HashMap<String, LatLng>() {{
-                                    put("northeast", new LatLng(row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("northeast").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("northeast").getDouble("lng")));
-                                    put("southwest", new LatLng(row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("southwest").getDouble("lat"), row.getJSONObject("geometry").getJSONObject("viewport").getJSONObject("southwest").getDouble("lng")));
-                                }},
-                                row.getString("icon"),
-                                row.getString("id"),
-                                row.getString("name"),
-                                row.getJSONObject("opening_hours").getBoolean("open_now"),
+                        mDataSet.add(new PlaceModel(
                                 row.getString("place_id"),
-                                row.getJSONObject("plus_code").getString("compound_code"),
-                                row.getJSONObject("plus_code").getString("global_code"),
-                                row.getString("rating"),
-                                row.getString("reference"),
-                                row.getString("scope"),
-                                row.getJSONArray("types"),
-                                row.getString("user_ratings_total"),
-                                row.getString("vicinity")
+                                row.getString("name"),
+                                row.getString("vicinity"),
+                                row.getDouble("rating"),
+                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
                         ));
                     }
                 } catch (final JSONException e) {
@@ -401,10 +391,10 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             mAdapter = new MosqueAdapter(getApplication(), mDataSet);
             listMasjid.setAdapter(mAdapter);
 
-            for (Mosque a : mDataSet) {
+            for (PlaceModel a : mDataSet) {
                 mMap.addMarker(new MarkerOptions()
-                        .position(a.getGeoLocation())
-                        .title(a.getName())
+                        .position(a.getPlaceLocation())
+                        .title(a.getPlaceName())
                         .icon(bitmapDescriptorFromVector(getApplicationContext())));
             }
         }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,18 +17,17 @@ import org.junit.internal.runners.statements.RunAfters;
 public class SplashscreenActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
-        mAuth = FirebaseAuth.getInstance();
-    }
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFF0984E3, android.graphics.PorterDuff.Mode.SRC_ATOP);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {

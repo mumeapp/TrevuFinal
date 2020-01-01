@@ -15,73 +15,85 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/MosqueName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
             android:layout_marginTop="25dp"
-            android:layout_marginEnd="25dp"
-            android:fontFamily="@font/osbold"
-            android:text="name"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginEnd="15dp"
-            android:background="#0f0f0f" />
+            <TextView
+                android:id="@+id/MosqueName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:fontFamily="@font/osbold"
+                android:maxLines="1"
+                android:text="name"
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/TargetAddress"
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
+                android:background="#0f0f0f" />
+
+            <TextView
+                android:id="@+id/TargetAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:fontFamily="@font/osregular"
+                android:maxLines="1"
+                android:text="address"
+                android:textColor="#adadad"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:fontFamily="@font/osregular"
-            android:text="address"
-            android:textColor="#adadad"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="25dp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/ic_dist" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="55dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/osregular"
-            android:text="0.00 km" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:background="@drawable/ic_star_yellow_24dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="125dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/ic_star_yellow_24dp" />
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/osregular"
+                android:text="rating" />
 
-        <TextView
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="150dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/osregular"
-            android:text="rating" />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/ic_dist" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/osregular"
+                android:text="distance" />
+
+        </LinearLayout>
+
 
         <Button
             android:layout_width="85dp"

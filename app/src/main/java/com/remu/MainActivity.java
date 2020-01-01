@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -117,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
         //go to food activity
         foodButton.setOnClickListener(view -> {
             Intent viewFood = new Intent(MainActivity.this, FoodActivity.class);
-            viewFood.putExtra("latitude", latitude);
-            viewFood.putExtra("longitude", longitude);
             startActivity(viewFood);
         });
 

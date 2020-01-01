@@ -1,0 +1,272 @@
+package com.remu;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.google.android.gms.maps.model.LatLng;
+import com.remu.POJO.PlaceModel;
+import com.remu.adapter.RecommendedFoodAdapter;
+import com.saber.chentianslideback.SlideBackActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class HalalBeveragesActivity extends SlideBackActivity {
+
+    private static final String TAG = "HalalBeveragesActivity";
+
+    private double latitude, longitude;
+
+    private RecyclerView listCategory, listRecommendedFood;
+    private EditText manualCategory;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_halal_beverages);
+
+        latitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
+        longitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
+
+        initializeUI();
+        Animatoo.animateSlideLeft(this);
+
+        generateListCategory();
+        new GetRecommended(this).execute();
+
+        manualCategory.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (manualCategory.getText() != null) {
+                    Intent intent = new Intent(HalalBeveragesActivity.this, HalalFoodRestaurantActivity.class);
+                    intent.putExtra("category", manualCategory.getText().toString());
+                    startActivity(intent);
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
+    }
+
+    private void initializeUI() {
+        listCategory = findViewById(R.id.listBeveragesCategory);
+        listRecommendedFood = findViewById(R.id.listRecommendedBeverages);
+        manualCategory = findViewById(R.id.et_manual_beverages_category);
+    }
+
+    private void generateListCategory() {
+        ArrayList<HashMap<String, Object>> categoryDataSet = new ArrayList<HashMap<String, Object>>() {{
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Bubble Tea");
+                put("category_image", R.drawable.food);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Tea");
+                put("category_image", R.drawable.food);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Coffee");
+                put("category_image", R.drawable.food);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Juice");
+                put("category_image", R.drawable.food);
+            }});
+        }};
+        listCategory.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, RecyclerView.HORIZONTAL, false));
+        RecyclerView.Adapter<CatergoryViewHolder> categoryAdapter = new RecyclerView.Adapter<CatergoryViewHolder>() {
+            @NonNull
+            @Override
+            public CatergoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.adapter_menu_kategori_food, parent, false);
+                return new CatergoryViewHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull CatergoryViewHolder holder, int position) {
+                holder.categoryImage.setImageDrawable(getDrawable((int) categoryDataSet.get(position).get("category_image")));
+                holder.categoryName.setText((String) categoryDataSet.get(position).get("category_name"));
+            }
+
+            @Override
+            public int getItemCount() {
+                return categoryDataSet.size();
+            }
+        };
+        listCategory.setAdapter(categoryAdapter);
+    }
+
+    private class GetRecommended extends AsyncTask<Void, Void, Void> {
+
+        private Context context;
+
+        private ProgressDialog progressDialog;
+        private ArrayList<PlaceModel> places;
+
+        GetRecommended(Context context) {
+            this.context = context;
+            places = new ArrayList<>();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Fetching result...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler httpHandler = new HttpHandler();
+
+            String url1 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=bubble%20tea&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url2 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=tea&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url3 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=coffee&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=juice&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+
+            ArrayList<String> arrayListJSON = new ArrayList<String>() {{
+                add(httpHandler.makeServiceCall(url1));
+                add(httpHandler.makeServiceCall(url2));
+                add(httpHandler.makeServiceCall(url3));
+                add(httpHandler.makeServiceCall(url4));
+            }};
+
+            ArrayList<String> placeIds = new ArrayList<>();
+
+            for (String jsonStr : arrayListJSON) {
+                Log.d(TAG, url1);
+                Log.d(TAG, "Response from url: " + jsonStr);
+
+                if (jsonStr != null) {
+                    parseJSON(jsonStr, placeIds);
+                } else {
+                    Log.e(TAG, "Couldn't get json from server.");
+                }
+            }
+
+            getTopRating();
+
+            return null;
+        }
+
+        private void getTopRating() {
+            ArrayList<PlaceModel> topRating = new ArrayList<>();
+
+            for (PlaceModel place : places) {
+                if (place.getPlaceRating() >= 4) {
+                    topRating.add(place);
+                }
+            }
+
+            places.clear();
+            places.addAll(topRating);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, LinearLayoutManager.VERTICAL, false));
+            RecommendedFoodAdapter recommendedAdapter = new RecommendedFoodAdapter(getApplication(), HalalBeveragesActivity.this, places);
+            listRecommendedFood.setAdapter(recommendedAdapter);
+
+            progressDialog.dismiss();
+        }
+
+        private void parseJSON(String jsonStr, ArrayList<String> placeIds) {
+            try {
+                JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
+
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject row = results.getJSONObject(i);
+
+                    if (row.isNull("photos")) {
+                        if (!placeIds.contains(row.getString("place_id"))) {
+                            places.add(new PlaceModel(
+                                    row.getString("place_id"),
+                                    row.getString("name"),
+                                    row.getString("vicinity"),
+                                    row.getDouble("rating"),
+                                    new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                            row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
+                            ));
+                            placeIds.add(row.getString("place_id"));
+                        }
+                    } else {
+                        if (!placeIds.contains(row.getString("place_id"))) {
+                            places.add(new PlaceModel(
+                                    row.getString("place_id"),
+                                    row.getString("name"),
+                                    row.getString("vicinity"),
+                                    row.getDouble("rating"),
+                                    new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                            row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
+                                    row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
+                            ));
+                            placeIds.add(row.getString("place_id"));
+                        }
+                    }
+                }
+            } catch (final JSONException e) {
+                Log.e(TAG, "Json parsing error: " + e.getMessage());
+            }
+        }
+    }
+
+    class CatergoryViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView categoryImage;
+        TextView categoryName;
+
+        CatergoryViewHolder(View itemView) {
+            super(itemView);
+
+            categoryImage = itemView.findViewById(R.id.food_category_image);
+            categoryName = itemView.findViewById(R.id.food_category_name);
+        }
+
+    }
+
+}

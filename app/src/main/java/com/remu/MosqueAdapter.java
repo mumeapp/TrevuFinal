@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.Distance;
-import com.remu.POJO.Mosque;
+import com.remu.POJO.PlaceModel;
 
 import java.util.ArrayList;
 
@@ -19,10 +19,10 @@ import static android.content.Context.MODE_PRIVATE;
 
 class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
 
-    private ArrayList<Mosque> mDataset;
+    private ArrayList<PlaceModel> mDataset;
     private Application app;
 
-    MosqueAdapter(Application app, ArrayList<Mosque> mDataset) {
+    MosqueAdapter(Application app, ArrayList<PlaceModel> mDataset) {
         this.app = app;
         this.mDataset = mDataset;
     }
@@ -37,12 +37,11 @@ class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MosqueAdapter.ViewHolder holder, int position) {
-        //ntr ganti
         try {
-            holder.mosqueName.setText(mDataset.get(position).getName());
-            holder.targetAddress.setText(mDataset.get(position).getVicinity());
-            holder.distance.setText(String.format("%.2f km", countDistance(mDataset.get(position).getGeoLocation())));
-            holder.rating.setText(String.format("%.1f", Double.parseDouble(mDataset.get(position).getRating())));
+            holder.mosqueName.setText(mDataset.get(position).getPlaceName());
+            holder.targetAddress.setText(mDataset.get(position).getPlaceAddress());
+            holder.distance.setText(String.format("%.2f km", countDistance(mDataset.get(position).getPlaceLocation())));
+            holder.rating.setText(String.format("%.1f", mDataset.get(position).getPlaceRating()));
         } catch (NullPointerException e) {
 
         }

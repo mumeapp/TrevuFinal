@@ -17,6 +17,8 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.remu.POJO.PlaceModel;
 import com.remu.adapter.GiftAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
+import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
+import com.takusemba.multisnaprecyclerview.SnapGravity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +34,7 @@ public class FoodActivity extends SlideBackActivity {
     private PlacesClient placesClient;
 
     private double latitude, longitude;
-    private CardView buttonHalalFood, buttonFastFood;
+    private CardView buttonHalalFood, buttonHalalBeverages;
 
     private RecyclerView listGift;
     private ArrayList<PlaceModel> places;
@@ -43,8 +45,8 @@ public class FoodActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_view);
 
-        latitude = Double.parseDouble(getIntent().getStringExtra("latitude"));
-        longitude = Double.parseDouble(getIntent().getStringExtra("longitude"));
+        latitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
+        longitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
         new GetGiftData(this).execute();
 
         //initialize ui
@@ -58,9 +60,9 @@ public class FoodActivity extends SlideBackActivity {
         });
 
         //set intent to back to previous activity
-        buttonFastFood.setOnClickListener(view -> {
-            Intent halalFastFood = new Intent(FoodActivity.this, HalalFastFoodActivity.class);
-            startActivity(halalFastFood);
+        buttonHalalBeverages.setOnClickListener(view -> {
+            Intent halalBeverages = new Intent(FoodActivity.this, HalalBeveragesActivity.class);
+            startActivity(halalBeverages);
         });
 
         setSlideBackDirection(SlideBackActivity.LEFT);
@@ -79,7 +81,7 @@ public class FoodActivity extends SlideBackActivity {
 
     private void initializeUI() {
         buttonHalalFood = findViewById(R.id.halalFoodButton);
-        buttonFastFood = findViewById(R.id.HalalFastFoodButton);
+        buttonHalalBeverages = findViewById(R.id.HalalBeveragesButton);
         listGift = findViewById(R.id.rv_listGift);
     }
 
@@ -161,6 +163,9 @@ public class FoodActivity extends SlideBackActivity {
             listGift.setLayoutManager(new LinearLayoutManager(FoodActivity.this, LinearLayoutManager.HORIZONTAL, false));
             GiftAdapter giftAdapter = new GiftAdapter(getApplication(), FoodActivity.this, places);
             listGift.setAdapter(giftAdapter);
+            MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
+            multiSnapHelper.attachToRecyclerView(listGift);
+
             progressDialog.dismiss();
         }
     }

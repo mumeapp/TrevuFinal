@@ -56,7 +56,7 @@
         <!-- food activities -->
         <activity
             android:name=".FoodActivity"
-            android:theme="@style/YellowTheme" />
+            android:theme="@style/GreenTheme" />
         <activity android:name=".HalalFoodRestaurantActivity" />
         <activity android:name=".FoodKategoriActivity" />
         <activity
@@ -70,6 +70,12 @@
             android:name=".HalalFastFoodActivity"
             android:theme="@style/DarkRedTheme" />
         <activity android:name=".FastFoodActivity" />
+
+        <!-- beverages activities -->
+        <activity
+            android:name=".HalalBeveragesActivity"
+            android:theme="@style/DarkRedTheme"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- gift food activities -->
         <activity
@@ -110,16 +116,13 @@
         <activity android:name=".FriendResult" />
         <activity android:name=".RestoranActivity" />
         <activity android:name=".ListOnline" />
-        <activity android:name=".Profil" />
-
-        <!-- meta datas -->
+        <activity android:name=".Profil" /> <!-- meta datas -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8" />
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
-
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.remu;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -19,21 +21,23 @@ import java.util.ArrayList;
 public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHolder> {
 
     private ArrayList<TourPlace> mDataset;
-    private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     private LatLng currentLatLng;
+    private double dpWidth;
 
-    public TourismAdapter(Context context, ArrayList<TourPlace> mDataset, LatLng currentLatLng) {
-        this.mInflater = LayoutInflater.from(context);
+    TourismAdapter(Context context, ArrayList<TourPlace> mDataset, LatLng currentLatLng) {
         this.mDataset = mDataset;
         this.currentLatLng = currentLatLng;
+
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        dpWidth = displayMetrics.widthPixels / displayMetrics.density;
     }
 
     @NonNull
     @Override
     public TourismAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.adapter_tourism, parent, false);
-//        return new ViewHolder(view) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.adapter_tourism, parent, false);
 //
 //            @Override
 //            public void setFixedHeight() {
@@ -52,6 +56,7 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull TourismAdapter.ViewHolder holder, int position) {
 //        holder.setFixedHeight();
+        holder.cardView.setMinimumWidth(/*(int) ((dpWidth - 40) / 2)*/300);
         holder.image.setImageDrawable(mDataset.get(position).getImage());
         holder.title.setText(mDataset.get(position).getTitle());
         holder.rating.setText(String.format("%.2f", mDataset.get(position).getRating()));
@@ -62,11 +67,15 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
     public int getItemCount() { return mDataset.size(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        CardView cardView;
         ImageView image;
         TextView title, rating, distance;
 
         ViewHolder(View itemView) {
             super(itemView);
+
+            cardView = itemView.findViewById(R.id.tourism_card);
             image = itemView.findViewById(R.id.img_tour_place);
             title = itemView.findViewById(R.id.title_tour_place);
             rating = itemView.findViewById(R.id.rating_tour_place);
