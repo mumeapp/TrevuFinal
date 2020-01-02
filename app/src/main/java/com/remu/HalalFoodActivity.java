@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.PlaceModel;
+import com.remu.POJO.Weighting;
 import com.remu.adapter.MidnightFoodAdapter;
 import com.remu.adapter.RecommendedFoodAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
@@ -33,6 +34,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class HalalFoodActivity extends SlideBackActivity {
@@ -289,7 +291,20 @@ public class HalalFoodActivity extends SlideBackActivity {
             } else {
                 Log.e(TAG, "Couldn't get json from server.");
             }
+            doWeighting();
             return null;
+        }
+
+        private void doWeighting(){
+            Weighting weighting = new Weighting();
+            ArrayList<Double> weight;
+
+            weight = weighting.doWeighting(latitude, longitude, places);
+
+            for (int i = 0; i < places.size(); i++) {
+                places.get(i).setPlaceWeight(weight.get(i));
+            }
+            Collections.sort(places, new MyComparator());
         }
 
         @Override

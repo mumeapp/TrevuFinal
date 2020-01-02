@@ -73,7 +73,12 @@ public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFood
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(holder.recommendedImage);
         }
-
+        holder.recommendeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println(mDataset.get(position).getPlaceWeight());
+            }
+        });
 //        holder.recommendeLayout.setOnClickListener((v) -> {
 //            Intent intent = new Intent(activity.getBaseContext(), HalalGiftDetail.class);
 //            intent.putExtra("place_id", mDataset.get(position).getPlaceId());
