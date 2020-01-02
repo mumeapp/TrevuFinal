@@ -119,8 +119,6 @@ public class MainActivity extends AppCompatActivity {
         //go to tourism activity
         tourButton.setOnClickListener(view -> {
             Intent viewTour = new Intent(MainActivity.this, TourismActivity.class);
-            viewTour.putExtra("latitude", latitude);
-            viewTour.putExtra("longitude", longitude);
             startActivity(viewTour);
         });
 

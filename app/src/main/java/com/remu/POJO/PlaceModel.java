@@ -2,6 +2,8 @@ package com.remu.POJO;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Comparator;
+
 public class PlaceModel {
 
     private String placeId;
@@ -62,3 +64,4 @@ public class PlaceModel {
     }
 
 }
+

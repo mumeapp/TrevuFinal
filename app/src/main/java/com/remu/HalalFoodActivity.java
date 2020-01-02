@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
+import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
 import com.remu.adapter.MidnightFoodAdapter;
@@ -346,7 +347,7 @@ public class HalalFoodActivity extends SlideBackActivity {
             HttpHandler httpHandler = new HttpHandler();
 
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "&radius=5000&type=restaurant&keyword=muslim%20food&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8\n";
+                    "&radius=5000&type=restaurant&keyword=muslim%20food&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
             String jsonStr = httpHandler.makeServiceCall(url);
 

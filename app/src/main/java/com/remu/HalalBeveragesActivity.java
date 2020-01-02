@@ -13,7 +13,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
+import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
 import com.remu.adapter.RecommendedFoodAdapter;
@@ -32,9 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 
 public class HalalBeveragesActivity extends SlideBackActivity {
 
@@ -287,14 +285,14 @@ public class HalalBeveragesActivity extends SlideBackActivity {
 
 }
 
-class MyComparator implements Comparator<PlaceModel> {
-    @Override
-    public int compare(PlaceModel o1, PlaceModel o2) {
-        if (o1.getPlaceWeight() > o2.getPlaceWeight()) {
-            return -1;
-        } else if (o1.getPlaceWeight() < o2.getPlaceWeight()) {
-            return 1;
-        }
-        return 0;
-    }
-}
+//class MyComparator implements Comparator<PlaceModel> {
+//    @Override
+//    public int compare(PlaceModel o1, PlaceModel o2) {
+//        if (o1.getPlaceWeight() > o2.getPlaceWeight()) {
+//            return -1;
+//        } else if (o1.getPlaceWeight() < o2.getPlaceWeight()) {
+//            return 1;
+//        }
+//        return 0;
+//    }
+//}

@@ -1,5 +1,7 @@
-package com.remu;
+package com.remu.adapter;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -14,23 +16,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.Distance;
+import com.remu.POJO.PlaceModel;
 import com.remu.POJO.TourPlace;
+import com.remu.R;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHolder> {
 
-    private ArrayList<TourPlace> mDataset;
+    Application app;
+    Activity activity;
+    private ArrayList<PlaceModel> mDataset;
     private ItemClickListener mClickListener;
     private LatLng currentLatLng;
-    private double dpWidth;
 
-    TourismAdapter(Context context, ArrayList<TourPlace> mDataset, LatLng currentLatLng) {
+    public TourismAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset, LatLng currentLatLng) {
+        this.app = app;
+        this.activity = activity;
         this.mDataset = mDataset;
         this.currentLatLng = currentLatLng;
-
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        dpWidth = displayMetrics.widthPixels / displayMetrics.density;
     }
 
     @NonNull
@@ -55,16 +63,38 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull TourismAdapter.ViewHolder holder, int position) {
-//        holder.setFixedHeight();
-        holder.cardView.setMinimumWidth(/*(int) ((dpWidth - 40) / 2)*/300);
-        holder.image.setImageDrawable(mDataset.get(position).getImage());
-        holder.title.setText(mDataset.get(position).getTitle());
-        holder.rating.setText(String.format("%.2f", mDataset.get(position).getRating()));
-        holder.distance.setText(String.format("%.2f km", getJarak(currentLatLng, mDataset.get(position).getPosition())));
+        holder.title.setText(mDataset.get(position).getPlaceName());
+
+        if (mDataset.get(position).getPlaceRating() == 0) {
+            holder.rating.setText("-");
+        } else {
+            holder.rating.setText(String.format("%.1f", mDataset.get(position).getPlaceRating()));
+        }
+
+        holder.distance.setText(String.format("%.2f km", countDistance(mDataset.get(position).getPlaceLocation())));
+
+        if (mDataset.get(position).getPlacePhotoUri() != null) {
+            Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + mDataset.get(position).getPlacePhotoUri()
+                    + "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+                    .error(R.drawable.bg_loading)
+                    .placeholder(R.drawable.bg_loading)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .into(holder.image);
+        } else {
+            LatLng location = mDataset.get(position).getPlaceLocation();
+            Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
+                    + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+                    .error(R.drawable.bg_loading)
+                    .placeholder(R.drawable.bg_loading)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .into(holder.image);
+        }
     }
 
     @Override
-    public int getItemCount() { return mDataset.size(); }
+    public int getItemCount() {
+        return mDataset.size();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -91,7 +121,7 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
 //        public abstract void setFixedHeight();
     }
 
-    public TourPlace getItem(int id) {
+    public PlaceModel getItem(int id) {
         return mDataset.get(id);
     }
 
@@ -103,12 +133,9 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
         void onItemClick(View view, int position);
     }
 
-    private double getJarak(LatLng currentLatLng, LatLng destinationLatlng){
-        double lat1 = currentLatLng.latitude;
-        double lat2 = destinationLatlng.latitude;
-        double long1 = currentLatLng.latitude;
-        double long2 = destinationLatlng.longitude;
-        return Distance.distance(lat1, lat2, long1, long2);
+    private double countDistance(LatLng latLng) {
+        LatLng currentLatLng = new LatLng(Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null)), Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null)));
+        return Distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
     }
 
 }

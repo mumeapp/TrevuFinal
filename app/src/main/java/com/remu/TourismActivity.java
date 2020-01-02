@@ -1,50 +1,46 @@
 package com.remu;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
-import com.bumptech.glide.Glide;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.remu.POJO.PlaceModel;
 import com.remu.POJO.TourPlace;
+import com.remu.adapter.TourismAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class TourismActivity extends SlideBackActivity {
 
-//    private DatabaseReference databaseReference;
-//    private FirebaseRecyclerAdapter<Restoran, TourismActivity.TourismViewHolder> firebaseRecyclerAdapter;
+    private static final String TAG = "TourismActivity";
+
+    //    private DatabaseReference databaseReference;
+    //    private FirebaseRecyclerAdapter<Restoran, TourismActivity.TourismViewHolder> firebaseRecyclerAdapter;
     private RecyclerView rvTour;
     private TourismAdapter tourismAdapter;
-    private ArrayList<TourPlace> tourPlaces;
-//    private CardView cvTour;
-    private LatLng currentPosition;
-    private String myLat, myLong;
+    //    private ArrayList<PlaceModel> places;
+    //    private CardView cvTour;
+    //    private LatLng currentPosition;
+    //    private String myLat, myLong;
+    private double latitude, longitude;
 
     NestedScrollView tourScrollView;
 
@@ -53,30 +49,29 @@ public class TourismActivity extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourism);
 
-        Intent intent = getIntent();
-        currentPosition = new LatLng(Double.parseDouble(intent.getStringExtra("latitude")), Double.parseDouble(intent.getStringExtra("longitude")));
+        latitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
+        longitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
 
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
-        FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-        mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null){
-                    myLat = Double.toString(location.getLatitude());
-                    myLong = Double.toString(location.getLongitude());
-                    // Do it all with location
-                    Log.d("My Current location", "Lat : " + location.getLatitude() + " Long : " + location.getLongitude());
-                    // Display in Toast
-//                    Toast.makeText(HalalFastFoodRestaurantActivity.this,
-//                            "Lat : " + location.getLatitude() + " Long : " + location.getLongitude(),
-//                            Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+//        FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+//        mFusedLocation.getLastLocation().addOnSuccessListener(this, location -> {
+//            if (location != null) {
+//                myLat = Double.toString(location.getLatitude());
+//                myLong = Double.toString(location.getLongitude());
+//                // Do it all with location
+//                Log.d("My Current location", "Lat : " + location.getLatitude() + " Long : " + location.getLongitude());
+//                // Display in Toast
+////                    Toast.makeText(HalalFastFoodRestaurantActivity.this,
+////                            "Lat : " + location.getLatitude() + " Long : " + location.getLongitude(),
+////                            Toast.LENGTH_LONG).show();
+//            }
+//        });
 
-        rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
+        new GetTourPlace(this).execute();
+
+
 
 //        Query query = databaseReference.orderByKey();
 //
@@ -120,13 +115,6 @@ public class TourismActivity extends SlideBackActivity {
 //            }
 //        };
 
-        tourismAdapter = new TourismAdapter(this, tourPlaces, currentPosition);
-        tourismAdapter.setClickListener((view, position) -> {
-            //set what happend when clicked
-            Log.i("TAG", "You clicked number " + tourismAdapter.getItem(position) + ", which is at cell position " + position);
-
-        });
-        rvTour.setAdapter(tourismAdapter);
 //        rvTour.setAdapter(firebaseRecyclerAdapter);
 //        cvTour.setOnClickListener(View->addTour());
 
@@ -152,14 +140,6 @@ public class TourismActivity extends SlideBackActivity {
         rvTour = findViewById(R.id.TourismCategories);
 //        cvTour = findViewById(R.id.addTour);
 //        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("Wisata").child("Wisata");
-        tourPlaces = new ArrayList<TourPlace>() {{
-            add(new TourPlace(getDrawable(R.drawable.universal_studios_japan), "Universal Studio Japan", 4.96, new LatLng(34.669529, 135.497009)));
-            add(new TourPlace(getDrawable(R.drawable.disneyland_japan), "Disneyland Japan", 4.91, new LatLng(35.652832, 139.839478)));
-            add(new TourPlace(getDrawable(R.drawable.disneysea_japan), "Disneysea Japan", 4.91, new LatLng(35.652832, 139.839478)));
-            add(new TourPlace(getDrawable(R.drawable.fuji_q_highland), "Fuji Q Highland", 4.85, new LatLng(35.16667, 138.68333)));
-            add(new TourPlace(getDrawable(R.drawable.nagashima_resort), "Nagashima Resort", 4.80, new LatLng(35.0302, 136.7300)));
-            add(new TourPlace(getDrawable(R.drawable.meiji_mura), "Meiji Mura", 4.69, new LatLng(35.3786, 136.9445)));
-        }};
     }
 
 //    @Override
@@ -229,5 +209,93 @@ public class TourismActivity extends SlideBackActivity {
 //            rating.setText(text);
 //        }
 //    }
+
+    private class GetTourPlace extends AsyncTask<Void, Void, Void> {
+
+        private Context context;
+
+        private ProgressDialog progressDialog;
+        private ArrayList<PlaceModel> places;
+
+        GetTourPlace(Context context) {
+            this.context = context;
+            places = new ArrayList<>();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Fetching result...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler httpHandler = new HttpHandler();
+
+            String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "&rankby=distance&type=tourist_attraction&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+
+            String jsonStr = httpHandler.makeServiceCall(url);
+
+            Log.d(TAG, url);
+            Log.d(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
+
+                    for (int i = 0; i < results.length(); i++) {
+                        JSONObject row = results.getJSONObject(i);
+
+                        if (row.isNull("photos")) {
+                            places.add(new PlaceModel(
+                                    row.getString("place_id"),
+                                    row.getString("name"),
+                                    row.getString("vicinity"),
+                                    row.getDouble("rating"),
+                                    new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                            row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
+                            ));
+                        } else {
+                            places.add(new PlaceModel(
+                                    row.getString("place_id"),
+                                    row.getString("name"),
+                                    row.getString("vicinity"),
+                                    row.getDouble("rating"),
+                                    new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                            row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
+                                    row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
+                            ));
+                        }
+                    }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
+            tourismAdapter = new TourismAdapter(getApplication(), getParent(), places, new LatLng(latitude, longitude));
+            tourismAdapter.setClickListener((view, position) -> {
+                //set what happend when clicked
+                Log.i("TAG", "You clicked number " + tourismAdapter.getItem(position) + ", which is at cell position " + position);
+
+            });
+            rvTour.setAdapter(tourismAdapter);
+
+            progressDialog.dismiss();
+        }
+    }
 
 }
