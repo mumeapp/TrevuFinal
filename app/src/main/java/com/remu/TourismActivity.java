@@ -238,7 +238,7 @@ public class TourismActivity extends SlideBackActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
-            //tourist_attraction, museum, zoo, aquarium, park, stadium
+            //tourist_attraction, museum, zoo, aquarium, park
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
                     "&rankby=distance&type=tourist_attraction&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
