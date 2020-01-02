@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ScrollView;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +41,8 @@ public class FoodActivity extends SlideBackActivity {
     private ArrayList<PlaceModel> places;
 //    private GiftAdapter giftAdapter;
 
+    private ScrollView foodScrollView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,9 @@ public class FoodActivity extends SlideBackActivity {
         //initialize ui
         initializeUI();
         Animatoo.animateSlideLeft(this);
+
+        foodScrollView = findViewById(R.id.food_scroll);
+        foodScrollView.post(() -> foodScrollView.scrollTo(0, 0));
 
         //set intent for halal food category list
         buttonHalalFood.setOnClickListener(view -> {

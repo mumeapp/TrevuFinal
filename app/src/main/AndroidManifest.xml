@@ -46,7 +46,7 @@
         <!-- main activities -->
         <activity
             android:name=".MainActivity"
-            android:theme="@style/MidPinkTheme" />
+            android:theme="@style/MainTheme" />
 
         <!-- mosque activities -->
         <activity

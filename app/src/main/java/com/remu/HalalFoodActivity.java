@@ -250,7 +250,7 @@ public class HalalFoodActivity extends SlideBackActivity {
             HttpHandler httpHandler = new HttpHandler();
 
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&type=restaurant&keyword=muslim%20recommended&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+                    "6&rankby=distance&type=restaurant&keyword=recommended&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
@@ -346,7 +346,7 @@ public class HalalFoodActivity extends SlideBackActivity {
             HttpHandler httpHandler = new HttpHandler();
 
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "&radius=5000&type=food&keyword=muslim%20food&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8\n";
+                    "&radius=5000&type=restaurant&keyword=muslim%20food&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8\n";
 
             String jsonStr = httpHandler.makeServiceCall(url);
 

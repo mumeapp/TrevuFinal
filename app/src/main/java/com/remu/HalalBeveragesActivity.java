@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 public class HalalBeveragesActivity extends SlideBackActivity {
 
@@ -214,8 +215,9 @@ public class HalalBeveragesActivity extends SlideBackActivity {
             for (int i = 0; i < places.size(); i++) {
                 places.get(i).setPlaceWeight(weight.get(i));
             }
-            Collections.sort(places, new MyComparator());
 
+            Collections.sort(places, new MyComparator());
+            places = new ArrayList<>(places.subList(0, 20));
         }
 
         @Override
@@ -284,6 +286,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
     }
 
 }
+
 class MyComparator implements Comparator<PlaceModel> {
     @Override
     public int compare(PlaceModel o1, PlaceModel o2) {
