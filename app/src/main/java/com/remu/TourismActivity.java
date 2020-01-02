@@ -17,8 +17,10 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.TourPlace;
+import com.remu.POJO.Weighting;
 import com.remu.adapter.TourismAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
 
@@ -27,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TourismActivity extends SlideBackActivity {
 
@@ -235,7 +238,7 @@ public class TourismActivity extends SlideBackActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
-
+            //tourist_attraction, museum, zoo, aquarium, park, stadium
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
                     "&rankby=distance&type=tourist_attraction&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
@@ -278,7 +281,21 @@ public class TourismActivity extends SlideBackActivity {
             } else {
                 Log.e(TAG, "Couldn't get json from server.");
             }
+            doWeighting();
             return null;
+        }
+
+        private void doWeighting() {
+            Weighting weighting = new Weighting();
+            ArrayList<Double> weight;
+            weight = weighting.doWeighting(latitude, longitude, places);
+
+            for (int i = 0; i < places.size(); i++) {
+                places.get(i).setPlaceWeight(weight.get(i));
+            }
+
+            Collections.sort(places, new MyComparator());
+//            places = new ArrayList<>(places.subList(0, 20));
         }
 
         @Override
