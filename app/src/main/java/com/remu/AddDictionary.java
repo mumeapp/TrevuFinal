@@ -103,11 +103,12 @@ public class AddDictionary extends SlideBackActivity {
         setAudio();
 
         setSlideBackDirection(SlideBackActivity.LEFT);
+
     }
 
     @Override
     protected void slideBackSuccess() {
-        finish();
+        link();
     }
 
     private void submitUser(TextProcess requests, String child){
