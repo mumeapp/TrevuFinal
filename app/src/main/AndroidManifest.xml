@@ -33,27 +33,19 @@
         <activity
             android:name=".OnboardingActivity"
             android:theme="@style/BlueTheme" />
-        <activity android:name=".PermissionActivity" />
-
-        <!-- login and register activities -->
+        <activity android:name=".PermissionActivity" /> <!-- login and register activities -->
         <activity
             android:name=".LoginActivity"
             android:theme="@style/BlueTheme" />
         <activity
             android:name=".RegisterActivity"
-            android:theme="@style/BlueTheme" />
-
-        <!-- main activities -->
+            android:theme="@style/BlueTheme" /> <!-- main activities -->
         <activity
             android:name=".MainActivity"
-            android:theme="@style/MainTheme" />
-
-        <!-- mosque activities -->
+            android:theme="@style/MainTheme" /> <!-- mosque activities -->
         <activity
             android:name=".MosqueActivity"
-            android:theme="@style/GreenTheme" />
-
-        <!-- food activities -->
+            android:theme="@style/GreenTheme" /> <!-- food activities -->
         <activity
             android:name=".FoodActivity"
             android:theme="@style/GreenTheme" />
@@ -62,34 +54,24 @@
         <activity
             android:name=".HalalFoodActivity"
             android:theme="@style/YellowTheme"
-            android:windowSoftInputMode="stateHidden" />
-
-        <!-- fast food activities -->
+            android:windowSoftInputMode="stateHidden" /> <!-- fast food activities -->
         <activity android:name=".HalalFastFoodRestaurantActivity" />
         <activity
             android:name=".HalalFastFoodActivity"
             android:theme="@style/DarkRedTheme" />
-        <activity android:name=".FastFoodActivity" />
-
-        <!-- beverages activities -->
+        <activity android:name=".FastFoodActivity" /> <!-- beverages activities -->
         <activity
             android:name=".HalalBeveragesActivity"
             android:theme="@style/DarkRedTheme"
-            android:windowSoftInputMode="stateHidden" />
-
-        <!-- gift food activities -->
+            android:windowSoftInputMode="stateHidden" /> <!-- gift food activities -->
         <activity
             android:name=".HalalGiftActivity"
-            android:theme="@style/BlueTheme" />
-
-        <!-- tourism activities -->
+            android:theme="@style/BlueTheme" /> <!-- tourism activities -->
         <activity android:name=".AddTourismActivity" />
         <activity android:name=".TourismDetailActivity" />
         <activity
             android:name=".TourismActivity"
-            android:theme="@style/BlueTheme" />
-
-        <!-- dictionary activities -->
+            android:theme="@style/BlueTheme" /> <!-- dictionary activities -->
         <activity
             android:name=".ChooseLanguageActivity"
             android:theme="@style/WhiteTheme" />
@@ -98,9 +80,7 @@
             android:theme="@style/LightPinkTheme" />
         <activity
             android:name=".DictionaryActivity"
-            android:theme="@style/LightPinkTheme" />
-
-        <!-- unknown activities -->
+            android:theme="@style/LightPinkTheme" /> <!-- unknown activities -->
         <activity android:name=".ProfileFriend" />
         <activity android:name=".RatingActivity" />
         <activity android:name=".CommentActivity" />

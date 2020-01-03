@@ -46,9 +46,9 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
-import com.remu.POJO.Mosque;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.PrayerTime;
+import com.remu.adapter.MosqueAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
 import com.takusemba.multisnaprecyclerview.SnapGravity;
@@ -58,13 +58,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MosqueActivity";
-
-    private PrayerTime prayerTime;
 
     private String latitude, longitude;
 
@@ -294,10 +291,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         cardJamSolat.setElevation(0);
         TextView captionCardSholat = cardJamSolat.findViewById(R.id.title);
         captionCardSholat.setTypeface(ResourcesCompat.getFont(this, R.font.osregular));
+
         someInformation = findViewById(R.id.someInformation);
         listMasjid = findViewById(R.id.listMasjid);
         mDataSet = new ArrayList<>();
         latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+
         jamSolatSelanjutnya = someInformation.findViewById(R.id.jamSolatSelanjutnya);
         solatSelanjutnya = someInformation.findViewById(R.id.solatSelanjutnya);
         timeFajr = jamSolat.findViewById(R.id.time_fajr);
@@ -314,6 +313,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             add(timeMahgrib);
             add(timeIsha);
         }};
+
         layoutFajr = jamSolat.findViewById(R.id.layout_fajr);
         layoutDhuhr = jamSolat.findViewById(R.id.layout_dhuhr);
         layoutAsr = jamSolat.findViewById(R.id.layout_asr);
@@ -326,8 +326,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             add(layoutMaghrib);
             add(layoutIsha);
         }};
-        prayerTime = new PrayerTime(this, TAG, latitude, longitude, textViews, linearLayouts);
-        prayerTime.execute();
+
+        new PrayerTime(this, TAG, latitude, longitude, textViews, linearLayouts).execute();
     }
 
     public float getPixelFromDp(float dp, Context context) {
