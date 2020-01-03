@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.remu.POJO.PlaceModel;
 import com.remu.adapter.GiftAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
@@ -30,17 +29,10 @@ import java.util.ArrayList;
 public class FoodActivity extends SlideBackActivity {
 
     private static final String TAG = "FoodActivity";
-    private static final String API_KEY = "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-
-    private PlacesClient placesClient;
 
     private double latitude, longitude;
     private CardView buttonHalalFood, buttonHalalBeverages;
-
     private RecyclerView listGift;
-    private ArrayList<PlaceModel> places;
-//    private GiftAdapter giftAdapter;
-
     private ScrollView foodScrollView;
 
     @Override

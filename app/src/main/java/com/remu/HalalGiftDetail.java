@@ -1,144 +1,151 @@
 package com.remu;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.remu.POJO.Restoran;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.remu.POJO.Distance;
+import com.saber.chentianslideback.SlideBackActivity;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
-public class HalalGiftDetail extends AppCompatActivity {
+import java.util.Arrays;
+import java.util.List;
 
-    public static final String ID = "HalalFoodRestaurantActivity";
-    public static String Nama= "Nama", gambar= "url";
-    private String nama = null;
-    private DatabaseReference databaseReference;
-    private FirebaseRecyclerAdapter<Restoran, HalalGiftDetail.HalalGiftDetailViewHolder> firebaseRecyclerAdapter;
-    private RecyclerView rvRestaurant;
-    private CardView cd;
-    private Intent getID;
-    private String id;
-    private ImageView img;
-    private TextView kategori;
+public class HalalGiftDetail extends SlideBackActivity {
+
+    public static final String TAG = "HalalGiftDetail";
+
+    private PlacesClient placesClient;
+
+    private ImageView giftImage, userImage;
+    private TextView giftName, giftDistance, giftRating, giftAddress;
+    private RatingBar giftRatingBar;
+    private EditText giftReview;
+    private Button giftReviewButton;
+    private RecyclerView listReviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restoran);
+        setContentView(R.layout.activity_halal_gift_detail);
 
-//        initializeUI();
-//
-//        setImage(getIntent().getStringExtra(gambar));
-//        kategori.setText(nama);
-//        rvRestaurant.setLayoutManager(new LinearLayoutManager(HalalGiftDetail.this));
-//
-//        Query query = databaseReference.orderByKey();
-//
-//        FirebaseRecyclerOptions<Restoran> options = new FirebaseRecyclerOptions.Builder<Restoran>()
-//                .setQuery(query, Restoran.class).build();
-//
-//
-//        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Restoran, HalalGiftDetailViewHolder>(options) {
-//            @Override
-//            protected void onBindViewHolder(@NonNull HalalGiftDetailViewHolder halalFoodRestaurantViewHolder, int i, @NonNull Restoran halalFoodRestaurant) {
-//
-//                halalFoodRestaurantViewHolder.setGambar(halalFoodRestaurant.getFoto());
-//                halalFoodRestaurantViewHolder.setNamaRestoran(halalFoodRestaurant.getNamaRestoran());
-//                halalFoodRestaurantViewHolder.setRating("5.0");
-//                halalFoodRestaurantViewHolder.setJarak("0.3 KM");
-//
-//                id = halalFoodRestaurant.getID();
-//
-//                halalFoodRestaurantViewHolder.itemView.setOnClickListener(view -> {
-//
-//                    Intent intent = new Intent(HalalGiftDetail.this, HalalRestaurantDetailActivity.class);
-//                    intent.putExtra(HalalRestaurantDetailActivity.ID, id);
-//
-//                    startActivity(intent);
-//                });
-//            }
-//
-//            @NonNull
-//            @Override
-//            public HalalGiftDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_restoran, parent, false);
-//
-//                return new HalalGiftDetailViewHolder(view);
-//            }
-//        };
-//
-//        rvRestaurant.setAdapter(firebaseRecyclerAdapter);
-//        cd.setOnClickListener(view -> addFood());
+        Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
+        placesClient = Places.createClient(this);
 
+        initializeUI();
+        Animatoo.animateSlideLeft(this);
+
+        getPlace(getIntent().getStringExtra("place_id"));
+
+        giftReviewButton.setOnClickListener((v -> {
+            String review = giftReview.getText().toString();
+
+            //TODO: PUT REVIEW IN FIREBASE
+        }));
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
+    private void getPlace(String placeId) {
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.PHOTO_METADATAS, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.RATING, Place.Field.ADDRESS);
+        FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
+
+        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+            Place place = response.getPlace();
+            Log.i(TAG, "Place found: " + place.getName());
+            applyPlaceInfoToView(place);
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                ApiException apiException = (ApiException) exception;
+                int statusCode = apiException.getStatusCode();
+                Log.e(TAG, "Place not found (ERROR[" + statusCode + "]): " + exception.getMessage());
+            }
+        });
+    }
+
+    private void applyPlaceInfoToView(Place giftPlace) {
+        if (giftPlace != null) {
+            if (giftPlace.getPhotoMetadatas() != null) {
+                PhotoMetadata photoMetadata = giftPlace.getPhotoMetadatas().get(0);
+                FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                        .setMaxHeight(500) // Optional.
+                        .build();
+                placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+                    Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                    giftImage.setImageBitmap(bitmap);
+                }).addOnFailureListener((exception) -> {
+                    Log.e(TAG, exception.toString());
+                });
+            } else {
+                LatLng location = giftPlace.getLatLng();
+                Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
+                        + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+                        .error(R.drawable.bg_loading)
+                        .placeholder(R.drawable.bg_loading)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                        .into(giftImage);
+            }
+
+            giftName.setText(giftPlace.getName());
+            giftDistance.setText(String.format("%.2f km", countDistance(giftPlace.getLatLng())));
+
+            if (giftPlace.getRating() == null) {
+                giftRating.setText("-");
+            } else {
+                giftRating.setText(String.format("%.1f", giftPlace.getRating()));
+            }
+
+            giftAddress.setText(giftPlace.getAddress());
+        }
+    }
+
+    @Override
+    protected void slideBackSuccess() {
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
+    }
 
     private void initializeUI() {
-//        getID = getIntent();
-//        nama = getID.getStringExtra(Nama);
-//        rvRestaurant = findViewById(R.id.HalalRestauran);
-//        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("Gift").child(nama);
-//        cd = findViewById(R.id.addReastaurant);
-//        img = findViewById(R.id.kategoriGambar);
-//        kategori = findViewById(R.id.kategori);
+        giftImage = findViewById(R.id.gift_detail_image);
+        userImage = findViewById(R.id.gift_detail_profile_image);
+        giftName = findViewById(R.id.gift_detail_name);
+        giftDistance = findViewById(R.id.gift_detail_distance);
+        giftRating = findViewById(R.id.gift_detail_rating);
+        giftAddress = findViewById(R.id.gift_detail_address);
+        giftRatingBar = findViewById(R.id.gift_detail_rating_bar);
+        giftReview = findViewById(R.id.gift_detail_review_edit_text);
+        giftReviewButton = findViewById(R.id.gift_detail_submit_button);
+        listReviews = findViewById(R.id.list_gift_detail_review_users);
     }
 
-    private void setImage(String url){
-        img = findViewById(R.id.kategoriGambar);
-        Glide.with(HalalGiftDetail.this)
-                .load(url)
-                .into(img);
-    }
-
-    public class HalalGiftDetailViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView foto;
-        TextView namaRestoran;
-        TextView jarak;
-        TextView rating;
-
-        public HalalGiftDetailViewHolder(@NonNull View itemView) {
-            super(itemView);
-            foto = itemView.findViewById(R.id.gambarRestaurant);
-            namaRestoran = itemView.findViewById(R.id.judul);
-            rating = itemView.findViewById(R.id.rating);
-            jarak = itemView.findViewById(R.id.Jarak);
-        }
-
-        public void setGambar(String foto) {
-
-            Glide.with(HalalGiftDetail.this)
-                    .load(foto)
-                    .placeholder(R.drawable.bg_loading)
-                    .into(this.foto);
-        }
-
-        public void setNamaRestoran(String text) {
-            namaRestoran.setText(text);
-        }
-
-        public void setRating(String text) {
-            rating.setText(text);
-        }
-
-        public void setJarak(String text) {
-            jarak.setText(text);
-        }
+    private double countDistance(LatLng latLng) {
+        LatLng currentLatLng = new LatLng(Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null)),
+                Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null)));
+        return Distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
     }
 
 }

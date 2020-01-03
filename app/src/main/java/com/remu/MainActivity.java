@@ -1,5 +1,6 @@
 package com.remu;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -172,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBackgroundByTime() {
-        int currentHour = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
-        int currentMinutes = Integer.parseInt(new SimpleDateFormat("mm").format(Calendar.getInstance().getTime()));
+        @SuppressLint("SimpleDateFormat") int currentHour = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
+        @SuppressLint("SimpleDateFormat") int currentMinutes = Integer.parseInt(new SimpleDateFormat("mm").format(Calendar.getInstance().getTime()));
 
         backgroundMorning.setAlpha(0f);
         viewMorning.setAlpha(0f);
