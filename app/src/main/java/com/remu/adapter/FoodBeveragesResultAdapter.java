@@ -54,7 +54,6 @@ public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeverag
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(mDataset.get(position).getPlaceId()).child("Intensity");
         holder.recommendedName.setText(mDataset.get(position).getPlaceName());
         holder.recommendedAddress.setText(mDataset.get(position).getPlaceAddress());
 
@@ -82,27 +81,25 @@ public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeverag
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(holder.recommendedImage);
         }
-        holder.recommendeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println(mDataset.get(position).getPlaceWeight());
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        try{
-                            int temp = Integer.parseInt(dataSnapshot.getValue().toString());
-                            databaseReference.setValue(Integer.toString(++temp));
-                        }catch (NullPointerException np){
-                            databaseReference.setValue("2");
-                        }
+        holder.recommendeLayout.setOnClickListener(view -> {
+            System.out.println(mDataset.get(position).getPlaceWeight());
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(mDataset.get(position).getPlaceId()).child("Intensity");
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        int temp = Integer.parseInt(dataSnapshot.getValue().toString());
+                        databaseReference.setValue(Integer.toString(++temp));
+                    } catch (NullPointerException np) {
+                        databaseReference.setValue("2");
                     }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
-            }
+                }
+            });
         });
 //        holder.recommendeLayout.setOnClickListener((v) -> {
 //            Intent intent = new Intent(activity.getBaseContext(), HalalGiftDetail.class);
