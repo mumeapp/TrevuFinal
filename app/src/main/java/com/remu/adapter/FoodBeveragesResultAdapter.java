@@ -82,16 +82,17 @@ public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeverag
                     .into(holder.recommendedImage);
         }
         holder.recommendeLayout.setOnClickListener(view -> {
-            System.out.println(mDataset.get(position).getPlaceWeight());
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(mDataset.get(position).getPlaceId()).child("Intensity");
+            System.out.println("weight "+mDataset.get(position).getPlaceWeight());
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(mDataset.get(position).getPlaceId());
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        int temp = Integer.parseInt(dataSnapshot.getValue().toString());
-                        databaseReference.setValue(Integer.toString(++temp));
+                        int temp = Integer.parseInt(dataSnapshot.child("Intensity").getValue().toString());
+                        databaseReference.child("Intensity").setValue(Integer.toString(++temp));
                     } catch (NullPointerException np) {
-                        databaseReference.setValue("2");
+                        databaseReference.child("Intensity").setValue("2");
+                        databaseReference.child("Name").setValue(mDataset.get(position).getPlaceName());
                     }
                 }
 

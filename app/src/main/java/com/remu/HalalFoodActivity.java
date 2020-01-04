@@ -167,13 +167,14 @@ public class HalalFoodActivity extends SlideBackActivity {
         Runnable getGoogleJSON = () -> {
             getGoogleJson();
         };
-        Runnable getFirebaseData = () -> getFirebaseData(value -> {
+        Runnable getFirebaseData = () -> {getFirebaseData(value -> {
             doWeighting();
             listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
             FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalFoodActivity.this, places);
             listRecommendedFood.setAdapter(recommendedAdapter);
             progressDialog.dismiss();
         });
+        };
 
         generateListCategory();
         generateListOpenNight();
@@ -326,7 +327,7 @@ public class HalalFoodActivity extends SlideBackActivity {
             progressDialog.setMessage("Fetching result...");
             progressDialog.setCancelable(false);
             progressDialog.show();
-//            progressDialog.dismiss();
+            progressDialog.dismiss();
         }
 
         @Override
@@ -342,7 +343,10 @@ public class HalalFoodActivity extends SlideBackActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
+            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
+            FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalFoodActivity.this, places);
+            listRecommendedFood.setAdapter(recommendedAdapter);
+            progressDialog.dismiss();
 
         }
     }
