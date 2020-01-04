@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.auth.FirebaseAuth;
 import com.remu.POJO.PlaceModel;
 import com.remu.adapter.GiftAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
@@ -33,6 +35,11 @@ public class FoodActivity extends SlideBackActivity {
     private double latitude, longitude;
     private CardView buttonHalalFood, buttonHalalBeverages;
     private RecyclerView listGift;
+    private ArrayList<PlaceModel> places;
+    private String userId;
+
+//    private GiftAdapter giftAdapter;
+
     private ScrollView foodScrollView;
 
     @Override
@@ -81,6 +88,7 @@ public class FoodActivity extends SlideBackActivity {
         buttonHalalFood = findViewById(R.id.halalFoodButton);
         buttonHalalBeverages = findViewById(R.id.HalalBeveragesButton);
         listGift = findViewById(R.id.rv_listGift);
+        userId = FirebaseAuth.getInstance().getUid();
     }
 
     private class GetGiftData extends AsyncTask<Void, Void, Void> {

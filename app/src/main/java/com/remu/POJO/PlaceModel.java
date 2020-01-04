@@ -2,8 +2,6 @@ package com.remu.POJO;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Comparator;
-
 public class PlaceModel {
 
     private String placeId;
@@ -13,6 +11,7 @@ public class PlaceModel {
     private LatLng placeLocation;
     private double placeWeight;
     private String placePhotoUri;
+    private int placeIntensity;
 
     public PlaceModel(String placeId, String placeName, String placeAddress, double placeRating, LatLng placeLocation) {
         this.placeId = placeId;
@@ -22,6 +21,7 @@ public class PlaceModel {
         this.placeLocation = placeLocation;
     }
 
+
     public PlaceModel(String placeId, String placeName, String placeAddress, double placeRating, LatLng placeLocation, String placePhotoUri) {
         this.placeId = placeId;
         this.placeName = placeName;
@@ -29,6 +29,7 @@ public class PlaceModel {
         this.placeRating = placeRating;
         this.placeLocation = placeLocation;
         this.placePhotoUri = placePhotoUri;
+
     }
 
     public String getPlaceId() {
@@ -63,5 +64,12 @@ public class PlaceModel {
         return placeWeight;
     }
 
+    public int getPlaceIntensity() {
+        return placeIntensity;
+    }
+
+    public void setPlaceIntensity(int placeIntensity) {
+        this.placeIntensity = placeIntensity;
+    }
 }
 

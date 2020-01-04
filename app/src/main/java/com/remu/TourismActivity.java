@@ -17,6 +17,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.TourPlace;
@@ -44,6 +45,7 @@ public class TourismActivity extends SlideBackActivity {
     //    private LatLng currentPosition;
     //    private String myLat, myLong;
     private double latitude, longitude;
+    private String userId;
 
     NestedScrollView tourScrollView;
 
@@ -141,6 +143,7 @@ public class TourismActivity extends SlideBackActivity {
 
     private void initializeUI() {
         rvTour = findViewById(R.id.TourismCategories);
+        userId = FirebaseAuth.getInstance().getUid();
 //        cvTour = findViewById(R.id.addTour);
 //        databaseReference = FirebaseDatabase.getInstance().getReference().child("Food").child("Restoran").child("Wisata").child("Wisata");
     }

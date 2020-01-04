@@ -21,6 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
@@ -43,6 +49,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
 
     private RecyclerView listCategory, listRecommendedFood;
     private EditText manualCategory;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +98,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         listCategory = findViewById(R.id.listBeveragesCategory);
         listRecommendedFood = findViewById(R.id.listRecommendedBeverages);
         manualCategory = findViewById(R.id.et_manual_beverages_category);
+        userId = FirebaseAuth.getInstance().getUid();
     }
 
     private void generateListCategory() {
@@ -220,6 +228,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         private void doWeighting() {
             Weighting weighting = new Weighting();
             ArrayList<Double> weight;
+
             weight = weighting.doWeighting(latitude, longitude, places);
 
             for (int i = 0; i < places.size(); i++) {

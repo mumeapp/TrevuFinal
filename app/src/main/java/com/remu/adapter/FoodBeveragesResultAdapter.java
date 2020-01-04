@@ -13,6 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
 import com.remu.R;
@@ -28,11 +34,14 @@ public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeverag
     Application app;
     Activity activity;
     ArrayList<PlaceModel> mDataset;
+    DatabaseReference databaseReference;
+    String userId;
 
     public FoodBeveragesResultAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset) {
         this.app = app;
         this.activity = activity;
         this.mDataset = mDataset;
+        userId = FirebaseAuth.getInstance().getUid();
     }
 
     @NonNull
@@ -45,6 +54,7 @@ public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeverag
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(mDataset.get(position).getPlaceId()).child("Intensity");
         holder.recommendedName.setText(mDataset.get(position).getPlaceName());
         holder.recommendedAddress.setText(mDataset.get(position).getPlaceAddress());
 
@@ -76,6 +86,22 @@ public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeverag
             @Override
             public void onClick(View view) {
                 System.out.println(mDataset.get(position).getPlaceWeight());
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        try{
+                            int temp = Integer.parseInt(dataSnapshot.getValue().toString());
+                            databaseReference.setValue(Integer.toString(++temp));
+                        }catch (NullPointerException np){
+                            databaseReference.setValue("2");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 //        holder.recommendeLayout.setOnClickListener((v) -> {

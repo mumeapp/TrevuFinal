@@ -22,6 +22,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.remu.POJO.MyCallBack;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
@@ -48,6 +55,102 @@ public class HalalFoodActivity extends SlideBackActivity {
     private LinearLayout layoutMidnight;
     private RecyclerView listCategory, listOpenAtNight, listRecommendedFood;
     private EditText manualCategory;
+    private ArrayList<PlaceModel> places;
+    private FirebaseDatabase firebaseDatabase;
+    private ProgressDialog progressDialog;
+    private String userId;
+    private boolean notify = false;
+
+//    private String userId;
+
+    private void getGoogleJson() {
+        HttpHandler httpHandler = new HttpHandler();
+
+        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                "6&rankby=distance&type=restaurant&keyword=recommended&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+
+        String jsonStr = httpHandler.makeServiceCall(url);
+
+        Log.d(TAG, url);
+        Log.d(TAG, "Response from url: " + jsonStr);
+
+        if (jsonStr != null) {
+            try {
+                JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
+
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject row = results.getJSONObject(i);
+
+                    if (row.isNull("photos")) {
+                        places.add(new PlaceModel(
+                                row.getString("place_id"),
+                                row.getString("name"),
+                                row.getString("vicinity"),
+                                row.getDouble("rating"),
+                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
+                        ));
+                    } else {
+                        places.add(new PlaceModel(
+                                row.getString("place_id"),
+                                row.getString("name"),
+                                row.getString("vicinity"),
+                                row.getDouble("rating"),
+                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
+                                row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
+                        ));
+
+                    }
+
+                }
+            } catch (final JSONException e) {
+                Log.e(TAG, "Json parsing error: " + e.getMessage());
+            }
+        } else {
+            Log.e(TAG, "Couldn't get json from server.");
+        }
+    }
+
+    private void getFirebaseData(MyCallBack myCallBack) {
+        for (int i = 0; i < places.size(); i++) {
+//            System.out.println("place" + places.get(i).getPlaceName());
+            DatabaseReference databaseReference = firebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+            int finalI = i;
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
+                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+                        myCallBack.onCallback(places);
+
+                    } catch (NullPointerException np) {
+                        places.get(finalI).setPlaceIntensity(1);
+                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+                        myCallBack.onCallback(places);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    private void doWeighting() {
+        Weighting weighting = new Weighting();
+        ArrayList<Double> weight;
+
+        weight = weighting.doWeighting(latitude, longitude, places);
+
+        for (int i = 0; i < places.size(); i++) {
+            places.get(i).setPlaceWeight(weight.get(i));
+        }
+        Collections.sort(places, new MyComparator());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +159,25 @@ public class HalalFoodActivity extends SlideBackActivity {
 
         latitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
         longitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
+        userId = FirebaseAuth.getInstance().getUid();
 
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
+        Runnable getGoogleJSON = () -> {
+            getGoogleJson();
+        };
+        Runnable getFirebaseData = () -> getFirebaseData(value -> {
+            doWeighting();
+            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
+            FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalFoodActivity.this, places);
+            listRecommendedFood.setAdapter(recommendedAdapter);
+            progressDialog.dismiss();
+        });
+
         generateListCategory();
         generateListOpenNight();
-        new GetRecommended(this).execute();
+        new GetRecommended(this).execute(getGoogleJSON, getFirebaseData);
 
         manualCategory.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -99,6 +214,7 @@ public class HalalFoodActivity extends SlideBackActivity {
         listOpenAtNight = findViewById(R.id.listFoodOpenAtNight);
         listRecommendedFood = findViewById(R.id.listRecommendedFood);
         manualCategory = findViewById(R.id.et_manual_food_category);
+        firebaseDatabase = FirebaseDatabase.getInstance();
     }
 
     private void generateListCategory() {
@@ -173,7 +289,9 @@ public class HalalFoodActivity extends SlideBackActivity {
             }
 
             @Override
-            public int getItemCount() { return categoryDataSet.size(); }
+            public int getItemCount() {
+                return categoryDataSet.size();
+            }
         };
         listCategory.setAdapter(categoryAdapter);
     }
@@ -189,12 +307,11 @@ public class HalalFoodActivity extends SlideBackActivity {
         }
     }
 
-    private class GetRecommended extends AsyncTask<Void, Void, Void> {
+    private class GetRecommended extends AsyncTask<Runnable, Void, Void> {
 
         private Context context;
 
-        private ProgressDialog progressDialog;
-        private ArrayList<PlaceModel> places;
+        private String userId;
 
         GetRecommended(Context context) {
             this.context = context;
@@ -209,79 +326,24 @@ public class HalalFoodActivity extends SlideBackActivity {
             progressDialog.setMessage("Fetching result...");
             progressDialog.setCancelable(false);
             progressDialog.show();
+//            progressDialog.dismiss();
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            HttpHandler httpHandler = new HttpHandler();
-
-            String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&type=restaurant&keyword=recommended&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-
-            String jsonStr = httpHandler.makeServiceCall(url);
-
-            Log.d(TAG, url);
-            Log.d(TAG, "Response from url: " + jsonStr);
-
-            if (jsonStr != null) {
-                try {
-                    JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
-
-                    for (int i = 0; i < results.length(); i++) {
-                        JSONObject row = results.getJSONObject(i);
-
-                        if (row.isNull("photos")) {
-                            places.add(new PlaceModel(
-                                    row.getString("place_id"),
-                                    row.getString("name"),
-                                    row.getString("vicinity"),
-                                    row.getDouble("rating"),
-                                    new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
-                                            row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
-                            ));
-                        } else {
-                            places.add(new PlaceModel(
-                                    row.getString("place_id"),
-                                    row.getString("name"),
-                                    row.getString("vicinity"),
-                                    row.getDouble("rating"),
-                                    new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
-                                            row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
-                                    row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
-                            ));
-                        }
-                    }
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                }
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
+        protected Void doInBackground(Runnable... runnables) {
+            for (Runnable task : runnables) {
+                task.run();
+                publishProgress();
             }
-            doWeighting();
             return null;
         }
 
-        private void doWeighting(){
-            Weighting weighting = new Weighting();
-            ArrayList<Double> weight;
-
-            weight = weighting.doWeighting(latitude, longitude, places);
-
-            for (int i = 0; i < places.size(); i++) {
-                places.get(i).setPlaceWeight(weight.get(i));
-            }
-            Collections.sort(places, new MyComparator());
-        }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
-            FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalFoodActivity.this, places);
-            listRecommendedFood.setAdapter(recommendedAdapter);
 
-            progressDialog.dismiss();
         }
     }
 
