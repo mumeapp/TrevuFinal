@@ -40,11 +40,6 @@ import java.util.HashMap;
 
 public class HalalFoodActivity extends SlideBackActivity {
 
-//    private DatabaseReference databaseReference;
-//    private FirebaseRecyclerAdapter<HalalFood, HalalFoodActivity.HalalFoodViewHolder> firebaseRecyclerAdapter;
-//    private RecyclerView rvFood;
-//    private CardView cd;
-
     private static final String TAG = "HalalFoodActivity";
 
     private double latitude, longitude;
@@ -80,44 +75,6 @@ public class HalalFoodActivity extends SlideBackActivity {
             return false;
         });
 
-//        rvFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this));
-//
-//        Query query = databaseReference.orderByKey();
-//
-//        FirebaseRecyclerOptions<HalalFood> options = new FirebaseRecyclerOptions.Builder<HalalFood>()
-//                .setQuery(query, HalalFood.class).build();
-//
-//
-//        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<HalalFood, HalalFoodViewHolder>(options) {
-//            @Override
-//            protected void onBindViewHolder(@NonNull HalalFoodViewHolder halalFoodViewHolder, int i, @NonNull HalalFood halalFood) {
-//                halalFoodViewHolder.setGambar(halalFood.getGambar());
-//                halalFoodViewHolder.setJudul(halalFood.getNama());
-//                halalFoodViewHolder.setJumlah(halalFood.getJarak());
-//                halalFoodViewHolder.setJarak(halalFood.getJarak());
-//
-//                String nama = halalFood.getNama();
-//                String url = halalFood.getGambar();
-//                halalFoodViewHolder.itemView.setOnClickListener(view -> {
-//                    Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
-//                    intent.putExtra(HalalFoodRestaurantActivity.Nama, nama);
-//                    intent.putExtra(HalalFoodRestaurantActivity.url, url);
-//                    startActivity(intent);
-//                });
-//            }
-//
-//            @NonNull
-//            @Override
-//            public HalalFoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_kategori, parent, false);
-//
-//                return new HalalFoodViewHolder(view);
-//            }
-//        };
-
-//        rvFood.setAdapter(firebaseRecyclerAdapter);
-//        cd.setOnClickListener(view -> addFood());
-
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
@@ -143,52 +100,48 @@ public class HalalFoodActivity extends SlideBackActivity {
     private void generateListCategory() {
         ArrayList<HashMap<String, Object>> categoryDataSet = new ArrayList<HashMap<String, Object>>() {{
             add(new HashMap<String, Object>() {{
-                put("category_name", "Meatballs");
-                put("category_image", R.drawable.food);
+                put("category_name", "Beef");
+                put("category_image", R.drawable.foodcategory_beef);
             }});
             add(new HashMap<String, Object>() {{
-                put("category_name", "Beef");
-                put("category_image", R.drawable.food);
+                put("category_name", "Burgers");
+                put("category_image", R.drawable.foodcategory_burgers);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Chicken Delight");
-                put("category_image", R.drawable.food);
+                put("category_image", R.drawable.foodcategory_chickendelight);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Chinese");
-                put("category_image", R.drawable.food);
-            }});
-            add(new HashMap<String, Object>() {{
-                put("category_name", "Ramen");
-                put("category_image", R.drawable.food);
+                put("category_image", R.drawable.foodcategory_chinese);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Duck");
-                put("category_image", R.drawable.food);
+                put("category_image", R.drawable.foodcategory_duck);
             }});
             add(new HashMap<String, Object>() {{
-                put("category_name", "Japanese");
-                put("category_image", R.drawable.food);
+                put("category_name", "Fried Chicken");
+                put("category_image", R.drawable.foodcategory_friedchicken);
             }});
             add(new HashMap<String, Object>() {{
-                put("category_name", "Kebabs");
-                put("category_image", R.drawable.food);
+                put("category_name", "Meatballs");
+                put("category_image", R.drawable.foodcategory_meatballs);
             }});
             add(new HashMap<String, Object>() {{
-                put("category_name", "Korean");
-                put("category_image", R.drawable.food);
+                put("category_name", "Pizza and Pasta");
+                put("category_image", R.drawable.foodcategory_pizzapasta);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Ramen");
+                put("category_image", R.drawable.foodcategory_ramen);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Seafood");
-                put("category_image", R.drawable.food);
+                put("category_image", R.drawable.foodcategory_seafood);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Sushi");
-                put("category_image", R.drawable.food);
-            }});
-            add(new HashMap<String, Object>() {{
-                put("category_name", "Western");
-                put("category_image", R.drawable.food);
+                put("category_image", R.drawable.foodcategory_sushi);
             }});
         }};
         listCategory.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, RecyclerView.HORIZONTAL, false));
