@@ -2,8 +2,6 @@ package com.remu.adapter;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
-import com.remu.POJO.TourPlace;
 import com.remu.R;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -76,16 +73,16 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
         if (mDataset.get(position).getPlacePhotoUri() != null) {
             Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + mDataset.get(position).getPlacePhotoUri()
                     + "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
-                    .error(R.drawable.bg_loading)
-                    .placeholder(R.drawable.bg_loading)
+                    .error(R.drawable.bg_loading_image)
+                    .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(holder.image);
         } else {
             LatLng location = mDataset.get(position).getPlaceLocation();
             Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
                     + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
-                    .error(R.drawable.bg_loading)
-                    .placeholder(R.drawable.bg_loading)
+                    .error(R.drawable.bg_loading_image)
+                    .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(holder.image);
         }

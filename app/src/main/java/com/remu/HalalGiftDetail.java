@@ -3,8 +3,6 @@ package com.remu;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -99,8 +97,8 @@ public class HalalGiftDetail extends SlideBackActivity {
                 LatLng location = giftPlace.getLatLng();
                 Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
                         + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
-                        .error(R.drawable.bg_loading)
-                        .placeholder(R.drawable.bg_loading)
+                        .error(R.drawable.bg_loading_image)
+                        .placeholder(R.drawable.bg_loading_image)
                         .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                         .into(giftImage);
             }

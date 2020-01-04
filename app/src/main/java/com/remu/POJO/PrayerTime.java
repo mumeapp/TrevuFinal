@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import com.remu.HttpHandler;
 import com.remu.R;
 
 import org.json.JSONException;

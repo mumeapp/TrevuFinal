@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_bg_register" />
+        android:src="@drawable/bg_register" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,7 +47,6 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/RegisterUsername"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="25dp"
@@ -123,7 +122,6 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/LoginWithTwitter"
                     android:layout_width="30.5dp"
                     android:layout_height="25dp"
                     android:background="@drawable/ic_twitter" />
@@ -134,7 +132,6 @@
                     android:layout_weight="1"/>
 
                 <Button
-                    android:id="@+id/LoginWithGoogle"
                     android:layout_width="24.4dp"
                     android:layout_height="25dp"
                     android:background="@drawable/ic_google_plus"/>
@@ -145,7 +142,6 @@
                     android:layout_weight="1.15"/>
 
                 <Button
-                    android:id="@+id/LoginWithFacebook"
                     android:layout_width="12.6dp"
                     android:layout_height="25dp"
                     android:background="@drawable/ic_facebook" />

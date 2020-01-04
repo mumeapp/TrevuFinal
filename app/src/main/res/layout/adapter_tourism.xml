@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_loading" />
+        android:src="@drawable/bg_loading_image" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:background="@drawable/ic_dist" />
+                android:background="@drawable/ic_distance" />
 
             <TextView
                 android:id="@+id/distance_tour_place"

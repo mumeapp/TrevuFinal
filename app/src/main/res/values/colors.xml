@@ -4,10 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="QRCodeWhiteColor">#ffffff</color>
-    <color name="QRCodeBlackColor">#000000</color>
-
-    <color name="trevuMidPink">#FF7587</color>
     <color name="trevuGreen">#217C36</color>
     <color name="trevuYellow">#FFAC00</color>
     <color name="trevuDarkRed">#A20000</color>

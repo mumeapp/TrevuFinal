@@ -1,14 +1,3 @@
 <resources>
     <string name="app_name">Trevu</string>
-    <string name="result_text_default">Please focus camera to QR Code</string>
-    <string-array name="bahasaAwal">
-        <item>Jepang</item>
-        <item>Indonesia</item>
-        <item>Inggris</item>
-    </string-array>
-    <string-array name="bahasaTrans">
-        <item>Indonesia</item>
-        <item>Jepang</item>
-        <item>Inggris</item>
-    </string-array>
 </resources>

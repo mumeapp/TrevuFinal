@@ -46,6 +46,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.remu.POJO.HttpHandler;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.PrayerTime;
 import com.remu.adapter.MosqueAdapter;

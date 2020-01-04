@@ -28,7 +28,7 @@
                 android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/ic_bg_main_night"
+                android:background="@drawable/bg_main_night"
                 tools:ignore="ContentDescription" />
 
             <View
@@ -43,7 +43,7 @@
                 android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/ic_bg_main_morning"
+                android:background="@drawable/bg_main_morning"
                 tools:ignore="ContentDescription" />
 
             <View
@@ -58,7 +58,7 @@
                 android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/ic_bg_main_day"
+                android:background="@drawable/bg_main_day"
                 tools:ignore="ContentDescription" />
 
             <View
@@ -73,7 +73,7 @@
                 android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/ic_bg_main_evening"
+                android:background="@drawable/bg_main_evening"
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
@@ -120,8 +120,14 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ic_bg_sholat_card">
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/bg_sholat_card"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -215,7 +221,7 @@
                                 android:layout_height="0dp"
                                 android:layout_weight="7.3"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/food"
+                                android:src="@drawable/menu_foodbeverages"
                                 tools:ignore="ContentDescription" />
 
                             <RelativeLayout
@@ -262,7 +268,7 @@
                                 android:layout_height="0dp"
                                 android:layout_weight="7.3"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/tourism"
+                                android:src="@drawable/menu_tourism"
                                 tools:ignore="ContentDescription" />
 
                             <RelativeLayout
@@ -310,7 +316,7 @@
                                 android:layout_height="0dp"
                                 android:layout_weight="7.3"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/dictionary"
+                                android:src="@drawable/menu_dictionary"
                                 tools:ignore="ContentDescription" />
 
                             <RelativeLayout

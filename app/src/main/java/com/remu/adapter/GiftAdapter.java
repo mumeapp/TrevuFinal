@@ -60,16 +60,16 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
         if (mDataset.get(position).getPlacePhotoUri() != null) {
             Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + mDataset.get(position).getPlacePhotoUri()
                     + "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
-                    .error(R.drawable.bg_loading)
-                    .placeholder(R.drawable.bg_loading)
+                    .error(R.drawable.bg_loading_image)
+                    .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(holder.giftImage);
         } else {
             LatLng location = mDataset.get(position).getPlaceLocation();
             Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
                     + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
-                    .error(R.drawable.bg_loading)
-                    .placeholder(R.drawable.bg_loading)
+                    .error(R.drawable.bg_loading_image)
+                    .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(holder.giftImage);
         }

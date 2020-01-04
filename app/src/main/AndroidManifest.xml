@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".FoodBeverageResult"></activity>
+
+
         <!-- splash and on board activities -->
         <activity
             android:name=".SplashscreenActivity"
@@ -33,49 +34,56 @@
         <activity
             android:name=".OnboardingActivity"
             android:theme="@style/BlueTheme" />
-        <activity android:name=".PermissionActivity" /> <!-- login and register activities -->
+        <activity android:name=".PermissionActivity" />
+
+        <!-- login and register activities -->
         <activity
             android:name=".LoginActivity"
             android:theme="@style/BlueTheme" />
         <activity
             android:name=".RegisterActivity"
-            android:theme="@style/BlueTheme" /> <!-- main activities -->
+            android:theme="@style/BlueTheme" />
+
+        <!-- main activities -->
         <activity
             android:name=".MainActivity"
-            android:theme="@style/MainTheme" /> <!-- mosque activities -->
+            android:theme="@style/MainTheme" />
+
+        <!-- mosque activities -->
         <activity
             android:name=".MosqueActivity"
-            android:theme="@style/GreenTheme" /> <!-- food activities -->
+            android:theme="@style/GreenTheme" />
+
+        <!-- food and beverages activities -->
         <activity
             android:name=".FoodActivity"
             android:theme="@style/GreenTheme" />
-        <activity android:name=".HalalFoodRestaurantActivity" />
-        <activity android:name=".FoodKategoriActivity" />
+        <activity android:name=".FoodBeverageResult" />
+
+        <!-- halal food activities -->
         <activity
             android:name=".HalalFoodActivity"
             android:theme="@style/YellowTheme"
-            android:windowSoftInputMode="stateHidden" /> <!-- fast food activities -->
-        <activity android:name=".HalalFastFoodRestaurantActivity" />
-        <activity
-            android:name=".HalalFastFoodActivity"
-            android:theme="@style/DarkRedTheme" />
-        <activity android:name=".FastFoodActivity" /> <!-- beverages activities -->
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- halal beverages activities -->
         <activity
             android:name=".HalalBeveragesActivity"
             android:theme="@style/DarkRedTheme"
-            android:windowSoftInputMode="stateHidden" /> <!-- gift food activities -->
-        <activity
-            android:name=".HalalGiftActivity"
-            android:theme="@style/BlueTheme" />
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- halal gift activities -->
         <activity
             android:name=".HalalGiftDetail"
             android:theme="@style/GreenTheme"
-            android:windowSoftInputMode="stateHidden" /> <!-- tourism activities -->
-        <activity android:name=".AddTourismActivity" />
-        <activity android:name=".TourismDetailActivity" />
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- tourism activities -->
         <activity
             android:name=".TourismActivity"
-            android:theme="@style/BlueTheme" /> <!-- dictionary activities -->
+            android:theme="@style/BlueTheme" />
+
+        <!-- dictionary activities -->
         <activity
             android:name=".ChooseLanguageActivity"
             android:theme="@style/WhiteTheme" />
@@ -84,23 +92,11 @@
             android:theme="@style/LightPinkTheme" />
         <activity
             android:name=".DictionaryActivity"
-            android:theme="@style/LightPinkTheme" /> <!-- unknown activities -->
-        <activity android:name=".ProfileFriend" />
-        <activity android:name=".RatingActivity" />
-        <activity android:name=".CommentActivity" />
-        <activity android:name=".ConfirmScannerActivity" />
-        <activity android:name=".QrCodeScannerActivity" />
-        <activity android:name=".LocationActivity" />
-        <activity android:name=".UpdateProfil" />
-        <activity android:name=".PlaceDetailActivity" />
+            android:theme="@style/LightPinkTheme" />
+
+        <!-- unknown activities -->
         <activity android:name=".QiblaActivity" />
-        <activity android:name=".SetAddressActivity" />
-        <activity android:name=".FindFriendsActivity" />
-        <activity android:name=".FindFriends" />
-        <activity android:name=".FriendResult" />
-        <activity android:name=".RestoranActivity" />
-        <activity android:name=".ListOnline" />
-        <activity android:name=".Profil" /> <!-- meta datas -->
+        <!-- meta datas -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8" />

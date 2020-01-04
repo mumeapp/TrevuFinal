@@ -25,6 +25,8 @@ import com.remu.POJO.LatLngRetriever;
 import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
 import com.remu.POJO.Tips;
+import com.remu.adapter.ArticleAdapter;
+import com.remu.adapter.TipsAdapter;
 import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
 import com.takusemba.multisnaprecyclerview.SnapGravity;
 

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_loading"
+            android:src="@drawable/bg_loading_image"
             tools:ignore="ContentDescription" />
 
         <androidx.cardview.widget.CardView
@@ -55,7 +55,7 @@
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_dist"
+                        android:src="@drawable/ic_distance"
                         android:tint="#000000" />
 
                     <TextView
@@ -164,7 +164,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/food" />
+                                    android:src="@drawable/profile_annasaha" />
 
                             </androidx.cardview.widget.CardView>
 

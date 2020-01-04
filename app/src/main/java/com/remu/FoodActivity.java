@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.remu.POJO.HttpHandler;
 import com.remu.POJO.PlaceModel;
 import com.remu.adapter.GiftAdapter;
 import com.saber.chentianslideback.SlideBackActivity;

@@ -1,4 +1,4 @@
-package com.remu;
+package com.remu.POJO;
 
 import android.util.Log;
 

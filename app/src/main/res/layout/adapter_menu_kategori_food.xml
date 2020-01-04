@@ -23,7 +23,7 @@
             android:layout_weight="7.3"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_loading" />
+            android:src="@drawable/bg_loading_image" />
 
         <RelativeLayout
             android:layout_width="match_parent"

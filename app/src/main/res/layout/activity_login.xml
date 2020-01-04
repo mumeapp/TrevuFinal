@@ -101,7 +101,6 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/LoginWithTwitter"
                     android:layout_width="30.5dp"
                     android:layout_height="25dp"
                     android:background="@drawable/ic_twitter" />
@@ -112,7 +111,6 @@
                     android:layout_weight="1"/>
 
                 <Button
-                    android:id="@+id/LoginWithGoogle"
                     android:layout_width="24.4dp"
                     android:layout_height="25dp"
                     android:background="@drawable/ic_google_plus"
@@ -124,7 +122,6 @@
                     android:layout_weight="1.15"/>
 
                 <Button
-                    android:id="@+id/LoginWithFacebook"
                     android:layout_width="12.6dp"
                     android:layout_height="25dp"
                     android:background="@drawable/ic_facebook" />

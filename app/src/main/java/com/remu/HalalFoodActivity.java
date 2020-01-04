@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.remu.POJO.HttpHandler;
 import com.remu.POJO.MyCallBack;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
@@ -60,8 +61,6 @@ public class HalalFoodActivity extends SlideBackActivity {
     private ProgressDialog progressDialog;
     private String userId;
     private boolean notify = false;
-
-//    private String userId;
 
     private void getGoogleJson() {
         HttpHandler httpHandler = new HttpHandler();
@@ -114,7 +113,6 @@ public class HalalFoodActivity extends SlideBackActivity {
 
     private void getFirebaseData(MyCallBack myCallBack) {
         for (int i = 0; i < places.size(); i++) {
-//            System.out.println("place" + places.get(i).getPlaceName());
             DatabaseReference databaseReference = firebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
             int finalI = i;
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -377,7 +375,7 @@ public class HalalFoodActivity extends SlideBackActivity {
             HttpHandler httpHandler = new HttpHandler();
 
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "&radius=5000&type=restaurant&keyword=muslim%20food&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+                    "&radius=5000&keyword=muslim%20food&opennow&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
@@ -467,7 +465,7 @@ public class HalalFoodActivity extends SlideBackActivity {
 //        public void setGambar(String foto) {
 //            Glide.with(HalalFoodActivity.this)
 //                    .load(foto)
-//                    .placeholder(R.drawable.bg_loading)
+//                    .placeholder(R.drawable.bg_loading_image)
 //                    .into(fotoMkn);
 //        }
 //
