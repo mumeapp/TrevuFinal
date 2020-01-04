@@ -2,7 +2,6 @@ package com.remu.adapter;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +23,13 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class RecommendedFoodAdapter extends RecyclerView.Adapter<RecommendedFoodAdapter.ViewHolder> {
+public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeveragesResultAdapter.ViewHolder> {
 
     Application app;
     Activity activity;
     ArrayList<PlaceModel> mDataset;
 
-    public RecommendedFoodAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset) {
+    public FoodBeveragesResultAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset) {
         this.app = app;
         this.activity = activity;
         this.mDataset = mDataset;

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
 import com.remu.adapter.MidnightFoodAdapter;
-import com.remu.adapter.RecommendedFoodAdapter;
+import com.remu.adapter.FoodBeveragesResultAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
 
 import org.json.JSONArray;
@@ -65,11 +66,14 @@ public class HalalFoodActivity extends SlideBackActivity {
 
         manualCategory.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (manualCategory.getText() != null) {
-                    Intent intent = new Intent(HalalFoodActivity.this, HalalFoodRestaurantActivity.class);
+                if (!manualCategory.getText().toString().equals("")) {
+                    Intent intent = new Intent(HalalFoodActivity.this, FoodBeverageResult.class);
+                    intent.putExtra("sender", "HalalFood");
                     intent.putExtra("category", manualCategory.getText().toString());
                     startActivity(intent);
                     return true;
+                } else {
+                    manualCategory.setError("Please put what category you want.");
                 }
             }
             return false;
@@ -108,8 +112,8 @@ public class HalalFoodActivity extends SlideBackActivity {
                 put("category_image", R.drawable.foodcategory_burgers);
             }});
             add(new HashMap<String, Object>() {{
-                put("category_name", "Chicken Delight");
-                put("category_image", R.drawable.foodcategory_chickendelight);
+                put("category_name", "Chicken");
+                put("category_image", R.drawable.foodcategory_chicken);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Chinese");
@@ -144,6 +148,7 @@ public class HalalFoodActivity extends SlideBackActivity {
                 put("category_image", R.drawable.foodcategory_sushi);
             }});
         }};
+
         listCategory.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, RecyclerView.HORIZONTAL, false));
         RecyclerView.Adapter<CatergoryViewHolder> categoryAdapter = new RecyclerView.Adapter<CatergoryViewHolder>() {
             @NonNull
@@ -158,6 +163,13 @@ public class HalalFoodActivity extends SlideBackActivity {
             public void onBindViewHolder(@NonNull CatergoryViewHolder holder, int position) {
                 holder.categoryImage.setImageDrawable(getDrawable((int) categoryDataSet.get(position).get("category_image")));
                 holder.categoryName.setText((String) categoryDataSet.get(position).get("category_name"));
+
+                holder.categoryCard.setOnClickListener((v) -> {
+                    Intent intent = new Intent(HalalFoodActivity.this, FoodBeverageResult.class);
+                    intent.putExtra("sender", "HalalFood");
+                    intent.putExtra("category", (String) categoryDataSet.get(position).get("category_name"));
+                    startActivity(intent);
+                });
             }
 
             @Override
@@ -266,7 +278,7 @@ public class HalalFoodActivity extends SlideBackActivity {
             super.onPostExecute(aVoid);
 
             listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
-            RecommendedFoodAdapter recommendedAdapter = new RecommendedFoodAdapter(getApplication(), HalalFoodActivity.this, places);
+            FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalFoodActivity.this, places);
             listRecommendedFood.setAdapter(recommendedAdapter);
 
             progressDialog.dismiss();
@@ -360,12 +372,14 @@ public class HalalFoodActivity extends SlideBackActivity {
 
         ImageView categoryImage;
         TextView categoryName;
+        CardView categoryCard;
 
         CatergoryViewHolder(View itemView) {
             super(itemView);
 
             categoryImage = itemView.findViewById(R.id.food_category_image);
             categoryName = itemView.findViewById(R.id.food_category_name);
+            categoryCard = itemView.findViewById(R.id.food_category_card);
         }
 
     }
