@@ -36,7 +36,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
-            holder.image.setImageDrawable(mDataset.get(position).getImage());
+//            holder.image.setImageDrawable(mDataset.get(position).getImage());
             holder.title.setText(mDataset.get(position).getTitle());
             holder.highlight.setText((mDataset.get(position).getHighlight()));
         } catch (NullPointerException e) {

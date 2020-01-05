@@ -4,19 +4,38 @@ import android.graphics.drawable.Drawable;
 
 public class Article {
 
-    private Drawable image;
+    private String image;
     private String title;
     private String highlight;
     private String article;
 
-    public Article(Drawable image, String title, String article) {
+    public Article(String image, String title, String article) {
         this.image = image;
         this.title = title;
         this.article = article;
         this.highlight = article.substring(0, 80) + "...";
     }
+    public Article(){
 
-    public Drawable getImage() {
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setHighlight(String highlight) {
+        this.highlight = highlight;
+    }
+
+    public void setArticle(String article) {
+        this.article = article;
+    }
+
+    public String getImage() {
         return image;
     }
 

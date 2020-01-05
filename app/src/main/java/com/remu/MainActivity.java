@@ -7,10 +7,13 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
@@ -18,14 +21,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.remu.POJO.Article;
 import com.remu.POJO.LatLngRetriever;
 import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
 import com.remu.POJO.Tips;
-import com.remu.adapter.ArticleAdapter;
 import com.remu.adapter.TipsAdapter;
 import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
 import com.takusemba.multisnaprecyclerview.SnapGravity;
@@ -48,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView halo, nama;
     private TextView jamSolatSelanjutnya;
 
+    private DatabaseReference databaseReference;
+    private FirebaseRecyclerAdapter<Article, MainActivity.ArticleViewHolder> firebaseRecyclerAdapter;
     private RecyclerView listArticle;
     private ArrayList<Article> articleDataSet;
 
@@ -133,6 +143,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseRecyclerAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseRecyclerAdapter.stopListening();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -162,10 +184,7 @@ public class MainActivity extends AppCompatActivity {
         viewNight = findViewById(R.id.view_night);
 
         listArticle = findViewById(R.id.listArticle);
-        articleDataSet = new ArrayList<Article>() {{
-            add(new Article(getDrawable(R.drawable.img_article), "Discover the relic!", "There was no mention of any time period, or the context of the conflict that took the purported and so on. "));
-            add(new Article(getDrawable(R.drawable.img_article), "Discover the relic!", "There was no mention of any time period, or the context of the conflict that took the purported and so on. "));
-        }};
+
         listTips = findViewById(R.id.listTips);
         tipsDataSet = new ArrayList<Tips>() {{
             add(new Tips(getDrawable(R.drawable.ic_img_tips), "Tips #1", ""));
@@ -314,8 +333,30 @@ public class MainActivity extends AppCompatActivity {
     private void initializeArticle() {
         LinearLayoutManager articleLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
         listArticle.setLayoutManager(articleLayoutManager);
-        RecyclerView.Adapter articleAdapter = new ArticleAdapter(getApplication(), articleDataSet);
-        listArticle.setAdapter(articleAdapter);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Article");
+
+        Query query = databaseReference.orderByKey();
+
+        FirebaseRecyclerOptions<Article> options = new FirebaseRecyclerOptions.Builder<Article>()
+                .setQuery(query, Article.class).build();
+
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Article, ArticleViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull ArticleViewHolder articleViewHolder, int i, @NonNull Article article) {
+                articleViewHolder.setImage(article.getImage());
+                articleViewHolder.setHighlight(article.getHighlight());
+                articleViewHolder.setJudul(article.getTitle());
+            }
+
+            @NonNull
+            @Override
+            public ArticleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_article, parent, false);
+                return new ArticleViewHolder(view);
+            }
+        };
+//        RecyclerView.Adapter articleAdapter = new ArticleAdapter(getApplication(), articleDataSet);
+        listArticle.setAdapter(firebaseRecyclerAdapter);
         MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
         multiSnapHelper.attachToRecyclerView(listArticle);
     }
@@ -331,6 +372,34 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             String name = user.getDisplayName();
             nama.setText(name);
+        }
+    }
+
+    public class ArticleViewHolder extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView judul;
+        TextView highlight;
+
+        public ArticleViewHolder(@NonNull View itemView) {
+            super(itemView);
+            image = itemView.findViewById(R.id.img_article);
+            judul = itemView.findViewById(R.id.title_article);
+            highlight = itemView.findViewById(R.id.highlight_article);
+        }
+
+        public void setJudul(String judul) {
+            this.judul.setText(judul);
+        }
+
+        public void setImage(String foto) {
+            Glide.with(MainActivity.this)
+                    .load(foto)
+                    .placeholder(R.drawable.bg_loading_image)
+                    .into(image);
+        }
+
+        public void setHighlight(String waktu) {
+            this.highlight.setText(waktu);
         }
     }
 
