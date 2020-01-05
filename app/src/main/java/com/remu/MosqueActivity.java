@@ -38,6 +38,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.karumi.dexter.Dexter;
@@ -66,16 +67,16 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
     private String latitude, longitude;
 
-    ExpandableCardView jamSolat;
-    RelativeLayout someInformation;
-    TextView jamSolatSelanjutnya, solatSelanjutnya, timeFajr, timeDhuhr, timeAsr, timeMahgrib, timeIsha;
-    LinearLayout layoutFajr, layoutDhuhr, layoutAsr, layoutMaghrib, layoutIsha;
+    private ExpandableCardView jamSolat;
+    private RelativeLayout someInformation;
 
-    LinearLayoutManager layoutManager;
-    RecyclerView listMasjid;
+    private LinearLayoutManager layoutManager;
+    private RecyclerView listMasjid;
+    private RecyclerView.Adapter mAdapter;
+    private ArrayList<PlaceModel> mDataSet;
 
-    //sydney, change later to malang
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
+
     // The entry points to the Places API.
     GeoDataClient mGeoDataClient;
     PlaceDetectionClient mPlaceDetectionClient;
@@ -88,10 +89,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
 
-    RecyclerView.Adapter mAdapter;
-    ArrayList<PlaceModel> mDataSet;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +96,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
         latitude = getIntent().getStringExtra("latitude");
         longitude = getIntent().getStringExtra("longitude");
-
         Log.e(TAG, latitude);
         Log.e(TAG, longitude);
 
@@ -107,7 +103,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
-        new GetData().execute();
+        new GetDataMosque().execute();
 
         //set title for expandable card
         jamSolat.setOnExpandedListener((v, isExpanded) -> {
@@ -134,11 +130,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-//        mDataSet = new ArrayList<>();
-//        for (int i = 0; i < 30; i++) {
-//            mDataSet.add("Title #" + i);
-//        }
-
         MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
         multiSnapHelper.attachToRecyclerView(listMasjid);
 
@@ -146,6 +137,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                setMarker("onScrollStateChanged");
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     View centerView = multiSnapHelper.findSnapView(layoutManager);
                     int pos = layoutManager.getPosition(centerView);
@@ -174,42 +166,22 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-        int Zoomlevel = 16;
+        int zoomlevel = 16;
 
         if (latLng != null) {
-            //mMap.clear();
             uiSettings.setAllGesturesEnabled(true);
             uiSettings.setMapToolbarEnabled(false);
             uiSettings.setMyLocationButtonEnabled(true);
             View locationButton = ((View) findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
             RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-// position on right bottom
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
             rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            rlp.setMargins(0, 0, 30, (int) getPixelFromDp(165, this) + 30);
+            rlp.setMargins(0, 0, 30, (int) getPixelFromDp(165) + 30);
 
             mMap.setMyLocationEnabled(true);
-//            mMap.setOnMyLocationButtonClickListener(this);
-//            mMap.setOnMyLocationClickListener(this);
-
-//            mCurrLocationMarker.setVisible(true);
-//            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Current Location"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, Zoomlevel));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomlevel));
         }
     }
-
-//    @Override
-//    public void onMyLocationClick(@NonNull Location location) {
-//        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public boolean onMyLocationButtonClick() {
-//        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-//        // Return false so that we don't consume the event and the default behavior still occurs
-//        // (the camera animates to the user's current position).
-//        return false;
-//    }
 
     private void getLocationPermission() {
         //WILL BE MOVED TO PERMISSIONACTIVITY LATER!
@@ -288,7 +260,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     private void initializeUI() {
         jamSolat = findViewById(R.id.jamSolat);
         CardView cardJamSolat = jamSolat.findViewById(R.id.card);
-        cardJamSolat.setRadius(getPixelFromDp(12, this));
+        cardJamSolat.setRadius(getPixelFromDp(12));
         cardJamSolat.setElevation(0);
         TextView captionCardSholat = cardJamSolat.findViewById(R.id.title);
         captionCardSholat.setTypeface(ResourcesCompat.getFont(this, R.font.osregular));
@@ -298,47 +270,72 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         mDataSet = new ArrayList<>();
         latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 
-        jamSolatSelanjutnya = someInformation.findViewById(R.id.jamSolatSelanjutnya);
-        solatSelanjutnya = someInformation.findViewById(R.id.solatSelanjutnya);
-        timeFajr = jamSolat.findViewById(R.id.time_fajr);
-        timeDhuhr = jamSolat.findViewById(R.id.time_dhuhr);
-        timeAsr = jamSolat.findViewById(R.id.time_asr);
-        timeMahgrib = jamSolat.findViewById(R.id.time_maghrib);
-        timeIsha = jamSolat.findViewById(R.id.time_isha);
         ArrayList<TextView> textViews = new ArrayList<TextView>() {{
-            add(jamSolatSelanjutnya);
-            add(solatSelanjutnya);
-            add(timeFajr);
-            add(timeDhuhr);
-            add(timeAsr);
-            add(timeMahgrib);
-            add(timeIsha);
+            add(someInformation.findViewById(R.id.jamSolatSelanjutnya));
+            add(someInformation.findViewById(R.id.solatSelanjutnya));
+            add(jamSolat.findViewById(R.id.time_fajr));
+            add(jamSolat.findViewById(R.id.time_dhuhr));
+            add(jamSolat.findViewById(R.id.time_asr));
+            add(jamSolat.findViewById(R.id.time_maghrib));
+            add(jamSolat.findViewById(R.id.time_isha));
         }};
-
-        layoutFajr = jamSolat.findViewById(R.id.layout_fajr);
-        layoutDhuhr = jamSolat.findViewById(R.id.layout_dhuhr);
-        layoutAsr = jamSolat.findViewById(R.id.layout_asr);
-        layoutMaghrib = jamSolat.findViewById(R.id.layout_maghrib);
-        layoutIsha = jamSolat.findViewById(R.id.layout_isha);
         ArrayList<LinearLayout> linearLayouts = new ArrayList<LinearLayout>() {{
-            add(layoutFajr);
-            add(layoutDhuhr);
-            add(layoutAsr);
-            add(layoutMaghrib);
-            add(layoutIsha);
+            add(jamSolat.findViewById(R.id.layout_fajr));
+            add(jamSolat.findViewById(R.id.layout_dhuhr));
+            add(jamSolat.findViewById(R.id.layout_asr));
+            add(jamSolat.findViewById(R.id.layout_maghrib));
+            add(jamSolat.findViewById(R.id.layout_isha));
         }};
-
         new PrayerTime(this, TAG, latitude, longitude, textViews, linearLayouts).execute();
     }
 
-    public float getPixelFromDp(float dp, Context context) {
-        Resources resources = context.getResources();
+    public float getPixelFromDp(float dp) {
+        Resources resources = this.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return dp * (metrics.densityDpi / 160f);
     }
 
+    private void setMarker(String sender) {
+        mMap.clear();
+
+        switch (sender) {
+            case "onScrollStateChanged":
+                for (PlaceModel a : mDataSet) {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(a.getPlaceLocation())
+                            .title(a.getPlaceName())
+                            .icon(bitmapDescriptorFromVector()));
+                }
+                break;
+            case "onPostExecute":
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)));
+
+                for (PlaceModel a : mDataSet) {
+                    builder.include(a.getPlaceLocation());
+                    mMap.addMarker(new MarkerOptions()
+                            .position(a.getPlaceLocation())
+                            .title(a.getPlaceName())
+                            .icon(bitmapDescriptorFromVector()));
+                }
+
+                LatLngBounds bounds = builder.build();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 210));
+                break;
+        }
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector() {
+        Drawable vectorDrawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_mosque_marker);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
     @SuppressLint("StaticFieldLeak")
-    private class GetData extends AsyncTask<Void, Void, Void> {
+    private class GetDataMosque extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -389,25 +386,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
             layoutManager = new LinearLayoutManager(MosqueActivity.this, LinearLayoutManager.HORIZONTAL, false);
             listMasjid.setLayoutManager(layoutManager);
-            mAdapter = new MosqueAdapter(getApplication(), mDataSet);
+            mAdapter = new MosqueAdapter(getApplication(), MosqueActivity.this, mDataSet, mMap);
             listMasjid.setAdapter(mAdapter);
-
-            for (PlaceModel a : mDataSet) {
-                mMap.addMarker(new MarkerOptions()
-                        .position(a.getPlaceLocation())
-                        .title(a.getPlaceName())
-                        .icon(bitmapDescriptorFromVector(getApplicationContext())));
-            }
+            setMarker("onPostExecute");
         }
 
-        private BitmapDescriptor bitmapDescriptorFromVector(Context context) {
-            Drawable vectorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_mosque_marker);
-            vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-            Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            vectorDrawable.draw(canvas);
-            return BitmapDescriptorFactory.fromBitmap(bitmap);
-        }
+
     }
 
 }

@@ -384,17 +384,6 @@
                 android:textSize="22sp"
                 tools:ignore="HardcodedText" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="25dp"
-                android:fontFamily="@font/osregular"
-                android:text="Take your time to read it."
-                android:textColor="#000000"
-                android:textSize="17sp"
-                tools:ignore="HardcodedText" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listArticle"
                 android:layout_width="match_parent"
