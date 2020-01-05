@@ -92,7 +92,8 @@ public class HalalFoodActivity extends SlideBackActivity {
                 if (!manualCategory.getText().toString().equals("")) {
                     Intent intent = new Intent(HalalFoodActivity.this, FoodBeverageTourismResult.class);
                     intent.putExtra("sender", "HalalFood");
-                    intent.putExtra("category", manualCategory.getText().toString());
+                    intent.putExtra("category", changeSpace(manualCategory.getText().toString()));
+                    intent.putExtra("name", manualCategory.getText().toString());
                     startActivity(intent);
                     return true;
                 } else {
@@ -125,50 +126,76 @@ public class HalalFoodActivity extends SlideBackActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
     }
 
+    private String changeSpace(String input) {
+        String[] strings = input.split(" ");
+        String returnVal = "";
+
+        for (int i = 0; i < strings.length; i++) {
+            if (i + 1 != strings.length) {
+                returnVal += strings[i] + "%20";
+            } else {
+                returnVal += strings[i];
+            }
+        }
+
+        return returnVal;
+    }
+
     private void generateListCategory() {
         ArrayList<HashMap<String, Object>> categoryDataSet = new ArrayList<HashMap<String, Object>>() {{
             add(new HashMap<String, Object>() {{
                 put("category_name", "Beef");
+                put("keyword", "beef");
                 put("category_image", R.drawable.foodcategory_beef);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Burgers");
+                put("keyword", "burgers");
                 put("category_image", R.drawable.foodcategory_burgers);
             }});
             add(new HashMap<String, Object>() {{
-                put("category_name", "Chicken");
+                put("category_name", "Chicken Delight");
+                put("keyword", "chicken");
                 put("category_image", R.drawable.foodcategory_chicken);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Chinese");
+                put("keyword", "chinese");
                 put("category_image", R.drawable.foodcategory_chinese);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Duck");
+                put("keyword", "duck");
                 put("category_image", R.drawable.foodcategory_duck);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Fried Chicken");
+                put("keyword", "fried%20chicken");
                 put("category_image", R.drawable.foodcategory_friedchicken);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Meatballs");
+                put("keyword", "meatballs");
                 put("category_image", R.drawable.foodcategory_meatballs);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Pizza and Pasta");
+                put("keyword", "pizza%20pasta");
                 put("category_image", R.drawable.foodcategory_pizzapasta);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Ramen");
+                put("keyword", "ramen");
                 put("category_image", R.drawable.foodcategory_ramen);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Seafood");
+                put("keyword", "seafood");
                 put("category_image", R.drawable.foodcategory_seafood);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Sushi");
+                put("keyword", "sushi");
                 put("category_image", R.drawable.foodcategory_sushi);
             }});
         }};
@@ -191,7 +218,8 @@ public class HalalFoodActivity extends SlideBackActivity {
                 holder.categoryCard.setOnClickListener((v) -> {
                     Intent intent = new Intent(HalalFoodActivity.this, FoodBeverageTourismResult.class);
                     intent.putExtra("sender", "HalalFood");
-                    intent.putExtra("category", (String) categoryDataSet.get(position).get("category_name"));
+                    intent.putExtra("category", (String) categoryDataSet.get(position).get("keyword"));
+                    intent.putExtra("name", (String) categoryDataSet.get(position).get("category_name"));
                     startActivity(intent);
                 });
             }

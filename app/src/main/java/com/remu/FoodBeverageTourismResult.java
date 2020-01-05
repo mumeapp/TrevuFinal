@@ -85,7 +85,7 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
 
     private void initializeUI(Intent intent) {
         TextView categoryName = findViewById(R.id.category_name);
-        categoryName.setText(capitalize(intent.getStringExtra("category")));
+        categoryName.setText(capitalize(intent.getStringExtra("name")));
 
         CardView categoryBar = findViewById(R.id.category_name_bar);
         switch (Objects.requireNonNull(intent.getStringExtra("sender"), "White")) {
@@ -97,7 +97,6 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
                 break;
             case "Tourism":
                 categoryBar.setCardBackgroundColor(getResources().getColor(R.color.trevuBlue));
-                categoryName.setText(capitalize(intent.getStringExtra("name")));
                 break;
             case "white":
                 break;

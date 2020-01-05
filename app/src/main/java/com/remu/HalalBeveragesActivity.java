@@ -219,7 +219,8 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                 if (!manualCategory.getText().toString().equals("")) {
                     Intent intent = new Intent(HalalBeveragesActivity.this, FoodBeverageTourismResult.class);
                     intent.putExtra("sender", "HalalBeverages");
-                    intent.putExtra("category", manualCategory.getText().toString());
+                    intent.putExtra("category", changeSpace(manualCategory.getText().toString()));
+                    intent.putExtra("name", manualCategory.getText().toString());
                     startActivity(intent);
                     return true;
                 } else {
@@ -250,22 +251,41 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         userId = FirebaseAuth.getInstance().getUid();
     }
 
+    private String changeSpace(String input) {
+        String[] strings = input.split(" ");
+        String returnVal = "";
+
+        for (int i = 0; i < strings.length; i++) {
+            if (i + 1 != strings.length) {
+                returnVal += strings[i] + "%20";
+            } else {
+                returnVal += strings[i];
+            }
+        }
+
+        return returnVal;
+    }
+
     private void generateListCategory() {
         ArrayList<HashMap<String, Object>> categoryDataSet = new ArrayList<HashMap<String, Object>>() {{
             add(new HashMap<String, Object>() {{
                 put("category_name", "Bubble Tea");
+                put("keyword", "bubble%20tea");
                 put("category_image", R.drawable.beveragescategory_bubbletea);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Coffee");
+                put("keyword", "coffee");
                 put("category_image", R.drawable.beveragescategory_coffee);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Juice");
+                put("keyword", "juice");
                 put("category_image", R.drawable.beveragescategory_juice);
             }});
             add(new HashMap<String, Object>() {{
                 put("category_name", "Tea");
+                put("keyword", "tea");
                 put("category_image", R.drawable.beveragescategory_tea);
             }});
         }};
@@ -288,7 +308,8 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                 holder.categoryCard.setOnClickListener((v) -> {
                     Intent intent = new Intent(HalalBeveragesActivity.this, FoodBeverageTourismResult.class);
                     intent.putExtra("sender", "HalalBeverages");
-                    intent.putExtra("category", (String) categoryDataSet.get(position).get("category_name"));
+                    intent.putExtra("category", (String) categoryDataSet.get(position).get("keyword"));
+                    intent.putExtra("name", (String) categoryDataSet.get(position).get("category_name"));
                     startActivity(intent);
                 });
             }
