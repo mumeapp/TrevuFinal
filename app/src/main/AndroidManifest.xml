@@ -20,7 +20,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-
         <!-- splash and on board activities -->
         <activity
             android:name=".SplashscreenActivity"
@@ -48,6 +47,7 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/MainTheme" />
+        <activity android:name=".FoodBeverageTourismResult" />
 
         <!-- mosque activities -->
         <activity
@@ -58,7 +58,7 @@
         <activity
             android:name=".FoodActivity"
             android:theme="@style/GreenTheme" />
-        <activity android:name=".FoodBeverageResult" />
+        <activity android:name=".FoodBeveragesDetail" />
 
         <!-- halal food activities -->
         <activity
@@ -82,6 +82,9 @@
         <activity
             android:name=".TourismActivity"
             android:theme="@style/BlueTheme" />
+        <activity
+            android:name=".TourismDetail"
+            android:theme="@style/BlueTheme" />
 
         <!-- dictionary activities -->
         <activity
@@ -96,6 +99,7 @@
 
         <!-- unknown activities -->
         <activity android:name=".QiblaActivity" />
+
         <!-- meta datas -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

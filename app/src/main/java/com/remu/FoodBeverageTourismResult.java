@@ -18,7 +18,7 @@ import com.remu.POJO.HttpHandler;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
-import com.remu.adapter.FoodBeveragesResultAdapter;
+import com.remu.adapter.FoodBeveragesTourismResultAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
 
 import org.json.JSONArray;
@@ -31,9 +31,9 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FoodBeverageResult extends SlideBackActivity {
+public class FoodBeverageTourismResult extends SlideBackActivity {
 
-    private static final String TAG = "FoodBeverageResult";
+    private static final String TAG = "FbBnTourResult";
 
     private RecyclerView listCategoryResult;
 
@@ -45,7 +45,7 @@ public class FoodBeverageResult extends SlideBackActivity {
         changeThemeBySender(Objects.requireNonNull(content.getStringExtra("sender"), "White"));
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food_beverage_result);
+        setContentView(R.layout.activity_foodbeveragetaourism_result);
 
         latitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
         longitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
@@ -75,12 +75,18 @@ public class FoodBeverageResult extends SlideBackActivity {
             case "HalalBeverages":
                 setTheme(R.style.DarkRedTheme);
                 break;
+            case "Tourism":
+                setTheme(R.style.BlueTheme);
+                break;
             case "white":
                 break;
         }
     }
 
     private void initializeUI(Intent intent) {
+        TextView categoryName = findViewById(R.id.category_name);
+        categoryName.setText(capitalize(intent.getStringExtra("category")));
+
         CardView categoryBar = findViewById(R.id.category_name_bar);
         switch (Objects.requireNonNull(intent.getStringExtra("sender"), "White")) {
             case "HalalFood":
@@ -89,12 +95,13 @@ public class FoodBeverageResult extends SlideBackActivity {
             case "HalalBeverages":
                 categoryBar.setCardBackgroundColor(getResources().getColor(R.color.trevuDarkRed));
                 break;
+            case "Tourism":
+                categoryBar.setCardBackgroundColor(getResources().getColor(R.color.trevuBlue));
+                categoryName.setText(capitalize(intent.getStringExtra("name")));
+                break;
             case "white":
                 break;
         }
-
-        TextView categoryName = findViewById(R.id.category_name);
-        categoryName.setText(capitalize(intent.getStringExtra("category")));
 
         listCategoryResult = findViewById(R.id.listCategoyResult);
         new GetCategoryResult(this, intent).execute();
@@ -118,11 +125,13 @@ public class FoodBeverageResult extends SlideBackActivity {
         private String url;
         private ProgressDialog progressDialog;
         private ArrayList<PlaceModel> places;
+        private String senderType;
 
         GetCategoryResult(Context context, Intent intent) {
             this.context = context;
             places = new ArrayList<>();
-            setURL(intent.getStringExtra("sender"), intent.getStringExtra("category"));
+            senderType = intent.getStringExtra("sender");
+            setURL(senderType, intent.getStringExtra("category"));
         }
 
         private void setURL(String sender, String category) {
@@ -133,6 +142,9 @@ public class FoodBeverageResult extends SlideBackActivity {
                     break;
                 case "HalalBeverages":
                     keyword = "beverages%20" + category;
+                    break;
+                case "Tourism":
+                    keyword = category;
                     break;
             }
             url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
@@ -212,9 +224,9 @@ public class FoodBeverageResult extends SlideBackActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            listCategoryResult.setLayoutManager(new LinearLayoutManager(FoodBeverageResult.this, LinearLayoutManager.VERTICAL, false));
-            FoodBeveragesResultAdapter foodBeveragesResultAdapter = new FoodBeveragesResultAdapter(getApplication(), FoodBeverageResult.this, places);
-            listCategoryResult.setAdapter(foodBeveragesResultAdapter);
+            listCategoryResult.setLayoutManager(new LinearLayoutManager(FoodBeverageTourismResult.this, LinearLayoutManager.VERTICAL, false));
+            FoodBeveragesTourismResultAdapter foodBeveragesTourismResultAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), FoodBeverageTourismResult.this, senderType, places);
+            listCategoryResult.setAdapter(foodBeveragesTourismResultAdapter);
 
             progressDialog.dismiss();
         }

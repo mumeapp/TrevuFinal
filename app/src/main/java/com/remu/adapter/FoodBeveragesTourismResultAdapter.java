@@ -2,6 +2,7 @@ package com.remu.adapter;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.remu.FoodBeveragesDetail;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
 import com.remu.R;
+import com.remu.TourismDetail;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -29,26 +32,27 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeveragesResultAdapter.ViewHolder> {
+public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<FoodBeveragesTourismResultAdapter.ViewHolder> {
 
     Application app;
     Activity activity;
     ArrayList<PlaceModel> mDataset;
     DatabaseReference databaseReference;
-    String userId;
+    String userId, senderType;
 
-    public FoodBeveragesResultAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset) {
+    public FoodBeveragesTourismResultAdapter(Application app, Activity activity, String senderType, ArrayList<PlaceModel> mDataset) {
         this.app = app;
         this.activity = activity;
         this.mDataset = mDataset;
         userId = FirebaseAuth.getInstance().getUid();
+        this.senderType = senderType;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_food_vertical_mode, parent, false);
+                .inflate(R.layout.adapter_vertical_mode, parent, false);
         return new ViewHolder(view);
     }
 
@@ -82,7 +86,7 @@ public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeverag
                     .into(holder.recommendedImage);
         }
         holder.recommendeLayout.setOnClickListener(view -> {
-            System.out.println("weight "+mDataset.get(position).getPlaceWeight());
+            System.out.println("weight " + mDataset.get(position).getPlaceWeight());
             databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(mDataset.get(position).getPlaceId());
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -102,11 +106,23 @@ public class FoodBeveragesResultAdapter extends RecyclerView.Adapter<FoodBeverag
                 }
             });
         });
-//        holder.recommendeLayout.setOnClickListener((v) -> {
-//            Intent intent = new Intent(activity.getBaseContext(), HalalGiftDetail.class);
-//            intent.putExtra("place_id", mDataset.get(position).getPlaceId());
-//            activity.startActivity(intent);
-//        });
+
+        holder.recommendeLayout.setOnClickListener((v) -> {
+            Intent intent = null;
+            switch (senderType) {
+                case "Tourism":
+                    intent = new Intent(activity.getBaseContext(), TourismDetail.class);
+                    break;
+                case "HalalFood":
+                case "HalalBeverages":
+                    intent = new Intent(activity.getBaseContext(), FoodBeveragesDetail.class);
+                    break;
+                default:
+                    intent = new Intent();
+            }
+            intent.putExtra("place_id", mDataset.get(position).getPlaceId());
+            activity.startActivity(intent);
+        });
     }
 
     @Override

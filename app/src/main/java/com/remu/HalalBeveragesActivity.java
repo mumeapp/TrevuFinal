@@ -32,7 +32,7 @@ import com.remu.POJO.MyCallBack;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
-import com.remu.adapter.FoodBeveragesResultAdapter;
+import com.remu.adapter.FoodBeveragesTourismResultAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
 
 import org.json.JSONArray;
@@ -213,13 +213,13 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
-        Runnable getGoogleJson = () -> getGoogleJson();
-        Runnable getTopRating = () -> getTopRating();
+        Runnable getGoogleJson = this::getGoogleJson;
+        Runnable getTopRating = this::getTopRating;
         Runnable getFirebaseData = () -> getFirebaseData(value -> {
             doWeighting();
 
             listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, LinearLayoutManager.VERTICAL, false));
-            FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalBeveragesActivity.this, places);
+            FoodBeveragesTourismResultAdapter recommendedAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), HalalBeveragesActivity.this, "HalalBeverages", places);
             listRecommendedFood.setAdapter(recommendedAdapter);
 
             progressDialog.dismiss();
@@ -231,7 +231,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         manualCategory.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (!manualCategory.getText().toString().equals("")) {
-                    Intent intent = new Intent(HalalBeveragesActivity.this, FoodBeverageResult.class);
+                    Intent intent = new Intent(HalalBeveragesActivity.this, FoodBeverageTourismResult.class);
                     intent.putExtra("sender", "HalalBeverages");
                     intent.putExtra("category", manualCategory.getText().toString());
                     startActivity(intent);
@@ -290,7 +290,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
             @Override
             public CatergoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.adapter_menu_kategori_food, parent, false);
+                        .inflate(R.layout.adapter_category_foodbeverages, parent, false);
                 return new CatergoryViewHolder(view);
             }
 
@@ -300,7 +300,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                 holder.categoryName.setText((String) categoryDataSet.get(position).get("category_name"));
 
                 holder.categoryCard.setOnClickListener((v) -> {
-                    Intent intent = new Intent(HalalBeveragesActivity.this, FoodBeverageResult.class);
+                    Intent intent = new Intent(HalalBeveragesActivity.this, FoodBeverageTourismResult.class);
                     intent.putExtra("sender", "HalalBeverages");
                     intent.putExtra("category", (String) categoryDataSet.get(position).get("category_name"));
                     startActivity(intent);
@@ -348,7 +348,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
             super.onPostExecute(aVoid);
 
             listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, LinearLayoutManager.VERTICAL, false));
-            FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalBeveragesActivity.this, places);
+            FoodBeveragesTourismResultAdapter recommendedAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), HalalBeveragesActivity.this, "HalalBeverages", places);
             listRecommendedFood.setAdapter(recommendedAdapter);
 
         }

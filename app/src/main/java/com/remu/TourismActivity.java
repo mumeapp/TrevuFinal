@@ -2,12 +2,21 @@ package com.remu;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
@@ -26,17 +35,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class TourismActivity extends SlideBackActivity {
 
     private static final String TAG = "TourismActivity";
 
-    private RecyclerView rvTour;
+    private RecyclerView listCategory, rvTour;
     private TourismAdapter tourismAdapter;
     private double latitude, longitude;
     private String userId;
 
-    NestedScrollView tourScrollView;
+    private NestedScrollView tourScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,8 @@ public class TourismActivity extends SlideBackActivity {
 
         initializeUI();
         Animatoo.animateSlideLeft(this);
+
+        generateListCategory();
 
         new GetTourPlace(this).execute();
 
@@ -70,8 +82,75 @@ public class TourismActivity extends SlideBackActivity {
     }
 
     private void initializeUI() {
-        rvTour = findViewById(R.id.TourismCategories);
+        listCategory = findViewById(R.id.listTourismCategories);
+        rvTour = findViewById(R.id.listRecommendedTourism);
         userId = FirebaseAuth.getInstance().getUid();
+    }
+
+    private void generateListCategory() {
+        ArrayList<HashMap<String, Object>> categoryDataSet = new ArrayList<HashMap<String, Object>>() {{
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Amusement park");
+                put("keyword", "theme%20park");
+                put("category_image", R.drawable.tourismcategory_amusementpark);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Aquarium");
+                put("keyword", "aquarium%20attraction");
+                put("category_image", R.drawable.tourismcategory_aquarium);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Beach");
+                put("keyword", "beach");
+                put("category_image", R.drawable.tourismcategory_beach);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Museum");
+                put("keyword", "museum");
+                put("category_image", R.drawable.tourismcategory_museum);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Waterfall");
+                put("keyword", "waterfall");
+                put("category_image", R.drawable.tourismcategory_waterfall);
+            }});
+            add(new HashMap<String, Object>() {{
+                put("category_name", "Zoo");
+                put("keyword", "zoo");
+                put("category_image", R.drawable.tourismcategory_zoo);
+            }});
+        }};
+
+        listCategory.setLayoutManager(new LinearLayoutManager(TourismActivity.this, RecyclerView.HORIZONTAL, false));
+        RecyclerView.Adapter<CatergoryViewHolder> categoryAdapter = new RecyclerView.Adapter<CatergoryViewHolder>() {
+            @NonNull
+            @Override
+            public CatergoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.adapter_category_tourism, parent, false);
+                return new CatergoryViewHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull CatergoryViewHolder holder, int position) {
+                holder.categoryImage.setImageDrawable(getDrawable((int) categoryDataSet.get(position).get("category_image")));
+                holder.categoryName.setText((String) categoryDataSet.get(position).get("category_name"));
+
+                holder.categoryCard.setOnClickListener((v) -> {
+                    Intent intent = new Intent(TourismActivity.this, FoodBeverageTourismResult.class);
+                    intent.putExtra("sender", "Tourism");
+                    intent.putExtra("category", (String) categoryDataSet.get(position).get("keyword"));
+                    intent.putExtra("name", (String) categoryDataSet.get(position).get("category_name"));
+                    startActivity(intent);
+                });
+            }
+
+            @Override
+            public int getItemCount() {
+                return categoryDataSet.size();
+            }
+        };
+        listCategory.setAdapter(categoryAdapter);
     }
 
     private class GetTourPlace extends AsyncTask<Void, Void, Void> {
@@ -99,23 +178,56 @@ public class TourismActivity extends SlideBackActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
-            //tourist_attraction, museum, zoo, aquarium, park
-            String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "&rankby=distance&type=tourist_attraction&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
-            String jsonStr = httpHandler.makeServiceCall(url);
+            String url1 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=museum&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url2 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=zoo&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url3 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=aquarium%20attraction&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=theme%20park&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url5 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=waterfall&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+            String url6 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                    "6&rankby=distance&keyword=beach&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
-            Log.d(TAG, url);
-            Log.d(TAG, "Response from url: " + jsonStr);
+            ArrayList<String> arrayListJSON = new ArrayList<String>() {{
+                add(httpHandler.makeServiceCall(url1));
+                add(httpHandler.makeServiceCall(url2));
+                add(httpHandler.makeServiceCall(url3));
+                add(httpHandler.makeServiceCall(url4));
+                add(httpHandler.makeServiceCall(url5));
+                add(httpHandler.makeServiceCall(url6));
+            }};
 
-            if (jsonStr != null) {
-                try {
-                    JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
+            ArrayList<String> placeIds = new ArrayList<>();
 
-                    for (int i = 0; i < results.length(); i++) {
-                        JSONObject row = results.getJSONObject(i);
+            for (String jsonStr : arrayListJSON) {
+                Log.d(TAG, url1);
+                Log.d(TAG, "Response from url: " + jsonStr);
 
-                        if (row.isNull("photos")) {
+                if (jsonStr != null) {
+                    parseJSON(jsonStr, placeIds);
+                } else {
+                    Log.e(TAG, "Couldn't get json from server.");
+                }
+            }
+
+            getTopRating();
+            doWeighting();
+            return null;
+        }
+
+        private void parseJSON(String jsonStr, ArrayList<String> placeIds) {
+            try {
+                JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
+
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject row = results.getJSONObject(i);
+
+                    if (row.isNull("photos")) {
+                        if (!placeIds.contains(row.getString("place_id"))) {
                             places.add(new PlaceModel(
                                     row.getString("place_id"),
                                     row.getString("name"),
@@ -124,7 +236,10 @@ public class TourismActivity extends SlideBackActivity {
                                     new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
                                             row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
                             ));
-                        } else {
+                            placeIds.add(row.getString("place_id"));
+                        }
+                    } else {
+                        if (!placeIds.contains(row.getString("place_id"))) {
                             places.add(new PlaceModel(
                                     row.getString("place_id"),
                                     row.getString("name"),
@@ -134,16 +249,26 @@ public class TourismActivity extends SlideBackActivity {
                                             row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
                                     row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
                             ));
+                            placeIds.add(row.getString("place_id"));
                         }
                     }
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
                 }
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
+            } catch (final JSONException e) {
+                Log.e(TAG, "Json parsing error: " + e.getMessage());
             }
-            doWeighting();
-            return null;
+        }
+
+        private void getTopRating() {
+            ArrayList<PlaceModel> topRating = new ArrayList<>();
+
+            for (PlaceModel place : places) {
+                if (place.getPlaceRating() >= 4) {
+                    topRating.add(place);
+                }
+            }
+
+            places.clear();
+            places.addAll(topRating);
         }
 
         private void doWeighting() {
@@ -173,6 +298,22 @@ public class TourismActivity extends SlideBackActivity {
 
             progressDialog.dismiss();
         }
+    }
+
+    class CatergoryViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView categoryImage;
+        TextView categoryName;
+        CardView categoryCard;
+
+        CatergoryViewHolder(View itemView) {
+            super(itemView);
+
+            categoryImage = itemView.findViewById(R.id.tourism_category_image);
+            categoryName = itemView.findViewById(R.id.tourism_category_name);
+            categoryCard = itemView.findViewById(R.id.tourism_category_card);
+        }
+
     }
 
 }

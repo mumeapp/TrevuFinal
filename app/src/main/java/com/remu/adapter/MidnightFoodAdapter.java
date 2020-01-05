@@ -39,7 +39,7 @@ public class MidnightFoodAdapter extends RecyclerView.Adapter<MidnightFoodAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_food_horizontal_mode, parent, false);
+                .inflate(R.layout.adapter_horizontal_mode, parent, false);
         return new ViewHolder(view);
     }
 
