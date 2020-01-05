@@ -184,21 +184,15 @@ public class TourismActivity extends SlideBackActivity {
             String url2 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
                     "6&rankby=distance&keyword=zoo&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
             String url3 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&keyword=aquarium%20attraction&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-            String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
                     "6&rankby=distance&keyword=theme%20park&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-            String url5 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+            String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
                     "6&rankby=distance&keyword=waterfall&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-            String url6 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&keyword=beach&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
 
             ArrayList<String> arrayListJSON = new ArrayList<String>() {{
                 add(httpHandler.makeServiceCall(url1));
                 add(httpHandler.makeServiceCall(url2));
                 add(httpHandler.makeServiceCall(url3));
                 add(httpHandler.makeServiceCall(url4));
-                add(httpHandler.makeServiceCall(url5));
-                add(httpHandler.makeServiceCall(url6));
             }};
 
             ArrayList<String> placeIds = new ArrayList<>();
@@ -288,12 +282,7 @@ public class TourismActivity extends SlideBackActivity {
             super.onPostExecute(aVoid);
 
             rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
-            tourismAdapter = new TourismAdapter(getApplication(), getParent(), places, new LatLng(latitude, longitude));
-            tourismAdapter.setClickListener((view, position) -> {
-                //set what happend when clicked
-                Log.i("TAG", "You clicked number " + tourismAdapter.getItem(position) + ", which is at cell position " + position);
-
-            });
+            tourismAdapter = new TourismAdapter(getApplication(), TourismActivity.this, places, new LatLng(latitude, longitude));
             rvTour.setAdapter(tourismAdapter);
 
             progressDialog.dismiss();

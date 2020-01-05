@@ -2,6 +2,7 @@ package com.remu.adapter;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
 import com.remu.R;
+import com.remu.TourismDetail;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +30,6 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
     Application app;
     Activity activity;
     private ArrayList<PlaceModel> mDataset;
-    private ItemClickListener mClickListener;
     private LatLng currentLatLng;
 
     public TourismAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset, LatLng currentLatLng) {
@@ -43,18 +44,6 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
     public TourismAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.adapter_tourism, parent, false);
-//
-//            @Override
-//            public void setFixedHeight() {
-//                //  magic happening here
-//                ViewGroup.LayoutParams parentParams = parent.getLayoutParams();
-//                parentParams.height =
-//                        ((RecyclerView) parent).computeVerticalScrollRange()
-//                                + parent.getPaddingTop()
-//                                + parent.getPaddingBottom();
-//                parent.setLayoutParams(parentParams);
-//            }
-//        };
         return new ViewHolder(view);
     }
 
@@ -86,6 +75,12 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(holder.image);
         }
+
+        holder.cardView.setOnClickListener((view) -> {
+            Intent intent = new Intent(activity.getBaseContext(), TourismDetail.class);
+            intent.putExtra("place_id", mDataset.get(position).getPlaceId());
+            activity.startActivity(intent);
+        });
     }
 
     @Override
@@ -93,7 +88,7 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
         return mDataset.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         CardView cardView;
         ImageView image;
@@ -107,27 +102,8 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
             title = itemView.findViewById(R.id.title_tour_place);
             rating = itemView.findViewById(R.id.rating_tour_place);
             distance = itemView.findViewById(R.id.distance_tour_place);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }
-
-//        public abstract void setFixedHeight();
-    }
-
-    public PlaceModel getItem(int id) {
-        return mDataset.get(id);
-    }
-
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
-
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
     }
 
     private double countDistance(LatLng latLng) {
