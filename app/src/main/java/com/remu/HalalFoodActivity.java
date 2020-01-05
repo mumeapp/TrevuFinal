@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -112,22 +113,40 @@ public class HalalFoodActivity extends SlideBackActivity {
 
     private void getFirebaseData(MyCallBack myCallBack) {
         for (int i = 0; i < places.size(); i++) {
-            DatabaseReference databaseReference = firebaseDatabase.getReference();
+            DatabaseReference intensity = firebaseDatabase.getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+            DatabaseReference rating = firebaseDatabase.getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            intensity.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.child("UserData").child(userId).child(places.get(finalI).getPlaceId()).child("Intensity").getValue().toString()));
-                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.child(places.get(finalI).getPlaceId()).child("Rating").getValue().toString()));
+                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
                         myCallBack.onCallback(places);
 
                     } catch (NullPointerException np) {
                         places.get(finalI).setPlaceIntensity(1);
-                        places.get(finalI).setTrevuRating(1);
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
                         myCallBack.onCallback(places);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+
+            });
+            rating.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try{
+                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
+                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                    }catch (NullPointerException np){
+                        places.get(finalI).setTrevuRating(1);
+                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
                     }
                 }
 

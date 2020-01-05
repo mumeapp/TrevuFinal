@@ -143,22 +143,40 @@ public class HalalBeveragesActivity extends SlideBackActivity {
 
     private void getFirebaseData(MyCallBack myCallBack){
         for (int i = 0; i < 20; i++) {
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference intensity = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+            DatabaseReference rating = FirebaseDatabase.getInstance().getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            intensity.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.child("UserData").child(userId).child(places.get(finalI).getPlaceId()).child("Intensity").getValue().toString()));
-                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.child(places.get(finalI).getPlaceId()).child("Rating").getValue().toString()));
+                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
                         myCallBack.onCallback(places);
 
                     } catch (NullPointerException np) {
                         places.get(finalI).setPlaceIntensity(1);
-                        places.get(finalI).setTrevuRating(1);
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
                         myCallBack.onCallback(places);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+
+            });
+            rating.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try{
+                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
+                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                    }catch (NullPointerException np){
+                        places.get(finalI).setTrevuRating(1);
+                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
                     }
                 }
 
