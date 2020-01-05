@@ -8,6 +8,7 @@ public class PlaceModel {
     private String placeName;
     private String placeAddress;
     private double placeRating;
+    private double trevuRating;
     private LatLng placeLocation;
     private double placeWeight;
     private String placePhotoUri;
@@ -30,6 +31,14 @@ public class PlaceModel {
         this.placeLocation = placeLocation;
         this.placePhotoUri = placePhotoUri;
 
+    }
+
+    public double getTrevuRating() {
+        return trevuRating;
+    }
+
+    public void setTrevuRating(double trevuRating) {
+        this.trevuRating = trevuRating;
     }
 
     public String getPlaceId() {

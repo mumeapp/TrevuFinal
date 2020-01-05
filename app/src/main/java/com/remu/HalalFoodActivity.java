@@ -60,7 +60,6 @@ public class HalalFoodActivity extends SlideBackActivity {
     private FirebaseDatabase firebaseDatabase;
     private ProgressDialog progressDialog;
     private String userId;
-    private boolean notify = false;
 
     private void getGoogleJson() {
         HttpHandler httpHandler = new HttpHandler();
@@ -113,18 +112,20 @@ public class HalalFoodActivity extends SlideBackActivity {
 
     private void getFirebaseData(MyCallBack myCallBack) {
         for (int i = 0; i < places.size(); i++) {
-            DatabaseReference databaseReference = firebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+            DatabaseReference databaseReference = firebaseDatabase.getReference();
             int finalI = i;
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
+                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.child("UserData").child(userId).child(places.get(finalI).getPlaceId()).child("Intensity").getValue().toString()));
+                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.child(places.get(finalI).getPlaceId()).child("Rating").getValue().toString()));
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
                         myCallBack.onCallback(places);
 
                     } catch (NullPointerException np) {
                         places.get(finalI).setPlaceIntensity(1);
+                        places.get(finalI).setTrevuRating(1);
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
                         myCallBack.onCallback(places);
                     }
@@ -165,14 +166,13 @@ public class HalalFoodActivity extends SlideBackActivity {
         Runnable getGoogleJSON = () -> {
             getGoogleJson();
         };
-        Runnable getFirebaseData = () -> {getFirebaseData(value -> {
+        Runnable getFirebaseData = () -> getFirebaseData(value -> {
             doWeighting();
             listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
             FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalFoodActivity.this, places);
             listRecommendedFood.setAdapter(recommendedAdapter);
             progressDialog.dismiss();
         });
-        };
 
         generateListCategory();
         generateListOpenNight();
@@ -343,7 +343,6 @@ public class HalalFoodActivity extends SlideBackActivity {
             listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
             FoodBeveragesResultAdapter recommendedAdapter = new FoodBeveragesResultAdapter(getApplication(), HalalFoodActivity.this, places);
             listRecommendedFood.setAdapter(recommendedAdapter);
-            progressDialog.dismiss();
 
         }
     }
