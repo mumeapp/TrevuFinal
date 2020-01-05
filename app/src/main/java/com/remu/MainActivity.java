@@ -101,9 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
         //initialize uI
         initializeUI();
-        setBackgroundByTime();
-        initializeArticle();
-        initializeTips();
         Animatoo.animateSlideLeft(this);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -168,11 +165,6 @@ public class MainActivity extends AppCompatActivity {
         tourButton = findViewById(R.id.tourismButton);
         halo = findViewById(R.id.halo);
         nama = findViewById(R.id.nama);
-        jamSolatSelanjutnya = findViewById(R.id.jamSolatSelanjutnya);
-        ArrayList<TextView> textViews = new ArrayList<TextView>() {{
-            add(jamSolatSelanjutnya);
-        }};
-        new PrayerTime(this, TAG, latitude, longitude, textViews).execute();
 
         backgroundMorning = findViewById(R.id.placeIllustrationMorning);
         viewMorning = findViewById(R.id.view_morning);
@@ -182,8 +174,10 @@ public class MainActivity extends AppCompatActivity {
         viewEvening = findViewById(R.id.view_evening);
         backgroundNight = findViewById(R.id.placeIllustrationNight);
         viewNight = findViewById(R.id.view_night);
+        setBackgroundByTime();
 
         listArticle = findViewById(R.id.listArticle);
+        initializeArticle();
 
         listTips = findViewById(R.id.listTips);
         tipsDataSet = new ArrayList<Tips>() {{
@@ -191,6 +185,12 @@ public class MainActivity extends AppCompatActivity {
             add(new Tips(getDrawable(R.drawable.ic_img_tips), "Tips #2", ""));
             add(new Tips(getDrawable(R.drawable.ic_img_tips), "Tips #3", ""));
         }};
+        initializeTips();
+
+        ArrayList<TextView> textViews = new ArrayList<TextView>() {{
+            add(findViewById(R.id.jamSolatSelanjutnya));
+        }};
+        new PrayerTime(this, TAG, latitude, longitude, textViews).execute();
     }
 
     private void setBackgroundByTime() {
