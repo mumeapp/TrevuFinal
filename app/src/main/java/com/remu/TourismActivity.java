@@ -22,10 +22,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.HttpHandler;
+import com.remu.POJO.MyCallBack;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
+import com.remu.adapter.FoodBeveragesTourismResultAdapter;
 import com.remu.adapter.TourismAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
 
@@ -45,6 +52,8 @@ public class TourismActivity extends SlideBackActivity {
     private TourismAdapter tourismAdapter;
     private double latitude, longitude;
     private String userId;
+    private ArrayList<PlaceModel> places;
+    private ProgressDialog progressDialog;
 
     private NestedScrollView tourScrollView;
 
@@ -59,9 +68,19 @@ public class TourismActivity extends SlideBackActivity {
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
+        Runnable getGoogleJSON = this::getGoogleJson;
+        Runnable getFirebaseData = () -> getFirebaseData(value -> {
+            doWeighting();
+            rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
+            tourismAdapter = new TourismAdapter(getApplication(), TourismActivity.this, places, new LatLng(latitude, longitude));
+            rvTour.setAdapter(tourismAdapter);
+
+            progressDialog.dismiss();
+        });
+
         generateListCategory();
 
-        new GetTourPlace(this).execute();
+        new GetTourPlace(this).execute(getGoogleJSON, getFirebaseData);
 
         tourScrollView = findViewById(R.id.tour_scroll);
         tourScrollView.post(() -> {
@@ -73,6 +92,138 @@ public class TourismActivity extends SlideBackActivity {
     @Override
     protected void slideBackSuccess() {
         finish();
+    }
+
+    private void parseJSON(String jsonStr, ArrayList<String> placeIds) {
+        try {
+            JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
+
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject row = results.getJSONObject(i);
+
+                if (row.isNull("photos")) {
+                    if (!placeIds.contains(row.getString("place_id"))) {
+                        places.add(new PlaceModel(
+                                row.getString("place_id"),
+                                row.getString("name"),
+                                row.getString("vicinity"),
+                                row.getDouble("rating"),
+                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
+                        ));
+                        placeIds.add(row.getString("place_id"));
+                    }
+                } else {
+                    if (!placeIds.contains(row.getString("place_id"))) {
+                        places.add(new PlaceModel(
+                                row.getString("place_id"),
+                                row.getString("name"),
+                                row.getString("vicinity"),
+                                row.getDouble("rating"),
+                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
+                                row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
+                        ));
+                        placeIds.add(row.getString("place_id"));
+                    }
+                }
+            }
+        } catch (final JSONException e) {
+            Log.e(TAG, "Json parsing error: " + e.getMessage());
+        }
+    }
+
+    private void getGoogleJson(){
+        HttpHandler httpHandler = new HttpHandler();
+
+        String url1 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                "6&rankby=distance&keyword=museum&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+        String url2 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                "6&rankby=distance&keyword=zoo&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+        String url3 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                "6&rankby=distance&keyword=theme%20park&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+        String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+                "6&rankby=distance&keyword=waterfall&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+
+        ArrayList<String> arrayListJSON = new ArrayList<String>() {{
+            add(httpHandler.makeServiceCall(url1));
+            add(httpHandler.makeServiceCall(url2));
+            add(httpHandler.makeServiceCall(url3));
+            add(httpHandler.makeServiceCall(url4));
+        }};
+
+        ArrayList<String> placeIds = new ArrayList<>();
+
+        for (String jsonStr : arrayListJSON) {
+            Log.d(TAG, url1);
+            Log.d(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                parseJSON(jsonStr, placeIds);
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+            }
+        }
+    }
+
+
+    private void doWeighting() {
+        Weighting weighting = new Weighting();
+        ArrayList<Double> weight;
+        weight = weighting.doWeighting(latitude, longitude, places);
+
+        for (int i = 0; i < places.size(); i++) {
+            places.get(i).setPlaceWeight(weight.get(i));
+        }
+
+        Collections.sort(places, new MyComparator());
+        places = new ArrayList<>(places.subList(0, 20));
+    }
+
+    private void getFirebaseData(MyCallBack myCallBack) {
+        for (int i = 0; i < 20; i++) {
+            DatabaseReference intensity = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+            DatabaseReference rating = FirebaseDatabase.getInstance().getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
+            int finalI = i;
+            intensity.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
+                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+                        myCallBack.onCallback(places);
+
+                    } catch (NullPointerException np) {
+                        places.get(finalI).setPlaceIntensity(1);
+                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+                        myCallBack.onCallback(places);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            rating.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try{
+                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
+                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                    }catch (NullPointerException np){
+                        places.get(finalI).setTrevuRating(1);
+                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -153,16 +304,23 @@ public class TourismActivity extends SlideBackActivity {
         listCategory.setAdapter(categoryAdapter);
     }
 
-    private class GetTourPlace extends AsyncTask<Void, Void, Void> {
+    private class GetTourPlace extends AsyncTask<Runnable, Void, Void> {
 
         private Context context;
 
-        private ProgressDialog progressDialog;
-        private ArrayList<PlaceModel> places;
 
         GetTourPlace(Context context) {
             this.context = context;
             places = new ArrayList<>();
+        }
+
+        @Override
+        protected Void doInBackground(Runnable... runnables) {
+            for (Runnable task : runnables) {
+                task.run();
+                publishProgress();
+            }
+            return null;
         }
 
         @Override
@@ -175,107 +333,7 @@ public class TourismActivity extends SlideBackActivity {
             progressDialog.show();
         }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            HttpHandler httpHandler = new HttpHandler();
 
-            String url1 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&keyword=museum&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-            String url2 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&keyword=zoo&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-            String url3 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&keyword=theme%20park&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-            String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&keyword=waterfall&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-
-            ArrayList<String> arrayListJSON = new ArrayList<String>() {{
-                add(httpHandler.makeServiceCall(url1));
-                add(httpHandler.makeServiceCall(url2));
-                add(httpHandler.makeServiceCall(url3));
-                add(httpHandler.makeServiceCall(url4));
-            }};
-
-            ArrayList<String> placeIds = new ArrayList<>();
-
-            for (String jsonStr : arrayListJSON) {
-                Log.d(TAG, url1);
-                Log.d(TAG, "Response from url: " + jsonStr);
-
-                if (jsonStr != null) {
-                    parseJSON(jsonStr, placeIds);
-                } else {
-                    Log.e(TAG, "Couldn't get json from server.");
-                }
-            }
-
-            getTopRating();
-            doWeighting();
-            return null;
-        }
-
-        private void parseJSON(String jsonStr, ArrayList<String> placeIds) {
-            try {
-                JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
-
-                for (int i = 0; i < results.length(); i++) {
-                    JSONObject row = results.getJSONObject(i);
-
-                    if (row.isNull("photos")) {
-                        if (!placeIds.contains(row.getString("place_id"))) {
-                            places.add(new PlaceModel(
-                                    row.getString("place_id"),
-                                    row.getString("name"),
-                                    row.getString("vicinity"),
-                                    row.getDouble("rating"),
-                                    new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
-                                            row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
-                            ));
-                            placeIds.add(row.getString("place_id"));
-                        }
-                    } else {
-                        if (!placeIds.contains(row.getString("place_id"))) {
-                            places.add(new PlaceModel(
-                                    row.getString("place_id"),
-                                    row.getString("name"),
-                                    row.getString("vicinity"),
-                                    row.getDouble("rating"),
-                                    new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
-                                            row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
-                                    row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
-                            ));
-                            placeIds.add(row.getString("place_id"));
-                        }
-                    }
-                }
-            } catch (final JSONException e) {
-                Log.e(TAG, "Json parsing error: " + e.getMessage());
-            }
-        }
-
-        private void getTopRating() {
-            ArrayList<PlaceModel> topRating = new ArrayList<>();
-
-            for (PlaceModel place : places) {
-                if (place.getPlaceRating() >= 4) {
-                    topRating.add(place);
-                }
-            }
-
-            places.clear();
-            places.addAll(topRating);
-        }
-
-        private void doWeighting() {
-            Weighting weighting = new Weighting();
-            ArrayList<Double> weight;
-            weight = weighting.doWeighting(latitude, longitude, places);
-
-            for (int i = 0; i < places.size(); i++) {
-                places.get(i).setPlaceWeight(weight.get(i));
-            }
-
-            Collections.sort(places, new MyComparator());
-        }
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -285,7 +343,6 @@ public class TourismActivity extends SlideBackActivity {
             tourismAdapter = new TourismAdapter(getApplication(), TourismActivity.this, places, new LatLng(latitude, longitude));
             rvTour.setAdapter(tourismAdapter);
 
-            progressDialog.dismiss();
         }
     }
 

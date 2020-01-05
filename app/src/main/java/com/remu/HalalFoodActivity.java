@@ -241,10 +241,11 @@ public class HalalFoodActivity extends SlideBackActivity {
     }
 
     private void getFirebaseData(MyCallBack myCallBack) {
-        for (int i = 0; i < places.size(); i++) {
-            DatabaseReference databaseReference = firebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+        for (int i = 0; i < 20; i++) {
+            DatabaseReference intensity = firebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+            DatabaseReference rating = FirebaseDatabase.getInstance().getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            intensity.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
@@ -256,6 +257,24 @@ public class HalalFoodActivity extends SlideBackActivity {
                         places.get(finalI).setPlaceIntensity(1);
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
                         myCallBack.onCallback(places);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            rating.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try{
+                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
+                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                    }catch (NullPointerException np){
+                        places.get(finalI).setTrevuRating(1);
+                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
                     }
                 }
 
@@ -329,6 +348,7 @@ public class HalalFoodActivity extends SlideBackActivity {
             places.get(i).setPlaceWeight(weight.get(i));
         }
         Collections.sort(places, new MyComparator());
+        places = new ArrayList<>(places.subList(0, 20));
     }
 
     private void generateListOpenNight() {

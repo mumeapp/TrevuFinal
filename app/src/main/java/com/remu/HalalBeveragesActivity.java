@@ -128,19 +128,6 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         }
     }
 
-    private void getTopRating() {
-        ArrayList<PlaceModel> topRating = new ArrayList<>();
-
-        for (PlaceModel place : places) {
-            if (place.getPlaceRating() >= 4) {
-                topRating.add(place);
-            }
-        }
-
-        places.clear();
-        places.addAll(topRating);
-    }
-
     private void getFirebaseData(MyCallBack myCallBack){
         for (int i = 0; i < 20; i++) {
             DatabaseReference intensity = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
@@ -214,7 +201,6 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         Animatoo.animateSlideLeft(this);
 
         Runnable getGoogleJson = this::getGoogleJson;
-        Runnable getTopRating = this::getTopRating;
         Runnable getFirebaseData = () -> getFirebaseData(value -> {
             doWeighting();
 
@@ -226,7 +212,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         });
 
         generateListCategory();
-        new GetRecommended(this).execute(getGoogleJson, getTopRating, getFirebaseData);
+        new GetRecommended(this).execute(getGoogleJson, getFirebaseData);
 
         manualCategory.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
