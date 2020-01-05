@@ -1,17 +1,17 @@
 package com.remu.POJO;
 
 public class Rating {
-    private String idUser, biaya, lama, review, rating;
+    private String idUser, review, rating, placeId, placeName;
 
     public Rating(){
 
     }
-    public Rating(String idUser, String biaya, String lama, String review, String rating){
+    public Rating(String idUser,  String review, String rating, String placeId, String placeName){
         this.idUser = idUser;
-        this.biaya = biaya;
-        this.lama= lama;
         this.review = review;
         this.rating = rating;
+        this.placeId = placeId;
+        this.placeName = placeName;
     }
 
     public String getIdUser() {
@@ -22,20 +22,20 @@ public class Rating {
         this.idUser = idUser;
     }
 
-    public String getBiaya() {
-        return biaya;
+    public String getPlaceId() {
+        return placeId;
     }
 
-    public void setBiaya(String biaya) {
-        this.biaya = biaya;
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 
-    public String getLama() {
-        return lama;
+    public String getPlaceName() {
+        return placeName;
     }
 
-    public void setLama(String lama) {
-        this.lama = lama;
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
     }
 
     public String getReview() {

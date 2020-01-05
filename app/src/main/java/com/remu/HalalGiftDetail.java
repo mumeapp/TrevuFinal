@@ -1,5 +1,7 @@
 package com.remu;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,13 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.remu.POJO.Distance;
+import com.remu.POJO.Rating;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -40,6 +47,8 @@ public class HalalGiftDetail extends SlideBackActivity {
     private EditText giftReview;
     private Button giftReviewButton;
     private RecyclerView listReviews;
+    private DatabaseReference databaseReference;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +57,22 @@ public class HalalGiftDetail extends SlideBackActivity {
 
         Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
         placesClient = Places.createClient(this);
-
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
+        String uId = FirebaseAuth.getInstance().getUid();
+
         getPlace(getIntent().getStringExtra("place_id"));
-
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
         giftReviewButton.setOnClickListener((v -> {
+            progressDialog.show();
             String review = giftReview.getText().toString();
-
-            //TODO: PUT REVIEW IN FIREBASE
+            Rating rating = new Rating(uId, review, Float.toString(giftRatingBar.getRating()), getIntent().getStringExtra("place_id"), giftName.getText().toString());
+            databaseReference.push().setValue(rating).addOnSuccessListener(aVoid -> {
+                giftReview.setText("");
+                giftRatingBar.setRating(0);
+                progressDialog.dismiss();
+            });
         }));
 
         setSlideBackDirection(SlideBackActivity.LEFT);
@@ -138,6 +153,9 @@ public class HalalGiftDetail extends SlideBackActivity {
         giftReview = findViewById(R.id.gift_detail_review_edit_text);
         giftReviewButton = findViewById(R.id.gift_detail_submit_button);
         listReviews = findViewById(R.id.list_gift_detail_review_users);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Fetching result...");
+        progressDialog.setCancelable(false);
     }
 
     private double countDistance(LatLng latLng) {
