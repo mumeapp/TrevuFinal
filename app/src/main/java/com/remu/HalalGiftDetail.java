@@ -1,22 +1,28 @@
 package com.remu;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
@@ -24,8 +30,12 @@ import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Distance;
 import com.remu.POJO.Rating;
 import com.saber.chentianslideback.SlideBackActivity;
@@ -47,8 +57,9 @@ public class HalalGiftDetail extends SlideBackActivity {
     private EditText giftReview;
     private Button giftReviewButton;
     private RecyclerView listReviews;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, databaseReview;
     private ProgressDialog progressDialog;
+    private FirebaseRecyclerAdapter<Rating, HalalGiftDetail.HalalGiftDetailAdapter> firebaseRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,23 +70,81 @@ public class HalalGiftDetail extends SlideBackActivity {
         placesClient = Places.createClient(this);
         initializeUI();
         Animatoo.animateSlideLeft(this);
-
         String uId = FirebaseAuth.getInstance().getUid();
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String nama = email.split("@")[0];
+
+        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(HalalGiftDetail.this, LinearLayoutManager.VERTICAL, false);
+        listReviews.setLayoutManager(articleLayoutManager);
+
+        databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+
+        Query query = databaseReview.orderByChild(uId).equalTo(null);
+
+        FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()
+                .setQuery(query, Rating.class).build();
+
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Rating, HalalGiftDetailAdapter>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull HalalGiftDetailAdapter halalGiftDetailAdapter, int i, @NonNull Rating rating) {
+                    halalGiftDetailAdapter.setNama(rating.getNamaUser());
+                    halalGiftDetailAdapter.setImage("");
+                    halalGiftDetailAdapter.setReview(rating.getReview());
+            }
+
+            @NonNull
+            @Override
+            public HalalGiftDetailAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_review_user, parent, false);
+                return new HalalGiftDetailAdapter(view);
+            }
+
+        };
+        listReviews.setAdapter(firebaseRecyclerAdapter);
 
         getPlace(getIntent().getStringExtra("place_id"));
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id")).child(uId);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    giftReview.setText(dataSnapshot.child("review").getValue().toString());
+                    giftRatingBar.setRating(Float.parseFloat(dataSnapshot.child("rating").getValue().toString()));
+                    giftReviewButton.setText("Edit");
+                } catch (NullPointerException np) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         giftReviewButton.setOnClickListener((v -> {
             progressDialog.show();
             String review = giftReview.getText().toString();
-            Rating rating = new Rating(uId, review, Float.toString(giftRatingBar.getRating()), getIntent().getStringExtra("place_id"), giftName.getText().toString());
-            databaseReference.push().setValue(rating).addOnSuccessListener(aVoid -> {
-                giftReview.setText("");
-                giftRatingBar.setRating(0);
+            Rating rating = new Rating(uId, nama, review, Float.toString(giftRatingBar.getRating()), getIntent().getStringExtra("place_id"), giftName.getText().toString());
+            databaseReference.setValue(rating).addOnSuccessListener(aVoid -> {
+                databaseReference.child(uId).setValue(true);
+                giftReviewButton.setText("Edit");
                 progressDialog.dismiss();
             });
         }));
 
         setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseRecyclerAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseRecyclerAdapter.stopListening();
     }
 
     private void getPlace(String placeId) {
@@ -162,6 +231,34 @@ public class HalalGiftDetail extends SlideBackActivity {
         LatLng currentLatLng = new LatLng(Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null)),
                 Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null)));
         return Distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
+    }
+
+    public class HalalGiftDetailAdapter extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView nama;
+        TextView review;
+
+        public HalalGiftDetailAdapter(@NonNull View itemView) {
+            super(itemView);
+            image = itemView.findViewById(R.id.profile_image);
+            nama = itemView.findViewById(R.id.username_review);
+            review = itemView.findViewById(R.id.review_user);
+        }
+
+        public void setNama(String nama) {
+            this.nama.setText(nama);
+        }
+
+        public void setImage(String foto) {
+            Glide.with(HalalGiftDetail.this)
+                    .load(foto)
+                    .placeholder(R.drawable.profile_annasaha)
+                    .into(image);
+        }
+
+        public void setReview(String review) {
+            this.review.setText(review);
+        }
     }
 
 }
