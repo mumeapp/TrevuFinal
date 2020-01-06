@@ -394,6 +394,7 @@
                         android:textColorHint="#aaf0f0f0" />
 
                     <Button
+                        android:id="@+id/submitButton"
                         android:layout_width="110dp"
                         android:layout_height="40dp"
                         android:layout_gravity="end"

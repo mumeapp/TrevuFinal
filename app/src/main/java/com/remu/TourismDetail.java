@@ -1,8 +1,6 @@
 package com.remu;
 
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,13 +11,24 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -28,12 +37,23 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Distance;
+import com.remu.POJO.Rating;
+import com.remu.POJO.StringCallBack;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -49,14 +69,22 @@ public class TourismDetail extends SlideBackActivity {
     private RatingBar tpdInputRating;
     private EditText tpdInputReview;
     private RecyclerView tpdListUserReview;
+    private Button tpdSubmitButon;
+    private String uId, email, nama;
 
     private PlacesClient placesClient;
     private Geocoder mGeocoder;
+    private FirebaseRecyclerAdapter<Rating, TourismDetail.TourismDetailAdapter> firebaseRecyclerAdapter;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourism_detail);
+        uId = FirebaseAuth.getInstance().getUid();
+        email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        nama = email.split("@")[0];
 
         Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
         placesClient = Places.createClient(this);
@@ -64,7 +92,18 @@ public class TourismDetail extends SlideBackActivity {
 
         initializeUI();
         Animatoo.animateSlideDown(this);
-
+        checkUserReview();
+        getReview(new StringCallBack() {
+            @Override
+            public void onCallback(String value, long jumlah) {
+                double rataRata = 0;
+                rataRata += Double.parseDouble(value);
+                rataRata /= jumlah;
+                DecimalFormat df = new DecimalFormat("#.##");
+                tpdRating2.setText(df.format(rataRata));
+                tpdTotalRating2.setText(Long.toString(jumlah));
+            }
+        });
         getPlace(getIntent().getStringExtra("place_id"));
 
         setSlideBackDirection(SlideBackActivity.LEFT);
@@ -79,6 +118,87 @@ public class TourismDetail extends SlideBackActivity {
     public void finish() {
         super.finish();
         Animatoo.animateSlideUp(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseRecyclerAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseRecyclerAdapter.stopListening();
+    }
+
+    protected void getReview(StringCallBack stringCallBack) {
+        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(TourismDetail.this, LinearLayoutManager.VERTICAL, false);
+        tpdListUserReview.setLayoutManager(articleLayoutManager);
+
+        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+
+        databaseReview.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    long jumlah = dataSnapshot.getChildrenCount();
+                    stringCallBack.onCallback(dataSnapshot.getValue(Rating.class).getRating(),jumlah);
+                }catch (NullPointerException np){
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Query query = databaseReview.orderByChild(uId).equalTo(null);
+
+        FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()
+                .setQuery(query, Rating.class).build();
+
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Rating, TourismDetail.TourismDetailAdapter>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull TourismDetail.TourismDetailAdapter tourismDetailAdapter, int i, @NonNull Rating rating) {
+                tourismDetailAdapter.setNama(rating.getNamaUser());
+                tourismDetailAdapter.setImage("");
+                tourismDetailAdapter.setReview(rating.getReview());
+
+            }
+
+            @NonNull
+            @Override
+            public TourismDetail.TourismDetailAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_review_user, parent, false);
+                return new TourismDetail.TourismDetailAdapter(view);
+            }
+
+        };
+        tpdListUserReview.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    private void checkUserReview() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id")).child(uId);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    tpdInputReview.setText(dataSnapshot.child("review").getValue().toString());
+                    tpdInputRating.setRating(Float.parseFloat(dataSnapshot.child("rating").getValue().toString()));
+                    tpdSubmitButon.setText("Edit");
+                } catch (NullPointerException np) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getPlace(String placeId) {
@@ -171,6 +291,16 @@ public class TourismDetail extends SlideBackActivity {
             } else {
                 tpdPhone.setText(tourismPlace.getPhoneNumber());
             }
+            tpdSubmitButon.setOnClickListener(view -> {
+                progressDialog.show();
+                Rating rating = new Rating(uId, nama, tpdInputReview.getText().toString(), Float.toString(tpdInputRating.getRating()), getIntent().getStringExtra("place_id"), tpdName.getText().toString());
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id")).child(uId);
+                databaseReference.setValue(rating).addOnSuccessListener(aVoid -> {
+                    databaseReference.child(uId).setValue(true);
+                    tpdSubmitButon.setText("Edit");
+                    progressDialog.dismiss();
+                });
+            });
         }
     }
 
@@ -190,6 +320,7 @@ public class TourismDetail extends SlideBackActivity {
         tpdClosingHours = findViewById(R.id.tpd_closing_hours);
         tpdPhone = findViewById(R.id.tpd_phone);
         tpdProfilePicture = findViewById(R.id.tpd_profile_picture);
+        tpdSubmitButon = findViewById(R.id.submitButton);
 
         tpdInputRating = findViewById(R.id.tpd_input_rating);
         LayerDrawable stars = (LayerDrawable) tpdInputRating.getProgressDrawable();
@@ -199,6 +330,10 @@ public class TourismDetail extends SlideBackActivity {
         tpdRating2 = findViewById(R.id.tpd_rating_2);
         tpdTotalRating2 = findViewById(R.id.tpd_user_rating_total_2);
         tpdListUserReview = findViewById(R.id.tpd_list_review);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Fetching result...");
+        progressDialog.setCancelable(false);
     }
 
     private double countDistance(LatLng latLng) {
@@ -213,6 +348,34 @@ public class TourismDetail extends SlideBackActivity {
             return addresses.get(0).getLocality();
         }
         return null;
+    }
+
+    public class TourismDetailAdapter extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView nama;
+        TextView review;
+
+        public TourismDetailAdapter(@NonNull View itemView) {
+            super(itemView);
+            image = itemView.findViewById(R.id.profile_image);
+            nama = itemView.findViewById(R.id.username_review);
+            review = itemView.findViewById(R.id.review_user);
+        }
+
+        public void setNama(String nama) {
+            this.nama.setText(nama);
+        }
+
+        public void setImage(String foto) {
+            Glide.with(TourismDetail.this)
+                    .load(foto)
+                    .placeholder(R.drawable.profile_annasaha)
+                    .into(image);
+        }
+
+        public void setReview(String review) {
+            this.review.setText(review);
+        }
     }
 
 }
