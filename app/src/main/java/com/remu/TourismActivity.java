@@ -86,12 +86,19 @@ public class TourismActivity extends SlideBackActivity {
         tourScrollView.post(() -> {
             tourScrollView.scrollTo(0, 0);
         });
+
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
     @Override
     protected void slideBackSuccess() {
         finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        Animatoo.animateSlideRight(this);
     }
 
     private void parseJSON(String jsonStr, ArrayList<String> placeIds) {
@@ -224,12 +231,6 @@ public class TourismActivity extends SlideBackActivity {
                 }
             });
         }
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {

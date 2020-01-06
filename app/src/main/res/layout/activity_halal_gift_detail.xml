@@ -141,9 +141,12 @@
                         <RatingBar
                             android:id="@+id/gift_detail_rating_bar"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="45dp"
                             android:layout_marginTop="5dp"
-                            android:numStars="5" />
+                            android:layout_marginBottom="5dp"
+                            android:numStars="5"
+                            android:scaleY="0.75"
+                            android:scaleX="0.75" />
 
                         <LinearLayout
                             android:layout_width="match_parent"

@@ -68,8 +68,10 @@ public class HalalGiftDetail extends SlideBackActivity {
 
         Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
         placesClient = Places.createClient(this);
+
         initializeUI();
         Animatoo.animateSlideLeft(this);
+
         String uId = FirebaseAuth.getInstance().getUid();
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String nama = email.split("@")[0];
@@ -103,6 +105,7 @@ public class HalalGiftDetail extends SlideBackActivity {
         listReviews.setAdapter(firebaseRecyclerAdapter);
 
         getPlace(getIntent().getStringExtra("place_id"));
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id")).child(uId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -121,6 +124,7 @@ public class HalalGiftDetail extends SlideBackActivity {
 
             }
         });
+
         giftReviewButton.setOnClickListener((v -> {
             progressDialog.show();
             String review = giftReview.getText().toString();
@@ -222,6 +226,7 @@ public class HalalGiftDetail extends SlideBackActivity {
         giftReview = findViewById(R.id.gift_detail_review_edit_text);
         giftReviewButton = findViewById(R.id.gift_detail_submit_button);
         listReviews = findViewById(R.id.list_gift_detail_review_users);
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Fetching result...");
         progressDialog.setCancelable(false);
