@@ -171,6 +171,7 @@ public class TourismActivity extends SlideBackActivity {
                 Log.e(TAG, "Couldn't get json from server.");
             }
         }
+        doWeighting();
     }
 
 

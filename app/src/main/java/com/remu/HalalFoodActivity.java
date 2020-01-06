@@ -270,8 +270,8 @@ public class HalalFoodActivity extends SlideBackActivity {
 
     private void getFirebaseData(MyCallBack myCallBack) {
         for (int i = 0; i < 20; i++) {
-            DatabaseReference intensity = firebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
-            DatabaseReference rating = FirebaseDatabase.getInstance().getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
+            DatabaseReference intensity = firebaseDatabase.getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+            DatabaseReference rating = firebaseDatabase.getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
             intensity.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -424,9 +424,7 @@ public class HalalFoodActivity extends SlideBackActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
-            FoodBeveragesTourismResultAdapter recommendedAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), HalalFoodActivity.this, "HalalFood", places);
-            listRecommendedFood.setAdapter(recommendedAdapter);
+
 
         }
     }
