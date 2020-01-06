@@ -84,7 +84,7 @@
             android:theme="@style/BlueTheme" />
         <activity
             android:name=".TourismDetail"
-            android:theme="@style/BlueTheme" />
+            android:theme="@style/TourismTheme" />
 
         <!-- dictionary activities -->
         <activity
