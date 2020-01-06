@@ -166,7 +166,7 @@ public class TourismDetail extends SlideBackActivity {
 
             //TODO: CLOSING HOURS
 
-            if (tourismPlace.getPhoneNumber().isEmpty()) {
+            if (tourismPlace.getPhoneNumber() == null) {
                 tpdPhone.setText("-");
             } else {
                 tpdPhone.setText(tourismPlace.getPhoneNumber());
