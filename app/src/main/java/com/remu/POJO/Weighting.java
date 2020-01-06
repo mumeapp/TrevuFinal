@@ -21,6 +21,7 @@ public class Weighting {
                         Math.pow(place.getPlaceRating(), weightGoogleRate) *
                         Math.pow(1, weightTrevuRate) *
                         Math.pow(place.getPlaceIntensity(), weightIntensity));
+
             } else {
                 s.add(Math.pow(Distance.distance(lat, latitude, lng, longitude), weightDistance) *
                         Math.pow(place.getPlaceRating(), weightGoogleRate) *
@@ -34,7 +35,7 @@ public class Weighting {
         for (Double vectorS : s) {
             v.add(vectorS / pembagi);
         }
-//        System.out.println("intensity"+item.get(0).getPlaceIntensity());
+
         return v;
     }
 }

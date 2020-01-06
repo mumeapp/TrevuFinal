@@ -54,7 +54,50 @@ public class HalalBeveragesActivity extends SlideBackActivity {
     private String userId;
     private ArrayList<PlaceModel> places;
     private ProgressDialog progressDialog;
+    private FirebaseDatabase firebaseDatabase;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_halal_beverages);
+
+        latitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
+        longitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
+        userId = FirebaseAuth.getInstance().getUid();
+
+        initializeUI();
+        Animatoo.animateSlideLeft(this);
+
+        generateListCategory();
+        Runnable getGoogleJson = this::getGoogleJson;
+        Runnable getFirebaseData = () -> getFirebaseData(value -> {
+            doWeighting();
+            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, LinearLayoutManager.VERTICAL, false));
+            FoodBeveragesTourismResultAdapter recommendedAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), HalalBeveragesActivity.this, "HalalBeverages", places);
+            listRecommendedFood.setAdapter(recommendedAdapter);
+            progressDialog.dismiss();
+        });
+
+        new GetRecommended(this).execute(getGoogleJson, getFirebaseData);
+
+        manualCategory.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (!manualCategory.getText().toString().equals("")) {
+                    Intent intent = new Intent(HalalBeveragesActivity.this, FoodBeverageTourismResult.class);
+                    intent.putExtra("sender", "HalalBeverages");
+                    intent.putExtra("category", changeSpace(manualCategory.getText().toString()));
+                    intent.putExtra("name", manualCategory.getText().toString());
+                    startActivity(intent);
+                    return true;
+                } else {
+                    manualCategory.setError("Please put what category you want.");
+                }
+            }
+            return false;
+        });
+
+        setSlideBackDirection(SlideBackActivity.LEFT);
+    }
 
     private void parseJSON(String jsonStr, ArrayList<String> placeIds) {
         try {
@@ -126,12 +169,13 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                 Log.e(TAG, "Couldn't get json from server.");
             }
         }
+        doWeighting();
     }
 
     private void getFirebaseData(MyCallBack myCallBack){
         for (int i = 0; i < 20; i++) {
-            DatabaseReference intensity = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
-            DatabaseReference rating = FirebaseDatabase.getInstance().getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
+            DatabaseReference intensity = firebaseDatabase.getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+            DatabaseReference rating = firebaseDatabase.getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
             intensity.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -139,11 +183,14 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                     try {
                         places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+                        System.out.println("placeName "+places.get(finalI).getPlaceId()+" Name "+places.get(finalI).getPlaceName());
                         myCallBack.onCallback(places);
 
                     } catch (NullPointerException np) {
                         places.get(finalI).setPlaceIntensity(1);
-                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+//                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+//                        System.out.println("placeName "+places.get(finalI).getPlaceId()+" Name "+places.get(finalI).getPlaceName());
+
                         myCallBack.onCallback(places);
                     }
                 }
@@ -152,9 +199,8 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-
-
             });
+
             rating.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -184,53 +230,8 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         for (int i = 0; i < places.size(); i++) {
             places.get(i).setPlaceWeight(weight.get(i));
         }
-
         Collections.sort(places, new MyComparator());
         places = new ArrayList<>(places.subList(0, 20));
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_halal_beverages);
-
-        latitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
-        longitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
-
-        initializeUI();
-        Animatoo.animateSlideLeft(this);
-
-        Runnable getGoogleJson = this::getGoogleJson;
-        Runnable getFirebaseData = () -> getFirebaseData(value -> {
-            doWeighting();
-
-            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, LinearLayoutManager.VERTICAL, false));
-            FoodBeveragesTourismResultAdapter recommendedAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), HalalBeveragesActivity.this, "HalalBeverages", places);
-            listRecommendedFood.setAdapter(recommendedAdapter);
-
-            progressDialog.dismiss();
-        });
-
-        generateListCategory();
-        new GetRecommended(this).execute(getGoogleJson, getFirebaseData);
-
-        manualCategory.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (!manualCategory.getText().toString().equals("")) {
-                    Intent intent = new Intent(HalalBeveragesActivity.this, FoodBeverageTourismResult.class);
-                    intent.putExtra("sender", "HalalBeverages");
-                    intent.putExtra("category", changeSpace(manualCategory.getText().toString()));
-                    intent.putExtra("name", manualCategory.getText().toString());
-                    startActivity(intent);
-                    return true;
-                } else {
-                    manualCategory.setError("Please put what category you want.");
-                }
-            }
-            return false;
-        });
-
-        setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
     @Override
@@ -248,7 +249,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         listCategory = findViewById(R.id.listBeveragesCategory);
         listRecommendedFood = findViewById(R.id.listRecommendedBeverages);
         manualCategory = findViewById(R.id.et_manual_beverages_category);
-        userId = FirebaseAuth.getInstance().getUid();
+        firebaseDatabase = FirebaseDatabase.getInstance();
     }
 
     private String changeSpace(String input) {
@@ -353,10 +354,6 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
-            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, LinearLayoutManager.VERTICAL, false));
-            FoodBeveragesTourismResultAdapter recommendedAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), HalalBeveragesActivity.this, "HalalBeverages", places);
-            listRecommendedFood.setAdapter(recommendedAdapter);
 
         }
 
