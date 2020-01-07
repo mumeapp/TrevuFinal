@@ -94,19 +94,9 @@ public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<Food
                     try {
                         int temp = Integer.parseInt(dataSnapshot.child("Intensity").getValue().toString());
                         databaseReference.child("Intensity").setValue(Integer.toString(++temp)).addOnSuccessListener(aVoid -> {
-                            Intent intent = null;
-                            switch (senderType) {
-                                case "Tourism":
-                                    intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
-                                    break;
-                                case "HalalFood":
-                                case "HalalBeverages":
-                                    intent = new Intent(activity.getBaseContext(), FoodBeveragesDetail.class);
-                                    break;
-                                default:
-                                    intent = new Intent();
-                            }
+                            Intent intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
                             intent.putExtra("place_id", mDataset.get(position).getPlaceId());
+                            intent.putExtra("sender", senderType);
                             activity.startActivity(intent);
                         });
 
@@ -115,21 +105,10 @@ public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<Food
                                 addOnSuccessListener(aVoid ->
                                         databaseReference.child("Name").setValue(mDataset.get(position).getPlaceName()).
                                                 addOnSuccessListener(aVoid1 -> {
-                                                    Intent intent = null;
-                                                    switch (senderType) {
-                                                        case "Tourism":
-                                                            intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
-                                                            break;
-                                                        case "HalalFood":
-                                                        case "HalalBeverages":
-                                                            intent = new Intent(activity.getBaseContext(), FoodBeveragesDetail.class);
-                                                            break;
-                                                        default:
-                                                            intent = new Intent();
-                                                    }
+                                                    Intent intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
                                                     intent.putExtra("place_id", mDataset.get(position).getPlaceId());
+                                                    intent.putExtra("sender", senderType);
                                                     activity.startActivity(intent);
-
                                                 }));
                     }
                 }

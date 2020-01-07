@@ -107,6 +107,7 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
             });
             Intent intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
             intent.putExtra("place_id", mDataset.get(position).getPlaceId());
+            intent.putExtra("sender", "Tourism");
             activity.startActivity(intent);
         });
     }

@@ -2,6 +2,7 @@ package com.remu;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -62,6 +63,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class PlaceDetail extends SlideBackActivity {
 
@@ -69,7 +71,9 @@ public class PlaceDetail extends SlideBackActivity {
 
     private TextView tpdName, tpdRating1, tpdTotalRating1, tpdRating2, tpdTotalRating2, tpdCityLocation,
             tpdDistance, tpdAddress, tpdPlusCode, tpdIsOpen, tpdClosingHours, tpdPhone;
-    private CardView tpdDiscoverButton;
+    private TextView headerAddress, headerPlusCode, headerCloseHours, headerPhone;
+    private ImageView starRating2;
+    private CardView tpdDiscoverButton, tpdReviewCard;
     private ImageView tpdPhoto, tpdBookmarkBorder, tpdBookmarkFilled, tpdProfilePicture;
     private RatingBar tpdInputRating;
     private EditText tpdInputReview;
@@ -87,6 +91,9 @@ public class PlaceDetail extends SlideBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourism_detail);
+
+        Intent content = getIntent();
+
         uId = FirebaseAuth.getInstance().getUid();
         email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         nama = email.split("@")[0];
@@ -96,12 +103,13 @@ public class PlaceDetail extends SlideBackActivity {
         mGeocoder = new Geocoder(this, Locale.getDefault());
 
         initializeUI();
+        changeThemeBySender(Objects.requireNonNull(content.getStringExtra("sender"), "White"));
         Animatoo.animateSlideDown(this);
         checkUserReview();
         getMean();
         getReview();
 
-        getPlace(getIntent().getStringExtra("place_id"));
+        getPlace(content.getStringExtra("place_id"));
 
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
@@ -129,11 +137,37 @@ public class PlaceDetail extends SlideBackActivity {
         firebaseRecyclerAdapter.stopListening();
     }
 
-    private void getMean(){
+    private void changeThemeBySender(String sender) {
+        int color = 0;
+        switch (sender) {
+            case "HalalFood":
+                color = getResources().getColor(R.color.trevuYellow);
+                break;
+            case "HalalBeverages":
+                color = getResources().getColor(R.color.trevuDarkRed);
+                break;
+            case "Tourism":
+                color = getResources().getColor(R.color.trevuBlue);
+                break;
+        }
+
+        tpdDiscoverButton.setCardBackgroundColor(color);
+        headerAddress.setTextColor(color);
+        headerPlusCode.setTextColor(color);
+        headerCloseHours.setTextColor(color);
+        headerPhone.setTextColor(color);
+        tpdReviewCard.setCardBackgroundColor(color);
+        tpdSubmitButon.setTextColor(color);
+        starRating2.setColorFilter(color);
+        tpdRating2.setTextColor(color);
+    }
+
+    private void getMean() {
         DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
         databaseReview.addChildEventListener(new ChildEventListener() {
             double rataRata = 0;
             double jumlah = 0;
+
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
@@ -179,6 +213,7 @@ public class PlaceDetail extends SlideBackActivity {
         databaseReview.addChildEventListener(new ChildEventListener() {
             double rataRata = 0;
             double jumlah = 0;
+
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
@@ -402,6 +437,13 @@ public class PlaceDetail extends SlideBackActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Fetching result...");
         progressDialog.setCancelable(false);
+
+        headerAddress = findViewById(R.id.tpd_header_address);
+        headerPlusCode = findViewById(R.id.tpd_header_plus_code);
+        headerCloseHours = findViewById(R.id.tpd_header_close_hours);
+        headerPhone = findViewById(R.id.tpd_header_phone);
+        starRating2 = findViewById(R.id.tpd_star_rating_2);
+        tpdReviewCard = findViewById(R.id.tpd_card_review);
     }
 
     private double countDistance(LatLng latLng) {

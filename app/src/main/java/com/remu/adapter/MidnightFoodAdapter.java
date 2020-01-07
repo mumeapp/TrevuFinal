@@ -2,6 +2,7 @@ package com.remu.adapter;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
+import com.remu.PlaceDetail;
 import com.remu.R;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -72,11 +74,12 @@ public class MidnightFoodAdapter extends RecyclerView.Adapter<MidnightFoodAdapte
                     .into(holder.foodImage);
         }
 
-//        holder.foodCard.setOnClickListener((v) -> {
-//            Intent intent = new Intent(activity.getBaseContext(), HalalGiftDetail.class);
-//            intent.putExtra("place_id", mDataset.get(position).getPlaceId());
-//            activity.startActivity(intent);
-//        });
+        holder.foodCard.setOnClickListener((v) -> {
+            Intent intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
+            intent.putExtra("place_id", mDataset.get(position).getPlaceId());
+            intent.putExtra("sender", "HalalFood");
+            activity.startActivity(intent);
+        });
     }
 
     @Override
