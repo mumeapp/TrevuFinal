@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
 import com.remu.R;
-import com.remu.TourismDetail;
+import com.remu.PlaceDetail;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -105,7 +105,7 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
 
                 }
             });
-            Intent intent = new Intent(activity.getBaseContext(), TourismDetail.class);
+            Intent intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
             intent.putExtra("place_id", mDataset.get(position).getPlaceId());
             activity.startActivity(intent);
         });

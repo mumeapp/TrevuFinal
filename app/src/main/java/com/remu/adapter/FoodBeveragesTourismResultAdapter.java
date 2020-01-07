@@ -23,8 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.remu.FoodBeveragesDetail;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
+import com.remu.PlaceDetail;
 import com.remu.R;
-import com.remu.TourismDetail;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -97,7 +97,7 @@ public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<Food
                             Intent intent = null;
                             switch (senderType) {
                                 case "Tourism":
-                                    intent = new Intent(activity.getBaseContext(), TourismDetail.class);
+                                    intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
                                     break;
                                 case "HalalFood":
                                 case "HalalBeverages":
@@ -118,7 +118,7 @@ public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<Food
                                                     Intent intent = null;
                                                     switch (senderType) {
                                                         case "Tourism":
-                                                            intent = new Intent(activity.getBaseContext(), TourismDetail.class);
+                                                            intent = new Intent(activity.getBaseContext(), PlaceDetail.class);
                                                             break;
                                                         case "HalalFood":
                                                         case "HalalBeverages":

@@ -50,7 +50,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Distance;
 import com.remu.POJO.Rating;
-import com.remu.POJO.StringCallBack;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -59,15 +58,14 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TourismDetail extends SlideBackActivity {
+public class PlaceDetail extends SlideBackActivity {
 
-    private static final String TAG = "TourismDetail";
+    private static final String TAG = "PlaceDetail";
 
     private TextView tpdName, tpdRating1, tpdTotalRating1, tpdRating2, tpdTotalRating2, tpdCityLocation,
             tpdDistance, tpdAddress, tpdPlusCode, tpdIsOpen, tpdClosingHours, tpdPhone;
@@ -81,7 +79,7 @@ public class TourismDetail extends SlideBackActivity {
 
     private PlacesClient placesClient;
     private Geocoder mGeocoder;
-    private FirebaseRecyclerAdapter<Rating, TourismDetail.TourismDetailAdapter> firebaseRecyclerAdapter;
+    private FirebaseRecyclerAdapter<Rating, PlaceDetail.TourismDetailAdapter> firebaseRecyclerAdapter;
 
     private ProgressDialog progressDialog;
 
@@ -174,7 +172,7 @@ public class TourismDetail extends SlideBackActivity {
     }
 
     private void getReview() {
-        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(TourismDetail.this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(PlaceDetail.this, LinearLayoutManager.VERTICAL, false);
         tpdListUserReview.setLayoutManager(articleLayoutManager);
 
         DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
@@ -222,9 +220,9 @@ public class TourismDetail extends SlideBackActivity {
         FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()
                 .setQuery(query, Rating.class).build();
 
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Rating, TourismDetail.TourismDetailAdapter>(options) {
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Rating, PlaceDetail.TourismDetailAdapter>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull TourismDetail.TourismDetailAdapter tourismDetailAdapter, int i, @NonNull Rating rating) {
+            protected void onBindViewHolder(@NonNull PlaceDetail.TourismDetailAdapter tourismDetailAdapter, int i, @NonNull Rating rating) {
                 tourismDetailAdapter.setNama(rating.getNamaUser());
                 tourismDetailAdapter.setImage("");
                 tourismDetailAdapter.setReview(rating.getReview());
@@ -233,9 +231,9 @@ public class TourismDetail extends SlideBackActivity {
 
             @NonNull
             @Override
-            public TourismDetail.TourismDetailAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public PlaceDetail.TourismDetailAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_review_user, parent, false);
-                return new TourismDetail.TourismDetailAdapter(view);
+                return new PlaceDetail.TourismDetailAdapter(view);
             }
 
         };
@@ -959,7 +957,7 @@ public class TourismDetail extends SlideBackActivity {
         }
 
         public void setImage(String foto) {
-            Glide.with(TourismDetail.this)
+            Glide.with(PlaceDetail.this)
                     .load(foto)
                     .placeholder(R.drawable.profile_annasaha)
                     .into(image);

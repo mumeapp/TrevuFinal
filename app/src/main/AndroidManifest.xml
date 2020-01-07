@@ -83,7 +83,7 @@
             android:name=".TourismActivity"
             android:theme="@style/BlueTheme" />
         <activity
-            android:name=".TourismDetail"
+            android:name=".PlaceDetail"
             android:theme="@style/TourismTheme" />
 
         <!-- dictionary activities -->

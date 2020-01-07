@@ -1,6 +1,7 @@
 package com.remu;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
@@ -88,6 +89,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
+    private boolean isClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +183,20 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             mMap.setMyLocationEnabled(true);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomlevel));
         }
+
+        mMap.setOnMapClickListener((view) -> {
+            if (isClicked) {
+                isClicked = false;
+                ObjectAnimator animation = ObjectAnimator.ofFloat(listMasjid, "translationY", 0f);
+                animation.setDuration(1000);
+                animation.start();
+            } else {
+                isClicked = true;
+                ObjectAnimator animation = ObjectAnimator.ofFloat(listMasjid, "translationY", 500f);
+                animation.setDuration(1000);
+                animation.start();
+            }
+        });
     }
 
     private void getLocationPermission() {
