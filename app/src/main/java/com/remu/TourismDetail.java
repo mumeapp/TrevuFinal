@@ -21,6 +21,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,11 +37,11 @@ import com.google.android.libraries.places.api.model.DayOfWeek;
 import com.google.android.libraries.places.api.model.Period;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TimeOfWeek;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -99,17 +100,9 @@ public class TourismDetail extends SlideBackActivity {
         initializeUI();
         Animatoo.animateSlideDown(this);
         checkUserReview();
-        getReview(new StringCallBack() {
-            @Override
-            public void onCallback(String value, long jumlah) {
-                double rataRata = 0;
-                rataRata += Double.parseDouble(value);
-                rataRata /= jumlah;
-                DecimalFormat df = new DecimalFormat("#.##");
-                tpdRating2.setText(df.format(rataRata));
-                tpdTotalRating2.setText(Long.toString(jumlah));
-            }
-        });
+        getMean();
+        getReview();
+
         getPlace(getIntent().getStringExtra("place_id"));
 
         setSlideBackDirection(SlideBackActivity.LEFT);
@@ -138,21 +131,84 @@ public class TourismDetail extends SlideBackActivity {
         firebaseRecyclerAdapter.stopListening();
     }
 
-    protected void getReview(StringCallBack stringCallBack) {
+    private void getMean(){
+        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+        databaseReview.addChildEventListener(new ChildEventListener() {
+            double rataRata = 0;
+            double jumlah = 0;
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                try {
+                    ++jumlah;
+                    rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
+                    rataRata /= jumlah;
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    DecimalFormat dfJumlah = new DecimalFormat("#");
+                    tpdRating2.setText(df.format(rataRata));
+                    tpdTotalRating2.setText("(" + dfJumlah.format(jumlah) + ")");
+                } catch (NullPointerException np) {
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getReview() {
         LinearLayoutManager articleLayoutManager = new LinearLayoutManager(TourismDetail.this, LinearLayoutManager.VERTICAL, false);
         tpdListUserReview.setLayoutManager(articleLayoutManager);
 
         DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
-
-        databaseReview.addValueEventListener(new ValueEventListener() {
+        databaseReview.addChildEventListener(new ChildEventListener() {
+            double rataRata = 0;
+            double jumlah = 0;
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                try {
-                    long jumlah = dataSnapshot.getChildrenCount();
-                    stringCallBack.onCallback(dataSnapshot.getValue(Rating.class).getRating(), jumlah);
-                } catch (NullPointerException np) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+                try {
+                    ++jumlah;
+                    rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
+                    rataRata /= jumlah;
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    DecimalFormat dfJumlah = new DecimalFormat("#");
+                    tpdRating2.setText(df.format(rataRata));
+                    tpdTotalRating2.setText("(" + dfJumlah.format(jumlah) + ")");
+                } catch (NullPointerException np) {
                 }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override
@@ -263,14 +319,14 @@ public class TourismDetail extends SlideBackActivity {
 
             if (tourismPlace.getRating() == null) {
                 tpdRating1.setText("-");
-                tpdRating2.setText("-");
+//                tpdRating2.setText("-");
                 tpdTotalRating1.setText("(0)");
-                tpdTotalRating2.setText("(0)");
+//                tpdTotalRating2.setText("(0)");
             } else {
                 tpdRating1.setText(String.format("%.1f", tourismPlace.getRating()));
                 tpdTotalRating1.setText(String.format("(%d)", tourismPlace.getUserRatingsTotal()));
-                tpdRating2.setText(String.format("%.1f", tourismPlace.getRating()));
-                tpdTotalRating2.setText(String.format("(%d)", tourismPlace.getUserRatingsTotal()));
+//                tpdRating2.setText(String.format("%.1f", tourismPlace.getRating()));
+//                tpdTotalRating2.setText(String.format("(%d)", tourismPlace.getUserRatingsTotal()));
             }
 
             try {
@@ -307,10 +363,11 @@ public class TourismDetail extends SlideBackActivity {
             tpdSubmitButon.setOnClickListener(view -> {
                 progressDialog.show();
                 Rating rating = new Rating(uId, nama, tpdInputReview.getText().toString(), Float.toString(tpdInputRating.getRating()), getIntent().getStringExtra("place_id"), tpdName.getText().toString());
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id")).child(uId);
-                databaseReference.setValue(rating).addOnSuccessListener(aVoid -> {
-                    databaseReference.child(uId).setValue(true);
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+                databaseReference.child(uId).setValue(rating).addOnSuccessListener(aVoid -> {
+                    databaseReference.child(uId).child(uId).setValue(true);
                     tpdSubmitButon.setText("Edit");
+                    getMean();
                     progressDialog.dismiss();
                 });
             });
