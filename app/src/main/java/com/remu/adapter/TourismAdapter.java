@@ -14,6 +14,12 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
 import com.remu.R;
@@ -31,12 +37,15 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
     Activity activity;
     private ArrayList<PlaceModel> mDataset;
     private LatLng currentLatLng;
+    private String userId;
+    private DatabaseReference databaseReference;
 
     public TourismAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset, LatLng currentLatLng) {
         this.app = app;
         this.activity = activity;
         this.mDataset = mDataset;
         this.currentLatLng = currentLatLng;
+        userId = FirebaseAuth.getInstance().getUid();
     }
 
     @NonNull
@@ -77,6 +86,25 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
         }
 
         holder.cardView.setOnClickListener((view) -> {
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(mDataset.get(position).getPlaceId());
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try{
+                        int temp = Integer.parseInt(dataSnapshot.child("Intensity").getValue().toString());
+                        databaseReference.child("Intensity").setValue(Integer.toString(++temp));
+                    }catch (NullPointerException np){
+                        databaseReference.child("Intensity").setValue("2").
+                                addOnSuccessListener(aVoid ->
+                                        databaseReference.child("Name").setValue(mDataset.get(position).getPlaceName()));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
             Intent intent = new Intent(activity.getBaseContext(), TourismDetail.class);
             intent.putExtra("place_id", mDataset.get(position).getPlaceId());
             activity.startActivity(intent);
