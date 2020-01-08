@@ -1,8 +1,8 @@
 package com.remu;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -79,7 +79,8 @@ public class PlaceDetail extends SlideBackActivity {
     private EditText tpdInputReview;
     private RecyclerView tpdListUserReview;
     private Button tpdSubmitButon;
-    private String uId, email, nama;
+    private String uId;
+    private String nama;
 
     private PlacesClient placesClient;
     private Geocoder mGeocoder;
@@ -95,7 +96,8 @@ public class PlaceDetail extends SlideBackActivity {
         Intent content = getIntent();
 
         uId = FirebaseAuth.getInstance().getUid();
-        email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String email = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+        assert email != null;
         nama = email.split("@")[0];
 
         Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
@@ -163,23 +165,24 @@ public class PlaceDetail extends SlideBackActivity {
     }
 
     private void getMean() {
-        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id")));
         databaseReview.addChildEventListener(new ChildEventListener() {
             double rataRata = 0;
             double jumlah = 0;
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 try {
                     ++jumlah;
-                    rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
+                    rataRata += Double.parseDouble(Objects.requireNonNull(dataSnapshot.getValue(Rating.class)).getRating());
                     rataRata /= jumlah;
                     DecimalFormat df = new DecimalFormat("#.#");
                     DecimalFormat dfJumlah = new DecimalFormat("#");
                     tpdRating2.setText(df.format(rataRata));
                     tpdTotalRating2.setText("(" + dfJumlah.format(jumlah) + ")");
-                } catch (NullPointerException np) {
+                } catch (NullPointerException ignored) {
                 }
             }
 
@@ -209,23 +212,24 @@ public class PlaceDetail extends SlideBackActivity {
         LinearLayoutManager articleLayoutManager = new LinearLayoutManager(PlaceDetail.this, LinearLayoutManager.VERTICAL, false);
         tpdListUserReview.setLayoutManager(articleLayoutManager);
 
-        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id")));
         databaseReview.addChildEventListener(new ChildEventListener() {
             double rataRata = 0;
             double jumlah = 0;
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 try {
                     ++jumlah;
-                    rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
+                    rataRata += Double.parseDouble(Objects.requireNonNull(dataSnapshot.getValue(Rating.class)).getRating());
                     rataRata /= jumlah;
                     DecimalFormat df = new DecimalFormat("#.#");
                     DecimalFormat dfJumlah = new DecimalFormat("#");
                     tpdRating2.setText(df.format(rataRata));
                     tpdTotalRating2.setText("(" + dfJumlah.format(jumlah) + ")");
-                } catch (NullPointerException np) {
+                } catch (NullPointerException ignored) {
                 }
             }
 
@@ -276,15 +280,16 @@ public class PlaceDetail extends SlideBackActivity {
     }
 
     private void checkUserReview() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id")).child(uId);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id"))).child(uId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    tpdInputReview.setText(dataSnapshot.child("review").getValue().toString());
-                    tpdInputRating.setRating(Float.parseFloat(dataSnapshot.child("rating").getValue().toString()));
+                    tpdInputReview.setText(Objects.requireNonNull(dataSnapshot.child("review").getValue()).toString());
+                    tpdInputRating.setRating(Float.parseFloat(Objects.requireNonNull(dataSnapshot.child("rating").getValue()).toString()));
                     tpdSubmitButon.setText("Edit");
-                } catch (NullPointerException np) {
+                } catch (NullPointerException ignored) {
 
                 }
             }
@@ -315,6 +320,7 @@ public class PlaceDetail extends SlideBackActivity {
         });
     }
 
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void applyPlaceInfoToView(Place tourismPlace) {
         if (tourismPlace != null) {
             tpdBookmarkBorder.setOnClickListener((view) -> {
@@ -330,16 +336,15 @@ public class PlaceDetail extends SlideBackActivity {
             if (tourismPlace.getPhotoMetadatas() != null) {
                 PhotoMetadata photoMetadata = tourismPlace.getPhotoMetadatas().get(0);
                 FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                        .setMaxHeight(500) // Optional.
+                        .setMaxHeight(750)
                         .build();
                 placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
                     Bitmap bitmap = fetchPhotoResponse.getBitmap();
                     tpdPhoto.setImageBitmap(bitmap);
-                }).addOnFailureListener((exception) -> {
-                    Log.e(TAG, exception.toString());
-                });
+                }).addOnFailureListener((exception) -> Log.e(TAG, exception.toString()));
             } else {
                 LatLng location = tourismPlace.getLatLng();
+                assert location != null;
                 Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
                         + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
                         .error(R.drawable.bg_loading_image)
@@ -352,18 +357,14 @@ public class PlaceDetail extends SlideBackActivity {
 
             if (tourismPlace.getRating() == null) {
                 tpdRating1.setText("-");
-//                tpdRating2.setText("-");
                 tpdTotalRating1.setText("(0)");
-//                tpdTotalRating2.setText("(0)");
             } else {
                 tpdRating1.setText(String.format("%.1f", tourismPlace.getRating()));
                 tpdTotalRating1.setText(String.format("(%d)", tourismPlace.getUserRatingsTotal()));
-//                tpdRating2.setText(String.format("%.1f", tourismPlace.getRating()));
-//                tpdTotalRating2.setText(String.format("(%d)", tourismPlace.getUserRatingsTotal()));
             }
 
             try {
-                tpdCityLocation.setText(getCityNameByCoordinates(tourismPlace.getLatLng().latitude, tourismPlace.getLatLng().longitude));
+                tpdCityLocation.setText(getCityNameByCoordinates(Objects.requireNonNull(tourismPlace.getLatLng()).latitude, tourismPlace.getLatLng().longitude));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -377,15 +378,10 @@ public class PlaceDetail extends SlideBackActivity {
             });
 
             tpdAddress.setText(tourismPlace.getAddress());
-            tpdPlusCode.setText(tourismPlace.getPlusCode().getCompoundCode());
+            tpdPlusCode.setText(Objects.requireNonNull(tourismPlace.getPlusCode()).getCompoundCode());
 
-            //TODO: CLOSING HOURS
             if (tourismPlace.getOpeningHours() != null) {
-                try {
-                    setOpenOrCLoseState(tourismPlace.getOpeningHours().getPeriods());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                setOpenOrCLoseState(tourismPlace.getOpeningHours().getPeriods());
             }
 
             if (tourismPlace.getPhoneNumber() == null) {
@@ -396,7 +392,7 @@ public class PlaceDetail extends SlideBackActivity {
             tpdSubmitButon.setOnClickListener(view -> {
                 progressDialog.show();
                 Rating rating = new Rating(uId, nama, tpdInputReview.getText().toString(), Float.toString(tpdInputRating.getRating()), getIntent().getStringExtra("place_id"), tpdName.getText().toString());
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id")));
                 databaseReference.child(uId).setValue(rating).addOnSuccessListener(aVoid -> {
                     databaseReference.child(uId).child(uId).setValue(true);
                     tpdSubmitButon.setText("Edit");
@@ -447,8 +443,8 @@ public class PlaceDetail extends SlideBackActivity {
     }
 
     private double countDistance(LatLng latLng) {
-        LatLng currentLatLng = new LatLng(Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null)),
-                Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null)));
+        LatLng currentLatLng = new LatLng(Double.parseDouble(Objects.requireNonNull(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null))),
+                Double.parseDouble(Objects.requireNonNull(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null))));
         return Distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
     }
 
@@ -460,405 +456,104 @@ public class PlaceDetail extends SlideBackActivity {
         return null;
     }
 
-    private void setOpenOrCLoseState(List<Period> openOrCLosePeriod) throws ParseException {
+
+    @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
+    private void setOpenOrCLoseState(List<Period> openOrCLosePeriod) {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
+        DayOfWeek dayOfWeek = null;
 
         switch (day) {
             case Calendar.SUNDAY:
-                Period sundayPeriod = null;
-                for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.SUNDAY) {
-                        sundayPeriod = period;
-                        break;
-                    }
-                }
-
-                if (sundayPeriod != null) {
-                    String[] currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()).split(":");
-
-                    if (Integer.parseInt(currentTime[0]) < sundayPeriod.getOpen().getTime().getHours()) {
-                        tpdIsOpen.setText("Closed");
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                .parse(sundayPeriod.getOpen().getTime().getHours() + ":" +
-                                        sundayPeriod.getOpen().getTime().getMinutes())) + " today");
-                    } else if (Integer.parseInt(currentTime[0]) == sundayPeriod.getOpen().getTime().getHours()) {
-                        if (Integer.parseInt(currentTime[1]) < sundayPeriod.getOpen().getTime().getMinutes()) {
-                            tpdIsOpen.setText("Closed");
-                            tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(sundayPeriod.getOpen().getTime().getHours() + ":" +
-                                            sundayPeriod.getOpen().getTime().getMinutes())) + " today");
-                        } else {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(sundayPeriod.getClose().getTime().getHours() + ":" +
-                                            sundayPeriod.getClose().getTime().getMinutes())) + " today");
-                        }
-                    } else {
-                        if (Integer.parseInt(currentTime[0]) < sundayPeriod.getClose().getTime().getHours()) {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(sundayPeriod.getClose().getTime().getHours() + ":" +
-                                            sundayPeriod.getClose().getTime().getMinutes())) + " today");
-                        } else if (Integer.parseInt(currentTime[0]) == sundayPeriod.getOpen().getTime().getHours()) {
-                            if (Integer.parseInt(currentTime[1]) < sundayPeriod.getOpen().getTime().getMinutes()) {
-                                tpdIsOpen.setText("Open");
-                                tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                        .parse(sundayPeriod.getClose().getTime().getHours() + ":" +
-                                                sundayPeriod.getClose().getTime().getMinutes())) + " today");
-                            } else {
-                                tpdIsOpen.setText("Closed");
-                                getOpenHoursNextDay(openOrCLosePeriod, Calendar.SUNDAY);
-                            }
-                        } else {
-                            tpdIsOpen.setText("Closed");
-                            getOpenHoursNextDay(openOrCLosePeriod, Calendar.SUNDAY);
-                        }
-                    }
-                } else {
-                    tpdIsOpen.setText("Closed");
-                    getOpenHoursNextDay(openOrCLosePeriod, Calendar.SUNDAY);
-                }
+                dayOfWeek = DayOfWeek.SUNDAY;
                 break;
             case Calendar.MONDAY:
-                Period mondayPeriod = null;
-                for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.MONDAY) {
-                        mondayPeriod = period;
-                        break;
-                    }
-                }
-
-                if (mondayPeriod != null) {
-                    String[] currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()).split(":");
-
-                    if (Integer.parseInt(currentTime[0]) < mondayPeriod.getOpen().getTime().getHours()) {
-                        tpdIsOpen.setText("Closed");
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                .parse(mondayPeriod.getOpen().getTime().getHours() + ":" +
-                                        mondayPeriod.getOpen().getTime().getMinutes())) + " today");
-                    } else if (Integer.parseInt(currentTime[0]) == mondayPeriod.getOpen().getTime().getHours()) {
-                        if (Integer.parseInt(currentTime[1]) < mondayPeriod.getOpen().getTime().getMinutes()) {
-                            tpdIsOpen.setText("Closed");
-                            tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(mondayPeriod.getOpen().getTime().getHours() + ":" +
-                                            mondayPeriod.getOpen().getTime().getMinutes())) + " today");
-                        } else {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(mondayPeriod.getClose().getTime().getHours() + ":" +
-                                            mondayPeriod.getClose().getTime().getMinutes())) + " today");
-                        }
-                    } else {
-                        if (Integer.parseInt(currentTime[0]) < mondayPeriod.getClose().getTime().getHours()) {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(mondayPeriod.getClose().getTime().getHours() + ":" +
-                                            mondayPeriod.getClose().getTime().getMinutes())) + " today");
-                        } else if (Integer.parseInt(currentTime[0]) == mondayPeriod.getOpen().getTime().getHours()) {
-                            if (Integer.parseInt(currentTime[1]) < mondayPeriod.getOpen().getTime().getMinutes()) {
-                                tpdIsOpen.setText("Open");
-                                tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                        .parse(mondayPeriod.getClose().getTime().getHours() + ":" +
-                                                mondayPeriod.getClose().getTime().getMinutes())) + " today");
-                            } else {
-                                tpdIsOpen.setText("Closed");
-                                getOpenHoursNextDay(openOrCLosePeriod, Calendar.MONDAY);
-                            }
-                        } else {
-                            tpdIsOpen.setText("Closed");
-                            getOpenHoursNextDay(openOrCLosePeriod, Calendar.MONDAY);
-                        }
-                    }
-                } else {
-                    tpdIsOpen.setText("Closed");
-                    getOpenHoursNextDay(openOrCLosePeriod, Calendar.MONDAY);
-                }
+                dayOfWeek = DayOfWeek.MONDAY;
                 break;
             case Calendar.TUESDAY:
-                Period tuesdayPeriod = null;
-                for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.TUESDAY) {
-                        tuesdayPeriod = period;
-                        break;
-                    }
-                }
-
-                if (tuesdayPeriod != null) {
-                    String[] currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()).split(":");
-
-                    if (Integer.parseInt(currentTime[0]) < tuesdayPeriod.getOpen().getTime().getHours()) {
-                        tpdIsOpen.setText("Closed");
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                .parse(tuesdayPeriod.getOpen().getTime().getHours() + ":" +
-                                        tuesdayPeriod.getOpen().getTime().getMinutes())) + " today");
-                    } else if (Integer.parseInt(currentTime[0]) == tuesdayPeriod.getOpen().getTime().getHours()) {
-                        if (Integer.parseInt(currentTime[1]) < tuesdayPeriod.getOpen().getTime().getMinutes()) {
-                            tpdIsOpen.setText("Closed");
-                            tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(tuesdayPeriod.getOpen().getTime().getHours() + ":" +
-                                            tuesdayPeriod.getOpen().getTime().getMinutes())) + " today");
-                        } else {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(tuesdayPeriod.getClose().getTime().getHours() + ":" +
-                                            tuesdayPeriod.getClose().getTime().getMinutes())) + " today");
-                        }
-                    } else {
-                        if (Integer.parseInt(currentTime[0]) < tuesdayPeriod.getClose().getTime().getHours()) {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(tuesdayPeriod.getClose().getTime().getHours() + ":" +
-                                            tuesdayPeriod.getClose().getTime().getMinutes())) + " today");
-                        } else if (Integer.parseInt(currentTime[0]) == tuesdayPeriod.getOpen().getTime().getHours()) {
-                            if (Integer.parseInt(currentTime[1]) < tuesdayPeriod.getOpen().getTime().getMinutes()) {
-                                tpdIsOpen.setText("Open");
-                                tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                        .parse(tuesdayPeriod.getClose().getTime().getHours() + ":" +
-                                                tuesdayPeriod.getClose().getTime().getMinutes())) + " today");
-                            } else {
-                                tpdIsOpen.setText("Closed");
-                                getOpenHoursNextDay(openOrCLosePeriod, Calendar.TUESDAY);
-                            }
-                        } else {
-                            tpdIsOpen.setText("Closed");
-                            getOpenHoursNextDay(openOrCLosePeriod, Calendar.TUESDAY);
-                        }
-                    }
-                } else {
-                    tpdIsOpen.setText("Closed");
-                    getOpenHoursNextDay(openOrCLosePeriod, Calendar.TUESDAY);
-                }
+                dayOfWeek = DayOfWeek.TUESDAY;
                 break;
             case Calendar.WEDNESDAY:
-                Period wednesdayPeriod = null;
-                for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.WEDNESDAY) {
-                        wednesdayPeriod = period;
-                        break;
-                    }
-                }
-
-                if (wednesdayPeriod != null) {
-                    String[] currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()).split(":");
-
-                    if (Integer.parseInt(currentTime[0]) < wednesdayPeriod.getOpen().getTime().getHours()) {
-                        tpdIsOpen.setText("Closed");
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                .parse(wednesdayPeriod.getOpen().getTime().getHours() + ":" +
-                                        wednesdayPeriod.getOpen().getTime().getMinutes())) + " today");
-                    } else if (Integer.parseInt(currentTime[0]) == wednesdayPeriod.getOpen().getTime().getHours()) {
-                        if (Integer.parseInt(currentTime[1]) < wednesdayPeriod.getOpen().getTime().getMinutes()) {
-                            tpdIsOpen.setText("Closed");
-                            tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(wednesdayPeriod.getOpen().getTime().getHours() + ":" +
-                                            wednesdayPeriod.getOpen().getTime().getMinutes())) + " today");
-                        } else {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(wednesdayPeriod.getClose().getTime().getHours() + ":" +
-                                            wednesdayPeriod.getClose().getTime().getMinutes())) + " today");
-                        }
-                    } else {
-                        if (Integer.parseInt(currentTime[0]) < wednesdayPeriod.getClose().getTime().getHours()) {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(wednesdayPeriod.getClose().getTime().getHours() + ":" +
-                                            wednesdayPeriod.getClose().getTime().getMinutes())) + " today");
-                        } else if (Integer.parseInt(currentTime[0]) == wednesdayPeriod.getOpen().getTime().getHours()) {
-                            if (Integer.parseInt(currentTime[1]) < wednesdayPeriod.getOpen().getTime().getMinutes()) {
-                                tpdIsOpen.setText("Open");
-                                tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                        .parse(wednesdayPeriod.getClose().getTime().getHours() + ":" +
-                                                wednesdayPeriod.getClose().getTime().getMinutes())) + " today");
-                            } else {
-                                tpdIsOpen.setText("Closed");
-                                getOpenHoursNextDay(openOrCLosePeriod, Calendar.WEDNESDAY);
-                            }
-                        } else {
-                            tpdIsOpen.setText("Closed");
-                            getOpenHoursNextDay(openOrCLosePeriod, Calendar.WEDNESDAY);
-                        }
-                    }
-                } else {
-                    tpdIsOpen.setText("Closed");
-                    getOpenHoursNextDay(openOrCLosePeriod, Calendar.WEDNESDAY);
-                }
+                dayOfWeek = DayOfWeek.WEDNESDAY;
                 break;
             case Calendar.THURSDAY:
-                Period thursdayPeriod = null;
-                for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.THURSDAY) {
-                        thursdayPeriod = period;
-                        break;
-                    }
-                }
-
-                if (thursdayPeriod != null) {
-                    String[] currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()).split(":");
-
-                    if (Integer.parseInt(currentTime[0]) < thursdayPeriod.getOpen().getTime().getHours()) {
-                        tpdIsOpen.setText("Closed");
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                .parse(thursdayPeriod.getOpen().getTime().getHours() + ":" +
-                                        thursdayPeriod.getOpen().getTime().getMinutes())) + " today");
-                    } else if (Integer.parseInt(currentTime[0]) == thursdayPeriod.getOpen().getTime().getHours()) {
-                        if (Integer.parseInt(currentTime[1]) < thursdayPeriod.getOpen().getTime().getMinutes()) {
-                            tpdIsOpen.setText("Closed");
-                            tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(thursdayPeriod.getOpen().getTime().getHours() + ":" +
-                                            thursdayPeriod.getOpen().getTime().getMinutes())) + " today");
-                        } else {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(thursdayPeriod.getClose().getTime().getHours() + ":" +
-                                            thursdayPeriod.getClose().getTime().getMinutes())) + " today");
-                        }
-                    } else {
-                        if (Integer.parseInt(currentTime[0]) < thursdayPeriod.getClose().getTime().getHours()) {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(thursdayPeriod.getClose().getTime().getHours() + ":" +
-                                            thursdayPeriod.getClose().getTime().getMinutes())) + " today");
-                        } else if (Integer.parseInt(currentTime[0]) == thursdayPeriod.getOpen().getTime().getHours()) {
-                            if (Integer.parseInt(currentTime[1]) < thursdayPeriod.getOpen().getTime().getMinutes()) {
-                                tpdIsOpen.setText("Open");
-                                tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                        .parse(thursdayPeriod.getClose().getTime().getHours() + ":" +
-                                                thursdayPeriod.getClose().getTime().getMinutes())) + " today");
-                            } else {
-                                tpdIsOpen.setText("Closed");
-                                getOpenHoursNextDay(openOrCLosePeriod, Calendar.THURSDAY);
-                            }
-                        } else {
-                            tpdIsOpen.setText("Closed");
-                            getOpenHoursNextDay(openOrCLosePeriod, Calendar.THURSDAY);
-                        }
-                    }
-                } else {
-                    tpdIsOpen.setText("Closed");
-                    getOpenHoursNextDay(openOrCLosePeriod, Calendar.THURSDAY);
-                }
+                dayOfWeek = DayOfWeek.THURSDAY;
                 break;
             case Calendar.FRIDAY:
-                Period fridayPeriod = null;
-                for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.FRIDAY) {
-                        fridayPeriod = period;
-                        break;
-                    }
-                }
-
-                if (fridayPeriod != null) {
-                    String[] currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()).split(":");
-
-                    if (Integer.parseInt(currentTime[0]) < fridayPeriod.getOpen().getTime().getHours()) {
-                        tpdIsOpen.setText("Closed");
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                .parse(fridayPeriod.getOpen().getTime().getHours() + ":" +
-                                        fridayPeriod.getOpen().getTime().getMinutes())) + " today");
-                    } else if (Integer.parseInt(currentTime[0]) == fridayPeriod.getOpen().getTime().getHours()) {
-                        if (Integer.parseInt(currentTime[1]) < fridayPeriod.getOpen().getTime().getMinutes()) {
-                            tpdIsOpen.setText("Closed");
-                            tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(fridayPeriod.getOpen().getTime().getHours() + ":" +
-                                            fridayPeriod.getOpen().getTime().getMinutes())) + " today");
-                        } else {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(fridayPeriod.getClose().getTime().getHours() + ":" +
-                                            fridayPeriod.getClose().getTime().getMinutes())) + " today");
-                        }
-                    } else {
-                        if (Integer.parseInt(currentTime[0]) < fridayPeriod.getClose().getTime().getHours()) {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(fridayPeriod.getClose().getTime().getHours() + ":" +
-                                            fridayPeriod.getClose().getTime().getMinutes())) + " today");
-                        } else if (Integer.parseInt(currentTime[0]) == fridayPeriod.getOpen().getTime().getHours()) {
-                            if (Integer.parseInt(currentTime[1]) < fridayPeriod.getOpen().getTime().getMinutes()) {
-                                tpdIsOpen.setText("Open");
-                                tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                        .parse(fridayPeriod.getClose().getTime().getHours() + ":" +
-                                                fridayPeriod.getClose().getTime().getMinutes())) + " today");
-                            } else {
-                                tpdIsOpen.setText("Closed");
-                                getOpenHoursNextDay(openOrCLosePeriod, Calendar.FRIDAY);
-                            }
-                        } else {
-                            tpdIsOpen.setText("Closed");
-                            getOpenHoursNextDay(openOrCLosePeriod, Calendar.FRIDAY);
-                        }
-                    }
-                } else {
-                    tpdIsOpen.setText("Closed");
-                    getOpenHoursNextDay(openOrCLosePeriod, Calendar.FRIDAY);
-                }
+                dayOfWeek = DayOfWeek.FRIDAY;
                 break;
             case Calendar.SATURDAY:
-                Period saturdayPeriod = null;
-                for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.SATURDAY) {
-                        saturdayPeriod = period;
-                        break;
-                    }
-                }
+                dayOfWeek = DayOfWeek.SATURDAY;
+                break;
+        }
 
-                if (saturdayPeriod != null) {
-                    String[] currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()).split(":");
+        Period todayPeriod = null;
+        for (Period period : openOrCLosePeriod) {
+            if (Objects.requireNonNull(period.getOpen()).getDay() == dayOfWeek) {
+                todayPeriod = period;
+                break;
+            }
+        }
 
-                    if (Integer.parseInt(currentTime[0]) < saturdayPeriod.getOpen().getTime().getHours()) {
+        try {
+            if (todayPeriod != null) {
+                String[] currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()).split(":");
+
+                if (Integer.parseInt(currentTime[0]) < todayPeriod.getOpen().getTime().getHours()) {
+                    tpdIsOpen.setText("Closed");
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                            .parse(todayPeriod.getOpen().getTime().getHours() + ":" +
+                                    todayPeriod.getOpen().getTime().getMinutes()))) + " today");
+                } else if (Integer.parseInt(currentTime[0]) == todayPeriod.getOpen().getTime().getHours()) {
+                    if (Integer.parseInt(currentTime[1]) < todayPeriod.getOpen().getTime().getMinutes()) {
                         tpdIsOpen.setText("Closed");
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                .parse(saturdayPeriod.getOpen().getTime().getHours() + ":" +
-                                        saturdayPeriod.getOpen().getTime().getMinutes())) + " today");
-                    } else if (Integer.parseInt(currentTime[0]) == saturdayPeriod.getOpen().getTime().getHours()) {
-                        if (Integer.parseInt(currentTime[1]) < saturdayPeriod.getOpen().getTime().getMinutes()) {
-                            tpdIsOpen.setText("Closed");
-                            tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(saturdayPeriod.getOpen().getTime().getHours() + ":" +
-                                            saturdayPeriod.getOpen().getTime().getMinutes())) + " today");
-                        } else {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(saturdayPeriod.getClose().getTime().getHours() + ":" +
-                                            saturdayPeriod.getClose().getTime().getMinutes())) + " today");
-                        }
+                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                                .parse(todayPeriod.getOpen().getTime().getHours() + ":" +
+                                        todayPeriod.getOpen().getTime().getMinutes()))) + " today");
                     } else {
-                        if (Integer.parseInt(currentTime[0]) < saturdayPeriod.getClose().getTime().getHours()) {
-                            tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                    .parse(saturdayPeriod.getClose().getTime().getHours() + ":" +
-                                            saturdayPeriod.getClose().getTime().getMinutes())) + " today");
-                        } else if (Integer.parseInt(currentTime[0]) == saturdayPeriod.getOpen().getTime().getHours()) {
-                            if (Integer.parseInt(currentTime[1]) < saturdayPeriod.getOpen().getTime().getMinutes()) {
-                                tpdIsOpen.setText("Open");
-                                tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
-                                        .parse(saturdayPeriod.getClose().getTime().getHours() + ":" +
-                                                saturdayPeriod.getClose().getTime().getMinutes())) + " today");
-                            } else {
-                                tpdIsOpen.setText("Closed");
-                                getOpenHoursNextDay(openOrCLosePeriod, Calendar.SATURDAY);
-                            }
-                        } else {
-                            tpdIsOpen.setText("Closed");
-                            getOpenHoursNextDay(openOrCLosePeriod, Calendar.SATURDAY);
-                        }
+                        tpdIsOpen.setText("Open");
+                        tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                                .parse(Objects.requireNonNull(todayPeriod.getClose()).getTime().getHours() + ":" +
+                                        todayPeriod.getClose().getTime().getMinutes()))) + " today");
                     }
                 } else {
-                    tpdIsOpen.setText("Closed");
-                    getOpenHoursNextDay(openOrCLosePeriod, Calendar.SATURDAY);
+                    if (Integer.parseInt(currentTime[0]) < Objects.requireNonNull(todayPeriod.getClose()).getTime().getHours()) {
+                        tpdIsOpen.setText("Open");
+                        tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                                .parse(todayPeriod.getClose().getTime().getHours() + ":" +
+                                        todayPeriod.getClose().getTime().getMinutes()))) + " today");
+                    } else if (Integer.parseInt(currentTime[0]) == todayPeriod.getOpen().getTime().getHours()) {
+                        if (Integer.parseInt(currentTime[1]) < todayPeriod.getOpen().getTime().getMinutes()) {
+                            tpdIsOpen.setText("Open");
+                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                                    .parse(todayPeriod.getClose().getTime().getHours() + ":" +
+                                            todayPeriod.getClose().getTime().getMinutes()))) + " today");
+                        } else {
+                            tpdIsOpen.setText("Closed");
+                            getOpenHoursNextDay(openOrCLosePeriod, day);
+                        }
+                    } else {
+                        tpdIsOpen.setText("Closed");
+                        getOpenHoursNextDay(openOrCLosePeriod, day);
+                    }
                 }
-                break;
+
+            } else {
+                tpdIsOpen.setText("Closed");
+                getOpenHoursNextDay(openOrCLosePeriod, day);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
+    @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
     private void getOpenHoursNextDay(List<Period> openOrCLosePeriod, int day) throws ParseException {
         switch (day) {
             case Calendar.SUNDAY:
                 Period mondayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.MONDAY) {
+                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.MONDAY) {
                         mondayPeriod = period;
                         break;
                     }
@@ -866,9 +561,9 @@ public class PlaceDetail extends SlideBackActivity {
 
                 if (mondayPeriod != null) {
                     try {
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
                                 .parse(mondayPeriod.getOpen().getTime().getHours() + ":" +
-                                        mondayPeriod.getOpen().getTime().getMinutes())) + " MON");
+                                        mondayPeriod.getOpen().getTime().getMinutes()))) + " MON");
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -879,16 +574,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.MONDAY:
                 Period tuesdayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.TUESDAY) {
+                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.TUESDAY) {
                         tuesdayPeriod = period;
                         break;
                     }
                 }
 
                 if (tuesdayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
                             .parse(tuesdayPeriod.getOpen().getTime().getHours() + ":" +
-                                    tuesdayPeriod.getOpen().getTime().getMinutes())) + " TUE");
+                                    tuesdayPeriod.getOpen().getTime().getMinutes()))) + " TUE");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.TUESDAY);
                 }
@@ -896,7 +591,7 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.TUESDAY:
                 Period wednesdayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.WEDNESDAY) {
+                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.WEDNESDAY) {
                         wednesdayPeriod = period;
                         break;
                     }
@@ -904,9 +599,9 @@ public class PlaceDetail extends SlideBackActivity {
 
                 if (wednesdayPeriod != null) {
                     Log.e(TAG, wednesdayPeriod.getOpen().getTime().toString());
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
                             .parse(wednesdayPeriod.getOpen().getTime().getHours() + ":" +
-                                    wednesdayPeriod.getOpen().getTime().getMinutes())) + " WED");
+                                    wednesdayPeriod.getOpen().getTime().getMinutes()))) + " WED");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.WEDNESDAY);
                 }
@@ -914,16 +609,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.WEDNESDAY:
                 Period thursdayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.THURSDAY) {
+                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.THURSDAY) {
                         thursdayPeriod = period;
                         break;
                     }
                 }
 
                 if (thursdayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
                             .parse(thursdayPeriod.getOpen().getTime().getHours() + ":" +
-                                    thursdayPeriod.getOpen().getTime().getMinutes())) + " THU");
+                                    thursdayPeriod.getOpen().getTime().getMinutes()))) + " THU");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.THURSDAY);
                 }
@@ -931,16 +626,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.THURSDAY:
                 Period fridayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.FRIDAY) {
+                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.FRIDAY) {
                         fridayPeriod = period;
                         break;
                     }
                 }
 
                 if (fridayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
                             .parse(fridayPeriod.getOpen().getTime().getHours() + ":" +
-                                    fridayPeriod.getOpen().getTime().getMinutes())) + " FRI");
+                                    fridayPeriod.getOpen().getTime().getMinutes()))) + " FRI");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.FRIDAY);
                 }
@@ -948,16 +643,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.FRIDAY:
                 Period saturdayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.SATURDAY) {
+                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.SATURDAY) {
                         saturdayPeriod = period;
                         break;
                     }
                 }
 
                 if (saturdayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
                             .parse(saturdayPeriod.getOpen().getTime().getHours() + ":" +
-                                    saturdayPeriod.getOpen().getTime().getMinutes())) + " SAT");
+                                    saturdayPeriod.getOpen().getTime().getMinutes()))) + " SAT");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.SATURDAY);
                 }
@@ -965,16 +660,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.SATURDAY:
                 Period sundayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (period.getOpen().getDay() == DayOfWeek.SUNDAY) {
+                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.SUNDAY) {
                         sundayPeriod = period;
                         break;
                     }
                 }
 
                 if (sundayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
                             .parse(sundayPeriod.getOpen().getTime().getHours() + ":" +
-                                    sundayPeriod.getOpen().getTime().getMinutes())) + " SUN");
+                                    sundayPeriod.getOpen().getTime().getMinutes()))) + " SUN");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.SUNDAY);
                 }
@@ -987,25 +682,25 @@ public class PlaceDetail extends SlideBackActivity {
         TextView nama;
         TextView review;
 
-        public TourismDetailAdapter(@NonNull View itemView) {
+        TourismDetailAdapter(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.profile_image);
             nama = itemView.findViewById(R.id.username_review);
             review = itemView.findViewById(R.id.review_user);
         }
 
-        public void setNama(String nama) {
+        void setNama(String nama) {
             this.nama.setText(nama);
         }
 
-        public void setImage(String foto) {
+        void setImage(String foto) {
             Glide.with(PlaceDetail.this)
                     .load(foto)
                     .placeholder(R.drawable.profile_annasaha)
                     .into(image);
         }
 
-        public void setReview(String review) {
+        void setReview(String review) {
             this.review.setText(review);
         }
     }
