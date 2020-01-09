@@ -1,9 +1,7 @@
 package com.remu;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,9 +36,7 @@ import com.remu.adapter.TipsAdapter;
 import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
 import com.takusemba.multisnaprecyclerview.SnapGravity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,17 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private String latitude, longitude;
     private LatLngRetriever latLngRetriever = new LatLngRetriever();
 
-    private ImageView backgroundMorning, backgroundDay, backgroundEvening, backgroundNight;
-    private View viewMorning, viewDay, viewEvening, viewNight;
-
     private CardView mosqueCardView, foodButton, dictionaryButton, tourButton;
-    private TextView halo, nama;
-    private TextView jamSolatSelanjutnya;
+    private TextView nama;
 
-    private DatabaseReference databaseReference;
     private FirebaseRecyclerAdapter<Article, MainActivity.ArticleViewHolder> firebaseRecyclerAdapter;
     private RecyclerView listArticle;
-    private ArrayList<Article> articleDataSet;
 
     private RecyclerView listTips;
     private ArrayList<Tips> tipsDataSet;
@@ -151,30 +141,12 @@ public class MainActivity extends AppCompatActivity {
         firebaseRecyclerAdapter.stopListening();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        setBackgroundByTime();
-    }
-
     private void initializeUI() {
         mosqueCardView = findViewById(R.id.MosqueCardView);
         foodButton = findViewById(R.id.foodButton);
         dictionaryButton = findViewById(R.id.dictionaryButton);
         tourButton = findViewById(R.id.tourismButton);
-        halo = findViewById(R.id.halo);
         nama = findViewById(R.id.nama);
-
-        backgroundMorning = findViewById(R.id.placeIllustrationMorning);
-        viewMorning = findViewById(R.id.view_morning);
-        backgroundDay = findViewById(R.id.placeIllustrationDay);
-        viewDay = findViewById(R.id.view_day);
-        backgroundEvening = findViewById(R.id.placeIllustrationEvening);
-        viewEvening = findViewById(R.id.view_evening);
-        backgroundNight = findViewById(R.id.placeIllustrationNight);
-        viewNight = findViewById(R.id.view_night);
-        setBackgroundByTime();
 
         listArticle = findViewById(R.id.listArticle);
         initializeArticle();
@@ -193,147 +165,10 @@ public class MainActivity extends AppCompatActivity {
         new PrayerTime(this, TAG, latitude, longitude, textViews).execute();
     }
 
-    private void setBackgroundByTime() {
-        @SuppressLint("SimpleDateFormat") int currentHour = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
-        @SuppressLint("SimpleDateFormat") int currentMinutes = Integer.parseInt(new SimpleDateFormat("mm").format(Calendar.getInstance().getTime()));
-
-        backgroundMorning.setAlpha(0f);
-        viewMorning.setAlpha(0f);
-        backgroundDay.setAlpha(0f);
-        viewDay.setAlpha(0f);
-        backgroundEvening.setAlpha(0f);
-        viewEvening.setAlpha(0f);
-        backgroundNight.setAlpha(0f);
-        viewNight.setAlpha(0f);
-
-        switch (currentHour) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 19:
-            case 20:
-            case 21:
-            case 22:
-            case 23:
-                halo.setTextColor(Color.parseColor("#FFFFFF"));
-                nama.setTextColor(Color.parseColor("#FFFFFF"));
-                backgroundNight.setAlpha(1f);
-                viewNight.setAlpha(1f);
-                break;
-            case 5:
-                backgroundNight.setAlpha(1f);
-                viewNight.setAlpha(1f);
-                if (currentMinutes <= 15) {
-                    backgroundMorning.setAlpha(0.25f);
-                    viewMorning.setAlpha(0.25f);
-                } else if (currentMinutes <= 30) {
-                    backgroundMorning.setAlpha(0.5f);
-                    viewMorning.setAlpha(0.5f);
-                } else if (currentMinutes <= 45) {
-                    backgroundMorning.setAlpha(0.75f);
-                    viewMorning.setAlpha(0.75f);
-                } else {
-                    backgroundMorning.setAlpha(1f);
-                    viewMorning.setAlpha(1f);
-                }
-                break;
-            case 6:
-                if (currentMinutes <= 30) {
-                    backgroundMorning.setAlpha(1f);
-                    viewMorning.setAlpha(1f);
-                } else if (currentMinutes <= 45) {
-                    backgroundMorning.setAlpha(0.75f);
-                    viewMorning.setAlpha(0.75f);
-                    backgroundDay.setAlpha(0.25f);
-                    viewDay.setAlpha(0.25f);
-                } else {
-                    backgroundMorning.setAlpha(0.5f);
-                    viewMorning.setAlpha(0.5f);
-                    backgroundDay.setAlpha(0.5f);
-                    viewDay.setAlpha(0.5f);
-                }
-                break;
-            case 7:
-                if (currentMinutes <= 15) {
-                    backgroundMorning.setAlpha(0.25f);
-                    viewMorning.setAlpha(0.25f);
-                    backgroundDay.setAlpha(0.75f);
-                    viewDay.setAlpha(0.75f);
-                } else {
-                    backgroundMorning.setAlpha(0f);
-                    viewMorning.setAlpha(0f);
-                    backgroundDay.setAlpha(1f);
-                    viewDay.setAlpha(1f);
-                }
-                break;
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-                backgroundDay.setAlpha(1f);
-                viewDay.setAlpha(1f);
-                break;
-            case 16:
-                if (currentMinutes <= 30) {
-                    backgroundDay.setAlpha(1f);
-                    viewDay.setAlpha(1f);
-                } else if (currentMinutes <= 45) {
-                    backgroundDay.setAlpha(0.75f);
-                    viewDay.setAlpha(0.75f);
-                    backgroundEvening.setAlpha(0.25f);
-                    viewEvening.setAlpha(0.25f);
-                } else {
-                    backgroundDay.setAlpha(0.5f);
-                    viewDay.setAlpha(0.5f);
-                    backgroundEvening.setAlpha(0.5f);
-                    viewEvening.setAlpha(0.5f);
-                }
-                break;
-            case 17:
-                if (currentMinutes <= 15) {
-                    backgroundDay.setAlpha(0.25f);
-                    viewDay.setAlpha(0.25f);
-                    backgroundEvening.setAlpha(0.75f);
-                    viewEvening.setAlpha(0.75f);
-                } else {
-                    backgroundDay.setAlpha(0f);
-                    viewDay.setAlpha(0f);
-                    backgroundEvening.setAlpha(1f);
-                    viewEvening.setAlpha(1f);
-                }
-                break;
-            case 18:
-                halo.setTextColor(Color.parseColor("#FFFFFF"));
-                nama.setTextColor(Color.parseColor("#FFFFFF"));
-                backgroundNight.setAlpha(1f);
-                viewNight.setAlpha(1f);
-                if (currentMinutes <= 15) {
-                    backgroundEvening.setAlpha(0.75f);
-                    viewEvening.setAlpha(0.75f);
-                } else if (currentMinutes <= 30) {
-                    backgroundEvening.setAlpha(0.5f);
-                    viewEvening.setAlpha(0.5f);
-                } else if (currentMinutes <= 45) {
-                    backgroundEvening.setAlpha(0.25f);
-                    viewEvening.setAlpha(0.25f);
-                } else {
-                    backgroundEvening.setAlpha(0f);
-                    viewEvening.setAlpha(0f);
-                }
-                break;
-        }
-    }
-
     private void initializeArticle() {
         LinearLayoutManager articleLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
         listArticle.setLayoutManager(articleLayoutManager);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Article");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Article");
 
         Query query = databaseReference.orderByKey();
 
@@ -355,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
                 return new ArticleViewHolder(view);
             }
         };
-//        RecyclerView.Adapter articleAdapter = new ArticleAdapter(getApplication(), articleDataSet);
         listArticle.setAdapter(firebaseRecyclerAdapter);
         MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
         multiSnapHelper.attachToRecyclerView(listArticle);
@@ -380,25 +214,25 @@ public class MainActivity extends AppCompatActivity {
         TextView judul;
         TextView highlight;
 
-        public ArticleViewHolder(@NonNull View itemView) {
+        ArticleViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.img_article);
             judul = itemView.findViewById(R.id.title_article);
             highlight = itemView.findViewById(R.id.highlight_article);
         }
 
-        public void setJudul(String judul) {
+        void setJudul(String judul) {
             this.judul.setText(judul);
         }
 
-        public void setImage(String foto) {
+        void setImage(String foto) {
             Glide.with(MainActivity.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading_image)
                     .into(image);
         }
 
-        public void setHighlight(String waktu) {
+        void setHighlight(String waktu) {
             this.highlight.setText(waktu);
         }
     }

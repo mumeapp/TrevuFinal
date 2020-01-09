@@ -46,7 +46,7 @@
         <!-- main activities -->
         <activity
             android:name=".MainActivity"
-            android:theme="@style/MainTheme" />
+            android:theme="@style/MidPinkTheme" />
         <activity android:name=".FoodBeverageTourismResult" />
 
         <!-- mosque activities -->
