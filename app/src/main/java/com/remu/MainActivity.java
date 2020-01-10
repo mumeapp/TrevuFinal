@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CardView mosqueCardView, foodButton, dictionaryButton, tourButton;
     private TextView nama;
+    private ImageView profile;
 
     private FirebaseRecyclerAdapter<Article, MainActivity.ArticleViewHolder> firebaseRecyclerAdapter;
     private RecyclerView listArticle;
@@ -127,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
             Intent viewDictonary = new Intent(MainActivity.this, DictionaryActivity.class);
             startActivity(viewDictonary);
         });
+
+        //sign out
+        profile.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent login = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(login);
+            finish();
+        });
     }
 
     @Override
@@ -147,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         dictionaryButton = findViewById(R.id.dictionaryButton);
         tourButton = findViewById(R.id.tourismButton);
         nama = findViewById(R.id.nama);
+        profile = findViewById(R.id.profile_picture);
 
         listArticle = findViewById(R.id.listArticle);
         initializeArticle();
