@@ -8,17 +8,45 @@
         android:id="@+id/nav_onboard1"
         android:name="com.remu.ui.onboard.onboard1.OnBoarding1Fragment"
         android:label="Home"
-        tools:layout="@layout/fragment_onboard1" />
+        tools:layout="@layout/fragment_onboard1" >
+        <action
+            android:id="@+id/action_nav_onboard1_to_nav_onboard23"
+            app:destination="@id/nav_onboard2"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_right"
+            app:popExitAnim="@anim/exit_to_left"
+            app:popUpTo="@+id/nav_onboard2" />
+        <action
+            android:id="@+id/action_nav_onboard1_to_nav_onboard3"
+            app:destination="@id/nav_onboard3"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_right"
+            app:popExitAnim="@anim/exit_to_left"
+            app:popUpTo="@+id/nav_onboard3" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_onboard2"
         android:name="com.remu.ui.onboard.onboard2.OnBoarding2Fragment"
         android:label="Home"
-        tools:layout="@layout/fragment_onboard2" />
+        tools:layout="@layout/fragment_onboard2" >
+        <action
+            android:id="@+id/action_nav_onboard2_to_nav_onboard32"
+            app:destination="@id/nav_onboard3"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_right"
+            app:popExitAnim="@anim/exit_to_left"
+            app:popUpTo="@+id/nav_onboard3" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_onboard3"
         android:name="com.remu.ui.onboard.onboard3.OnBoarding3Fragment"
         android:label="Home"
         tools:layout="@layout/fragment_onboard3" />
+
+
 </navigation>

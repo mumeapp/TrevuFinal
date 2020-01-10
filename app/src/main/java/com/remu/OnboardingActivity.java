@@ -3,11 +3,11 @@ package com.remu;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavAction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.remu.POJO.FragmentChangeListener;
-
 
 public class OnboardingActivity extends FragmentActivity implements FragmentChangeListener {
 
@@ -22,13 +22,16 @@ public class OnboardingActivity extends FragmentActivity implements FragmentChan
     }
 
     @Override
-    public void replaceFragment(int idFragment) {
-        switch (idFragment) {
+    public void replaceFragment(int idAction) {
+        switch (idAction) {
+            case 1:
+                navController.navigate(R.id.action_nav_onboard1_to_nav_onboard23);
+                break;
             case 2:
-                navController.navigate(R.id.nav_onboard2);
+                navController.navigate(R.id.action_nav_onboard1_to_nav_onboard3);
                 break;
             case 3:
-                navController.navigate(R.id.nav_onboard3);
+                navController.navigate(R.id.action_nav_onboard2_to_nav_onboard32);
                 break;
         }
     }

@@ -32,7 +32,7 @@
         </activity>
         <activity
             android:name=".OnboardingActivity"
-            android:theme="@style/BlueTheme" />
+            android:theme="@style/FullScreenTheme" />
         <activity android:name=".PermissionActivity" />
 
         <!-- login and register activities -->
@@ -84,7 +84,7 @@
             android:theme="@style/BlueTheme" />
         <activity
             android:name=".PlaceDetail"
-            android:theme="@style/PlaceTheme" />
+            android:theme="@style/FullScreenTheme" />
 
         <!-- dictionary activities -->
         <activity

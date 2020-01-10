@@ -27,13 +27,9 @@ import com.remu.MainActivity;
 import com.remu.PermissionActivity;
 import com.remu.R;
 
-
 public class OnBoarding3Fragment extends Fragment {
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
     private FirebaseAuth mAuth;
-    private OnBoarding3ViewModel onBoarding3ViewModel;
     private Button permissionButton;
 
     private FragmentActivity mActivity;
@@ -50,7 +46,6 @@ public class OnBoarding3Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        onBoarding3ViewModel = ViewModelProviders.of(this).get(OnBoarding3ViewModel.class);
         View root = inflater.inflate(R.layout.fragment_onboard3, container, false);
 
         initializeUI(root);
