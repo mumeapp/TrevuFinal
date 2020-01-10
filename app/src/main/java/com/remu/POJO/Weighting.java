@@ -16,13 +16,26 @@ public class Weighting {
             double lat = place.getPlaceLocation().latitude;
             double lng = place.getPlaceLocation().longitude;
             System.out.println("intensity" + place.getPlaceIntensity());
-            if (place.getPlaceIntensity() != 0) {
+            if (place.getPlaceIntensity() != 0 && place.getTrevuRating() != 0) {
+                s.add(Math.pow(Distance.distance(lat, latitude, lng, longitude), weightDistance) *
+                        Math.pow(place.getPlaceRating(), weightGoogleRate) *
+                        Math.pow(place.getTrevuRating(), weightTrevuRate) *
+                        Math.pow(place.getPlaceIntensity(), weightIntensity));
+
+            }
+            else if (place.getPlaceIntensity()!=0){
                 s.add(Math.pow(Distance.distance(lat, latitude, lng, longitude), weightDistance) *
                         Math.pow(place.getPlaceRating(), weightGoogleRate) *
                         Math.pow(1, weightTrevuRate) *
                         Math.pow(place.getPlaceIntensity(), weightIntensity));
-
-            } else {
+            }
+            else if (place.getTrevuRating()!=0){
+                s.add(Math.pow(Distance.distance(lat, latitude, lng, longitude), weightDistance) *
+                        Math.pow(place.getPlaceRating(), weightGoogleRate) *
+                        Math.pow(place.getTrevuRating(), weightTrevuRate) *
+                        Math.pow(1, weightIntensity));
+            }
+            else {
                 s.add(Math.pow(Distance.distance(lat, latitude, lng, longitude), weightDistance) *
                         Math.pow(place.getPlaceRating(), weightGoogleRate) *
                         Math.pow(1, weightTrevuRate) *

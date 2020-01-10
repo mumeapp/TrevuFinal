@@ -220,9 +220,11 @@ public class TourismActivity extends SlideBackActivity {
                     try{
                         places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
                         System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                        myCallBack.onCallback(places);
                     }catch (NullPointerException np){
                         places.get(finalI).setTrevuRating(1);
                         System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                        myCallBack.onCallback(places);
                     }
                 }
 

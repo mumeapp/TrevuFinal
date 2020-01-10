@@ -165,10 +165,13 @@ public class PlaceDetail extends SlideBackActivity {
     }
 
     private void getMean() {
+        tpdRating2.setText("-");
+        tpdTotalRating2.setText("(0)");
         DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id")));
         databaseReview.addChildEventListener(new ChildEventListener() {
             double rataRata = 0;
             double jumlah = 0;
+
 
             @SuppressLint("SetTextI18n")
             @Override
@@ -183,6 +186,7 @@ public class PlaceDetail extends SlideBackActivity {
                     tpdRating2.setText(df.format(rataRata));
                     tpdTotalRating2.setText("(" + dfJumlah.format(jumlah) + ")");
                 } catch (NullPointerException ignored) {
+
                 }
             }
 
