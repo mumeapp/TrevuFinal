@@ -32,16 +32,18 @@
         </activity>
         <activity
             android:name=".OnboardingActivity"
-            android:theme="@style/FullScreenTheme" />
+            android:theme="@style/WhiteTheme" />
         <activity android:name=".PermissionActivity" />
 
         <!-- login and register activities -->
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/BlueTheme" />
+            android:theme="@style/WhiteTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".RegisterActivity"
-            android:theme="@style/BlueTheme" />
+            android:theme="@style/WhiteTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <!-- main activities -->
         <activity

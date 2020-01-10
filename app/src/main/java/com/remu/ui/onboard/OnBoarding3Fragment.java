@@ -1,4 +1,4 @@
-package com.remu.ui.onboard.onboard3;
+package com.remu.ui.onboard;
 
 import android.Manifest;
 import android.app.Activity;

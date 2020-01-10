@@ -1,4 +1,4 @@
-package com.remu.ui.onboard.onboard1;
+package com.remu.ui.onboard;
 
 import android.content.Context;
 import android.os.Bundle;
