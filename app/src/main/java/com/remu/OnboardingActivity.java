@@ -3,10 +3,10 @@ package com.remu;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.NavAction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.remu.POJO.FragmentChangeListener;
 
 public class OnboardingActivity extends FragmentActivity implements FragmentChangeListener {
@@ -18,6 +18,7 @@ public class OnboardingActivity extends FragmentActivity implements FragmentChan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
+        Animatoo.animateSlideLeft(this);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_onboard);
     }
 

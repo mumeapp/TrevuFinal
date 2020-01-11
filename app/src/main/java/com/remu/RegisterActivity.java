@@ -73,11 +73,11 @@ public class RegisterActivity extends AppCompatActivity {
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
-        registerButton = findViewById(R.id.registerButton);
-        registerButton.setOnClickListener(view -> registerNewUser());
+//        registerButton = findViewById(R.id.registerButton);
+//        registerButton.setOnClickListener(view -> registerNewUser());
     }
 
-    public void have_account(View view) {
+    public void haveAccount(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -90,44 +90,43 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Please enter email...", Toast.LENGTH_LONG).show();
+            registerEmail.setError("Email is required");
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Please enter password!", Toast.LENGTH_LONG).show();
+            registerPassword.setError("Password is required");
             return;
         }
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateName(user);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateName(user);
 
-                            String userID = user.getUid();
+                        String userID = user.getUid();
 
-                            User userr = new User("", "", "", "", "", email, "default", "", userID);
+                        User userr = new User("", "", "", "", "", email, "default", "", userID);
 
-                            databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(userID);
-                            databaseReference.setValue(userr).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        updateUI(user);
-                                    } else {
-                                        Toast.makeText(RegisterActivity.this, "Register gagal", Toast.LENGTH_SHORT).show();
-                                    }
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(userID);
+                        databaseReference.setValue(userr).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    updateUI(user);
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, "Register gagal", Toast.LENGTH_SHORT).show();
                                 }
-                            });
-
-
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Registration failed!", Toast.LENGTH_LONG).show();
-                        }
+                            }
+                        });
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Registration failed!", Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    public void loginClicked(View view) {
+        finish();
     }
 
     @Override
@@ -137,8 +136,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        registerEmail = findViewById(R.id.RegisterEmail);
-        registerPassword = findViewById(R.id.RegisterPassword);
+//        registerEmail = findViewById(R.id.RegisterEmail);
+//        registerPassword = findViewById(R.id.RegisterPassword);
     }
 
     private void updateName(FirebaseUser user) {
@@ -161,6 +160,14 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
             Toast.makeText(getApplicationContext(), "Please login!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void registerWithFacebook(View view) {
+        //TODO
+    }
+
+    public void registerWithGoogle(View view) {
 
     }
+
 }

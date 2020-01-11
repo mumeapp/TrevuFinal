@@ -38,12 +38,12 @@
         <!-- login and register activities -->
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/WhiteTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:theme="@style/LoginTheme"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".RegisterActivity"
-            android:theme="@style/WhiteTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:theme="@style/RegisterTheme"
+            android:windowSoftInputMode="stateHidden"/>
 
         <!-- main activities -->
         <activity

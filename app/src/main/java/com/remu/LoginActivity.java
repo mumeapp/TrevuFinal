@@ -72,23 +72,35 @@ public class LoginActivity extends AppCompatActivity {
 
         initializeUI();
         Animatoo.animateSlideLeft(this);
+
         mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder().requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
         loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(view -> signIn());
     }
 
-    public void register_clicked(View view) {
+    public void registerClicked(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
-        finish();
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            finish();
+        }
     }
 
     public void loginWithGoogle(View view) {
         Intent signIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signIntent, GOOGLE_SIGN);
+    }
+
+    public void loginWithFacebook(View view) {
+        // TODO: Make Login with facebook
+
     }
 
     @Override
@@ -129,7 +141,6 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
-
             }
         });
     }
@@ -140,22 +151,19 @@ public class LoginActivity extends AppCompatActivity {
         password = loginPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Please enter email...", Toast.LENGTH_LONG).show();
+            loginEmail.setError("Email is required");
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Please enter password!", Toast.LENGTH_LONG).show();
+            loginPassword.setError("Password is required");
             return;
         }
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Login failed!", Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -167,8 +175,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        loginEmail = findViewById(R.id.LoginEmail);
-        loginPassword = findViewById(R.id.LoginPassword);
+        loginEmail = findViewById(R.id.login_email);
+        loginPassword = findViewById(R.id.login_password);
     }
 
     @Override
@@ -183,4 +191,5 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
+
 }
