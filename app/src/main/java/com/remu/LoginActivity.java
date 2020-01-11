@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,13 +28,15 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.remu.POJO.LatLngRetriever;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
-    Button loginButton, registerButton, googleButton;
+    Button loginButton;
     private FirebaseAuth mAuth;
-    private EditText loginEmail, loginPassword;
+    private TextInputEditText loginEmail, loginPassword;
     static final int GOOGLE_SIGN = 123;
     GoogleSignInClient mGoogleSignInClient;
 
@@ -85,12 +87,6 @@ public class LoginActivity extends AppCompatActivity {
     public void registerClicked(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
-
-        FirebaseUser user = mAuth.getCurrentUser();
-
-        if (user != null) {
-            finish();
-        }
     }
 
     public void loginWithGoogle(View view) {
@@ -147,23 +143,35 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signIn() {
         String email, password;
-        email = loginEmail.getText().toString();
-        password = loginPassword.getText().toString();
+        TextInputLayout emailLayout = findViewById(R.id.input_layout_login_email);
+        emailLayout.setError(null);
+        TextInputLayout passwordLayout = findViewById(R.id.input_layout_login_password);
+        passwordLayout.setError(null);
+        boolean isError = false;
+        email = Objects.requireNonNull(loginEmail.getText()).toString();
+        password = Objects.requireNonNull(loginPassword.getText()).toString();
 
-        if (TextUtils.isEmpty(email)) {
-            loginEmail.setError("Email is required");
+        if (loginEmail.getText().length() == 0) {
+            emailLayout.setError("Email is required");
+            isError = true;
+        }
+        if (loginPassword.getText().length() == 0) {
+            passwordLayout.setError("Password is required");
+            isError = true;
+        }
+        if (isError) {
             return;
         }
-        if (TextUtils.isEmpty(password)) {
-            loginPassword.setError("Password is required");
-            return;
-        }
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
+                        loginPassword.setText("");
                     }
                 });
     }
