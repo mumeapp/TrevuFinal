@@ -216,6 +216,10 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             String name = user.getDisplayName();
             nama.setText(name);
+            Glide.with(MainActivity.this)
+                    .load(user.getPhotoUrl())
+                    .placeholder(R.drawable.profile_annasaha)
+                    .into(profile);
         }
     }
 
