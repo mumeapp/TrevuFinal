@@ -120,7 +120,7 @@ public class UpdateLocation extends Service {
                 }
             }
         }
-
+        databaseReference.removeValue();
     }
 
     private void initializeLocationManager() {
