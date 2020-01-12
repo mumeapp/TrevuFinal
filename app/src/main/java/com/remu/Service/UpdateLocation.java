@@ -20,15 +20,15 @@ public class UpdateLocation extends Service {
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 10f;
     private DatabaseReference databaseReference;
-    private String userId;
 
     private class LocationListener implements android.location.LocationListener {
         Location mLastLocation;
 
-        public LocationListener(String provider) {
+        LocationListener(String provider) {
             Log.e(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
-            userId = FirebaseAuth.getInstance().getUid();
+            String userId = FirebaseAuth.getInstance().getUid();
+            assert userId != null;
             databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
         }
 
@@ -101,9 +101,9 @@ public class UpdateLocation extends Service {
         Log.e(TAG, "onDestroy");
         super.onDestroy();
         if (mLocationManager != null) {
-            for (int i = 0; i < mLocationListeners.length; i++) {
+            for (LocationListener mLocationListener : mLocationListeners) {
                 try {
-                    mLocationManager.removeUpdates(mLocationListeners[i]);
+                    mLocationManager.removeUpdates(mLocationListener);
                 } catch (Exception ex) {
                     Log.i(TAG, "fail to remove location listners, ignore", ex);
                 }
