@@ -41,6 +41,7 @@ import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
 import com.takusemba.multisnaprecyclerview.SnapGravity;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,33 +62,33 @@ public class MainActivity extends AppCompatActivity {
 
     private NestedScrollView mainScrollView;
 
-    public LocationResult locationResult = new LocationResult() {
-        @Override
-        public void gotLocation(Location location) {
-            double Longitude = location.getLongitude();
-            double Latitude = location.getLatitude();
-
-            Log.d(TAG, "Got Location");
-
-            try {
-                SharedPreferences locationpref = getApplication()
-                        .getSharedPreferences("location", MODE_PRIVATE);
-                SharedPreferences.Editor prefsEditor = locationpref.edit();
-                prefsEditor.putString("Longitude", Longitude + "");
-                prefsEditor.putString("Latitude", Latitude + "");
-                prefsEditor.apply();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
+//    public LocationResult locationResult = new LocationResult() {
+//        @Override
+//        public void gotLocation(Location location) {
+//            double Longitude = location.getLongitude();
+//            double Latitude = location.getLatitude();
+//
+//            Log.d(TAG, "Got Location");
+//
+//            try {
+//                SharedPreferences locationpref = getApplication()
+//                        .getSharedPreferences("location", MODE_PRIVATE);
+//                SharedPreferences.Editor prefsEditor = locationpref.edit();
+//                prefsEditor.putString("Longitude", Longitude + "");
+//                prefsEditor.putString("Latitude", Latitude + "");
+//                prefsEditor.apply();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        latLngRetriever.getLocation(getApplicationContext(), locationResult);
+//        latLngRetriever.getLocation(getApplicationContext(), locationResult);
         latitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null);
         longitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null);
 
@@ -137,8 +138,10 @@ public class MainActivity extends AppCompatActivity {
         //sign out
         profile.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
             Intent stopService = new Intent(MainActivity.this, UpdateLocation.class);
             stopService(stopService);
+            databaseReference.removeValue();
             Intent login = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(login);
             finish();
