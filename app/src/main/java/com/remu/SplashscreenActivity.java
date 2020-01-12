@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.remu.Service.UpdateLocation;
 
 public class SplashscreenActivity extends AppCompatActivity {
 
@@ -21,6 +22,8 @@ public class SplashscreenActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
+        Intent service = new Intent(SplashscreenActivity.this, UpdateLocation.class);
+        startService(service);
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {

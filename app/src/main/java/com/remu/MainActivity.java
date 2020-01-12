@@ -153,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         firebaseRecyclerAdapter.startListening();
-        Intent service = new Intent(MainActivity.this, UpdateLocation.class);
-        startService(service);
     }
 
     @Override

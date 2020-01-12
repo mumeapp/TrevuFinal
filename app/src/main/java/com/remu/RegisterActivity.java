@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.remu.POJO.LatLngRetriever;
 import com.remu.POJO.User;
+import com.remu.Service.UpdateLocation;
 
 import java.util.Objects;
 
@@ -39,37 +40,15 @@ public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference databaseReference; //1
     Button registerButton;
 
-    LatLngRetriever latLngRetriever = new LatLngRetriever();
-
-    public LatLngRetriever.LocationResult locationResult = new LatLngRetriever.LocationResult() {
-        @Override
-        public void gotLocation(Location location) {
-            // TODO Auto-generated method stub
-            double Longitude = location.getLongitude();
-            double Latitude = location.getLatitude();
-
-            Log.d(TAG, "Got Location");
-
-            try {
-                SharedPreferences locationpref = getApplication()
-                        .getSharedPreferences("location", MODE_PRIVATE);
-                SharedPreferences.Editor prefsEditor = locationpref.edit();
-                prefsEditor.putString("Longitude", Longitude + "");
-                prefsEditor.putString("Latitude", Latitude + "");
-                prefsEditor.apply();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        latLngRetriever.getLocation(getApplicationContext(), locationResult);
+        Intent service = new Intent(RegisterActivity.this, UpdateLocation.class);
+        stopService(service);
+        startService(service);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();

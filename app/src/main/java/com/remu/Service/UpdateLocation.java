@@ -21,6 +21,7 @@ public class UpdateLocation extends Service {
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 10f;
     private DatabaseReference databaseReference;
+    private String userId;
 
     private class LocationListener implements android.location.LocationListener {
         Location mLastLocation;
@@ -28,9 +29,10 @@ public class UpdateLocation extends Service {
         LocationListener(String provider) {
             Log.e(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
-            String userId = FirebaseAuth.getInstance().getUid();
-            assert userId != null;
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
+            userId = FirebaseAuth.getInstance().getUid();
+            if (userId != null) {
+                databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
+            }
         }
 
         @Override
@@ -47,7 +49,9 @@ public class UpdateLocation extends Service {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            databaseReference.child("latlong").setValue(location.getLatitude()+","+location.getLongitude());
+            if (userId != null) {
+                databaseReference.child("latlong").setValue(location.getLatitude() + "," + location.getLongitude());
+            }
         }
 
         @Override
@@ -120,7 +124,9 @@ public class UpdateLocation extends Service {
                 }
             }
         }
-        databaseReference.removeValue();
+        if (userId != null) {
+            databaseReference.removeValue();
+        }
     }
 
     private void initializeLocationManager() {
