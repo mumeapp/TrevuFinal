@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -137,11 +138,13 @@ public class MainActivity extends AppCompatActivity {
 
         //sign out
         profile.setOnClickListener(view -> {
+            LoginManager loginManager = LoginManager.getInstance();
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(FirebaseAuth.getInstance().getUid());
             databaseReference.removeValue();
             Intent stopService = new Intent(MainActivity.this, UpdateLocation.class);
             stopService(stopService);
             FirebaseAuth.getInstance().signOut();
+            loginManager.logOut();
             Intent login = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(login);
             finish();
