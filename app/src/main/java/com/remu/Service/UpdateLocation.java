@@ -3,6 +3,7 @@ package com.remu.Service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -36,6 +37,16 @@ public class UpdateLocation extends Service {
         public void onLocationChanged(Location location) {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
+            try {
+                SharedPreferences locationpref = getApplication()
+                        .getSharedPreferences("location", MODE_PRIVATE);
+                SharedPreferences.Editor prefsEditor = locationpref.edit();
+                prefsEditor.putString("Longitude", location.getLongitude() + "");
+                prefsEditor.putString("Latitude", location.getLatitude() + "");
+                prefsEditor.apply();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             databaseReference.child("latlong").setValue(location.getLatitude()+","+location.getLongitude());
         }
 
