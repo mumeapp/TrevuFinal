@@ -1,11 +1,7 @@
 package com.remu;
 
-import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
@@ -32,8 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.remu.POJO.Article;
-import com.remu.POJO.LatLngRetriever;
-import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
 import com.remu.POJO.Tips;
 import com.remu.Service.UpdateLocation;
@@ -42,14 +35,12 @@ import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
 import com.takusemba.multisnaprecyclerview.SnapGravity;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
     private String latitude, longitude;
-    private LatLngRetriever latLngRetriever = new LatLngRetriever();
 
     private CardView mosqueCardView, foodButton, dictionaryButton, tourButton;
     private TextView nama;
@@ -63,33 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
     private NestedScrollView mainScrollView;
 
-//    public LocationResult locationResult = new LocationResult() {
-//        @Override
-//        public void gotLocation(Location location) {
-//            double Longitude = location.getLongitude();
-//            double Latitude = location.getLatitude();
-//
-//            Log.d(TAG, "Got Location");
-//
-//            try {
-//                SharedPreferences locationpref = getApplication()
-//                        .getSharedPreferences("location", MODE_PRIVATE);
-//                SharedPreferences.Editor prefsEditor = locationpref.edit();
-//                prefsEditor.putString("Longitude", Longitude + "");
-//                prefsEditor.putString("Latitude", Latitude + "");
-//                prefsEditor.apply();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        latLngRetriever.getLocation(getApplicationContext(), locationResult);
         latitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null);
         longitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null);
 
