@@ -29,14 +29,14 @@ public class UpdateLocation extends Service {
             Log.e(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
             userId = FirebaseAuth.getInstance().getUid();
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId).child("latlong");
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
         }
 
         @Override
         public void onLocationChanged(Location location) {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
-            databaseReference.setValue(location.getLatitude()+","+location.getLongitude());
+            databaseReference.child("latlong").setValue(location.getLatitude()+","+location.getLongitude());
         }
 
         @Override
@@ -109,6 +109,7 @@ public class UpdateLocation extends Service {
                 }
             }
         }
+        databaseReference.removeValue();
     }
 
     private void initializeLocationManager() {

@@ -139,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
         //sign out
         profile.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
+            Intent stopService = new Intent(MainActivity.this, UpdateLocation.class);
+            stopService(stopService);
             Intent login = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(login);
             finish();
