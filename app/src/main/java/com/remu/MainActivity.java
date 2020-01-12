@@ -137,11 +137,11 @@ public class MainActivity extends AppCompatActivity {
 
         //sign out
         profile.setOnClickListener(view -> {
-            FirebaseAuth.getInstance().signOut();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(FirebaseAuth.getInstance().getUid());
+            databaseReference.removeValue();
             Intent stopService = new Intent(MainActivity.this, UpdateLocation.class);
             stopService(stopService);
-            databaseReference.removeValue();
+            FirebaseAuth.getInstance().signOut();
             Intent login = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(login);
             finish();
