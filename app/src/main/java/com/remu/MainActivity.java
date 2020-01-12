@@ -91,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
         latitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null);
         longitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null);
 
-        Intent service = new Intent(MainActivity.this, UpdateLocation.class);
-        startService(service);
 
         Log.e(TAG, "Latitude: " + latitude);
         Log.e(TAG, "Longitude: " + longitude);
@@ -151,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         firebaseRecyclerAdapter.startListening();
+        Intent service = new Intent(MainActivity.this, UpdateLocation.class);
+        startService(service);
     }
 
     @Override
