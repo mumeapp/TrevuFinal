@@ -102,6 +102,9 @@
         <!-- unknown activities -->
         <activity android:name=".QiblaActivity" />
 
+        <service android:name=".Service.UpdateLocation"
+            tools:ignore="InnerclassSeparator" />
+
         <!-- meta datas -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

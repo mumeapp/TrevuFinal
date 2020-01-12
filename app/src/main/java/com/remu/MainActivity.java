@@ -1,9 +1,11 @@
 package com.remu;
 
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
@@ -32,6 +35,7 @@ import com.remu.POJO.LatLngRetriever;
 import com.remu.POJO.LatLngRetriever.LocationResult;
 import com.remu.POJO.PrayerTime;
 import com.remu.POJO.Tips;
+import com.remu.Service.UpdateLocation;
 import com.remu.adapter.TipsAdapter;
 import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
 import com.takusemba.multisnaprecyclerview.SnapGravity;
@@ -86,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
         latLngRetriever.getLocation(getApplicationContext(), locationResult);
         latitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null);
         longitude = getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null);
+
+        Intent service = new Intent(MainActivity.this, UpdateLocation.class);
+        startService(service);
 
         Log.e(TAG, "Latitude: " + latitude);
         Log.e(TAG, "Longitude: " + longitude);
