@@ -1,6 +1,7 @@
 package com.remu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.remu.Service.UpdateLocation;
 
 import java.util.Objects;
@@ -47,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     static final int GOOGLE_SIGN = 123;
     GoogleSignInClient mGoogleSignInClient;
     private CallbackManager callbackManager;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +148,16 @@ public class LoginActivity extends AppCompatActivity {
                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                 .setDisplayName(defaultName).setPhotoUri(foto).build();
                         user.updateProfile(profileUpdates);
+                        databaseReference.child(mAuth.getUid()).child("status").setValue(true);
+                        try {
+                            SharedPreferences privacyPreference =
+                                    getSharedPreferences("privacy", MODE_PRIVATE);
+                            SharedPreferences.Editor prefsEditor = privacyPreference.edit();
+                            prefsEditor.putBoolean("searchable", true);
+                            prefsEditor.apply();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -178,6 +192,16 @@ public class LoginActivity extends AppCompatActivity {
                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                         .setDisplayName(defaultName).build();
                 user.updateProfile(profileUpdates);
+                databaseReference.child(mAuth.getUid()).child("status").setValue(true);
+                try {
+                    SharedPreferences privacyPreference =
+                            getSharedPreferences("privacy", MODE_PRIVATE);
+                    SharedPreferences.Editor prefsEditor = privacyPreference.edit();
+                    prefsEditor.putBoolean("searchable", true);
+                    prefsEditor.apply();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -212,6 +236,16 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        databaseReference.child(mAuth.getUid()).child("status").setValue(true);
+                        try {
+                            SharedPreferences privacyPreference =
+                                    getSharedPreferences("privacy", MODE_PRIVATE);
+                            SharedPreferences.Editor prefsEditor = privacyPreference.edit();
+                            prefsEditor.putBoolean("searchable", true);
+                            prefsEditor.apply();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -232,6 +266,7 @@ public class LoginActivity extends AppCompatActivity {
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);
         facebookButton = findViewById(R.id.loginFacebook);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location");
     }
 
     @Override
