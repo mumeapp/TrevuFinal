@@ -160,6 +160,62 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="15dp"
                 android:fontFamily="@font/geomanistbold"
+                android:text="Privacy"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:src="@drawable/ic_crosshairs_gps_black_24dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/geomanistmedium"
+                    android:text="Allow people to find you"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+
+                <Switch
+                    android:id="@+id/searchable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/geomanistbold"
                 android:text="About"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -288,6 +344,7 @@
             android:background="@drawable/button_pinkt"
             android:text="Sign Out"
             android:textAllCaps="false"
+            android:fontFamily="@font/geomanistmedium"
             android:textColor="@color/trevuMidPink"
             android:textSize="20sp" />
 

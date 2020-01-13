@@ -1,6 +1,7 @@
 package com.remu.ui.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,15 +20,23 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.remu.BuildConfig;
+import com.remu.ChangeProfileActivity;
+import com.remu.HelpCenterActivity;
 import com.remu.LoginActivity;
+import com.remu.PrivacyPolicyActivity;
 import com.remu.R;
 import com.remu.Service.UpdateLocation;
+
+import java.util.Objects;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment {
 
     private ImageView profilePicture;
     private TextView profileName, profileId, versionId;
     private LinearLayout changeProfile, privacyPolicy, helpCenter;
+    private Switch searchable;
     private Button signOutButton;
 
     @Override
@@ -53,15 +63,36 @@ public class ProfileFragment extends Fragment {
         }
 
         changeProfile.setOnClickListener(v -> {
-
+            Intent intent = new Intent(ProfileFragment.super.getContext(), ChangeProfileActivity.class);
+            startActivity(intent);
         });
 
-        privacyPolicy.setOnClickListener(v -> {
+        if (getActivity().getSharedPreferences("privacy", MODE_PRIVATE).contains("searchable")) {
+            searchable.setChecked(getActivity().getSharedPreferences("privacy", MODE_PRIVATE).getBoolean("searchable", true));
+        } else {
+            searchable.setChecked(true);
+        }
 
+        searchable.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            try {
+                SharedPreferences privacyPreference = getActivity()
+                        .getSharedPreferences("privacy", MODE_PRIVATE);
+                SharedPreferences.Editor prefsEditor = privacyPreference.edit();
+                prefsEditor.putBoolean("searchable", isChecked);
+                prefsEditor.apply();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }));
+
+        privacyPolicy.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileFragment.super.getContext(), PrivacyPolicyActivity.class);
+            startActivity(intent);
         });
 
         helpCenter.setOnClickListener(v -> {
-
+            Intent intent = new Intent(ProfileFragment.super.getContext(), HelpCenterActivity.class);
+            startActivity(intent);
         });
 
         String versionName = "Version " + BuildConfig.VERSION_NAME + " (Beta)";
@@ -86,6 +117,7 @@ public class ProfileFragment extends Fragment {
         profileName = root.findViewById(R.id.profile_name);
         profileId = root.findViewById(R.id.profile_id);
         changeProfile = root.findViewById(R.id.change_profile);
+        searchable = root.findViewById(R.id.searchable);
         privacyPolicy = root.findViewById(R.id.privacy_policy);
         helpCenter = root.findViewById(R.id.help_center);
         versionId = root.findViewById(R.id.version_id);
