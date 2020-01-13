@@ -52,10 +52,15 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
-        progressDialog.show();
+
+        if (TAG.equals("MosqueActivity")) {
+            progressDialog.show();
+        }
     }
 
     @Override
@@ -70,24 +75,24 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
             try {
                 JSONObject timings = new JSONObject(jsonStr).getJSONObject("data").getJSONObject("timings");
 
-                prayerList = new ArrayList<HashMap<String, String>>(){{
-                    add(new HashMap<String, String>(){{
+                prayerList = new ArrayList<HashMap<String, String>>() {{
+                    add(new HashMap<String, String>() {{
                         put("name", "Fajr");
                         put("time", timings.getString("Fajr"));
                     }});
-                    add(new HashMap<String, String>(){{
+                    add(new HashMap<String, String>() {{
                         put("name", "Dhuhr");
                         put("time", timings.getString("Dhuhr"));
                     }});
-                    add(new HashMap<String, String>(){{
+                    add(new HashMap<String, String>() {{
                         put("name", "Asr");
                         put("time", timings.getString("Asr"));
                     }});
-                    add(new HashMap<String, String>(){{
+                    add(new HashMap<String, String>() {{
                         put("name", "Maghrib");
                         put("time", timings.getString("Maghrib"));
                     }});
-                    add(new HashMap<String, String>(){{
+                    add(new HashMap<String, String>() {{
                         put("name", "Isha");
                         put("time", timings.getString("Isha"));
                     }});
@@ -116,7 +121,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
                 setNextPrayerName(textViews.get(1));
                 setPrayerList(textViews.get(2), textViews.get(3), textViews.get(4), textViews.get(5), textViews.get(6));
                 highlightNextPrayerTime(linearLayouts.get(getIndexNextPrayerTime()), textViews.get(getIndexNextPrayerTime() + 2));
-            case "MainActivity":
+            case "HomeFragment":
                 setNextPrayerTime(textViews.get(0));
         }
     }
@@ -164,7 +169,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     }
 
     private void highlightNextPrayerTime(LinearLayout nextPrayerTimeLayout, TextView nextPrayerTime) {
-        int[] colors = {Color.parseColor("#7EF077"),Color.parseColor("#007EF077")};
+        int[] colors = {Color.parseColor("#7EF077"), Color.parseColor("#007EF077")};
         GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
         nextPrayerTimeLayout.setBackground(gradientDrawable);
 

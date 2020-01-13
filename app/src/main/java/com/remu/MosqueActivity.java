@@ -61,6 +61,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallback {
 
@@ -96,8 +97,9 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mosque);
 
-        latitude = getIntent().getStringExtra("latitude");
-        longitude = getIntent().getStringExtra("longitude");
+        latitude = Objects.requireNonNull(getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
+        longitude = Objects.requireNonNull(getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
+
         Log.e(TAG, latitude);
         Log.e(TAG, longitude);
 
@@ -188,12 +190,12 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             if (isClicked) {
                 isClicked = false;
                 ObjectAnimator animation = ObjectAnimator.ofFloat(listMasjid, "translationY", 0f);
-                animation.setDuration(1000);
+                animation.setDuration(500);
                 animation.start();
             } else {
                 isClicked = true;
                 ObjectAnimator animation = ObjectAnimator.ofFloat(listMasjid, "translationY", 500f);
-                animation.setDuration(1000);
+                animation.setDuration(500);
                 animation.start();
             }
         });

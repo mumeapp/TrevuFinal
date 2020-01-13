@@ -11,4 +11,7 @@
     <color name="trevuBlue">#0984E3</color>
     <color name="trevuLightPink">#FF8C94</color>
 
+    <color name="nav_unchecked">#747575</color>
+    <color name="nav_background">#FFFFFF</color>
+
 </resources>
