@@ -115,9 +115,16 @@ public class RegisterActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        Intent service = new Intent(RegisterActivity.this, UpdateLocation.class);
+                        stopService(service);
+                        startService(service);
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Registration failed!", Toast.LENGTH_LONG).show();
                     }
+
                 });
     }
 

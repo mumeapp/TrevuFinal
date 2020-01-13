@@ -158,6 +158,9 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        Intent service = new Intent(LoginActivity.this, UpdateLocation.class);
+                        stopService(service);
+                        startService(service);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -202,6 +205,9 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                Intent service = new Intent(LoginActivity.this, UpdateLocation.class);
+                stopService(service);
+                startService(service);
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -246,6 +252,9 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        Intent service = new Intent(LoginActivity.this, UpdateLocation.class);
+                        stopService(service);
+                        startService(service);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

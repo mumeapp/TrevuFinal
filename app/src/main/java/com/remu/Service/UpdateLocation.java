@@ -30,9 +30,6 @@ public class UpdateLocation extends Service {
             Log.e(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
             userId = FirebaseAuth.getInstance().getUid();
-            if (userId != null) {
-                databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
-            }
         }
 
         @Override
@@ -88,6 +85,9 @@ public class UpdateLocation extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
+        if (userId != null) {
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
+        }
         return START_STICKY;
     }
 
