@@ -50,11 +50,20 @@
         <item name="colorAccent">@color/trevuLightPink</item>
     </style>
 
-    <style name="WhiteTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="OnboardingTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="WhiteTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:windowBackground">@color/grey_200</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

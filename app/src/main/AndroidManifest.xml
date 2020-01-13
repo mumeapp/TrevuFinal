@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".FindFriendActivity"></activity>
+
         <!-- splash and on board activities -->
         <activity
             android:name=".SplashscreenActivity"
@@ -32,8 +32,10 @@
         </activity>
         <activity
             android:name=".OnboardingActivity"
-            android:theme="@style/WhiteTheme" />
-        <activity android:name=".PermissionActivity" /> <!-- login and register activities -->
+            android:theme="@style/OnboardingTheme" />
+        <activity android:name=".PermissionActivity" />
+
+        <!-- login and register activities -->
         <activity
             android:name=".LoginActivity"
             android:theme="@style/LoginTheme"
@@ -41,36 +43,55 @@
         <activity
             android:name=".RegisterActivity"
             android:theme="@style/RegisterTheme"
-            android:windowSoftInputMode="stateHidden" /> <!-- main activities -->
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- main activities -->
         <activity
             android:name=".MainActivity"
             android:theme="@style/WhiteTheme" />
-        <activity android:name=".FoodBeverageTourismResult" /> <!-- mosque activities -->
+        <activity android:name=".FoodBeverageTourismResult" />
+
+        <!-- mosque activities -->
         <activity
             android:name=".MosqueActivity"
-            android:theme="@style/GreenTheme" /> <!-- food and beverages activities -->
+            android:theme="@style/GreenTheme" />
+
+        <!-- food and beverages activities -->
         <activity
             android:name=".FoodActivity"
             android:theme="@style/GreenTheme" />
-        <activity android:name=".FoodBeveragesDetail" /> <!-- halal food activities -->
+        <activity android:name=".FoodBeveragesDetail" />
+
+        <!-- halal food activities -->
         <activity
             android:name=".HalalFoodActivity"
             android:theme="@style/YellowTheme"
-            android:windowSoftInputMode="stateHidden" /> <!-- halal beverages activities -->
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- halal beverages activities -->
         <activity
             android:name=".HalalBeveragesActivity"
             android:theme="@style/DarkRedTheme"
-            android:windowSoftInputMode="stateHidden" /> <!-- halal gift activities -->
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- halal gift activities -->
         <activity
             android:name=".HalalGiftDetail"
             android:theme="@style/GreenTheme"
-            android:windowSoftInputMode="stateHidden" /> <!-- tourism activities -->
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- tourism activities -->
         <activity
             android:name=".TourismActivity"
             android:theme="@style/BlueTheme" />
         <activity
             android:name=".PlaceDetail"
-            android:theme="@style/FullScreenTheme" /> <!-- dictionary activities -->
+            android:theme="@style/FullScreenTheme" />
+
+        <!-- find friends -->
+        <activity android:name=".FindFriendActivity" />
+
+        <!-- dictionary activities -->
         <activity
             android:name=".ChooseLanguageActivity"
             android:theme="@style/WhiteTheme" />
@@ -79,12 +100,16 @@
             android:theme="@style/LightPinkTheme" />
         <activity
             android:name=".DictionaryActivity"
-            android:theme="@style/LightPinkTheme" /> <!-- unknown activities -->
+            android:theme="@style/LightPinkTheme" />
+
+        <!-- unknown activities -->
         <activity android:name=".QiblaActivity" />
 
         <service
             android:name=".Service.UpdateLocation"
-            tools:ignore="InnerclassSeparator" /> <!-- meta datas -->
+            tools:ignore="InnerclassSeparator" />
+
+        <!-- meta datas -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8" />

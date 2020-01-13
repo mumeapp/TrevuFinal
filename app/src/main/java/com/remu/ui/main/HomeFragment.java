@@ -62,15 +62,20 @@ public class HomeFragment extends Fragment {
     private NestedScrollView homeScrollView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
 
         latitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
         longitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
 
         Log.e(TAG, "Latitude: " + latitude);
         Log.e(TAG, "Longitude: " + longitude);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         initializeUI(root);
 

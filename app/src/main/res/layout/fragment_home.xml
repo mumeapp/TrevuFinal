@@ -11,503 +11,335 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="175dp"
-                android:layout_centerHorizontal="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bg_main"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="175dp"
-                android:layout_centerHorizontal="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/gradient_white"
-                tools:ignore="ContentDescription" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
-                android:gravity="bottom"
-                android:orientation="horizontal"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp">
-
-                <TextView
-                    android:id="@+id/halo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:fontFamily="@font/geomanistregular"
-                    android:text="Halo, "
-                    android:textColor="#000000"
-                    android:textSize="22sp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:id="@+id/nama"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="25dp"
-                    android:fontFamily="@font/geomanistbold"
-                    android:text="Guest"
-                    android:textColor="#000000"
-                    android:textSize="27sp"
-                    tools:ignore="HardcodedText" />
-
-            </LinearLayout>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/mosque_card_view"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="120dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="match_parent"-->
-                    <!--                        android:layout_height="match_parent"-->
-                    <!--                        android:adjustViewBounds="true"-->
-                    <!--                        android:scaleType="fitXY"-->
-                    <!--                        app:srcCompat="@drawable/bg_sholat_card"-->
-                    <!--                        tools:ignore="ContentDescription" />-->
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="15dp"
-                        android:fontFamily="@font/geomanistregular"
-                        android:text="Jadwal Sholat Selanjutnya"
-                        android:textColor="@color/black"
-                        android:textSize="17sp"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:id="@+id/jam_solat_selanjutnya"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:fontFamily="@font/osextrabold"
-                        android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="45sp"
-                        tools:ignore="RelativeOverlap" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:fontFamily="@font/osregular"
-                        android:text="Selengkapnya"
-                        android:textColor="@color/black"
-                        tools:ignore="HardcodedText" />
-
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-
-        </RelativeLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/fnb_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="175dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/bg_main"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="175dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/gradient_white"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <TextView
+                        android:id="@+id/halo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:fontFamily="@font/geomanistregular"
+                        android:text="Halo, "
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/nama"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:fontFamily="@font/geomanistbold"
+                        android:text="Guest"
+                        android:textColor="@color/black"
+                        android:textSize="27sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="0dp">
+                    android:id="@+id/mosque_card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/menu_foodbeverages" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="15dp"
+                            android:fontFamily="@font/geomanistregular"
+                            android:text="Jadwal Sholat Selanjutnya"
+                            android:textColor="@color/black"
+                            android:textSize="17sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/jam_solat_selanjutnya"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:fontFamily="@font/osextrabold"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="45sp"
+                            tools:ignore="RelativeOverlap" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:fontFamily="@font/osregular"
+                            android:text="Selengkapnya"
+                            android:textColor="@color/black"
+                            tools:ignore="HardcodedText" />
+
+                    </RelativeLayout>
 
                 </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/geomanistregular"
-                    android:text="FnB"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    tools:ignore="HardcodedText" />
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/tourism_button"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/fnb_button"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="0dp">
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/menu_tourism" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="0dp">
 
-                </androidx.cardview.widget.CardView>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/menu_foodbeverages" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/geomanistregular"
+                        android:text="FnB"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tourism_button"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/geomanistregular"
-                    android:text="Tourism"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    tools:ignore="HardcodedText" />
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="0dp">
 
-            <LinearLayout
-                android:id="@+id/findfriend_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/menu_tourism" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/geomanistregular"
+                        android:text="Tourism"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/findfriend_button"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="0dp">
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/menu_findriend" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="0dp">
 
-                </androidx.cardview.widget.CardView>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/menu_findriend" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/geomanistregular"
+                        android:text="Find Friends"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dictionary_button"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/geomanistregular"
-                    android:text="Find Friends"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    tools:ignore="HardcodedText" />
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="0dp">
 
-            <LinearLayout
-                android:id="@+id/dictionary_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/menu_dictionary" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="0dp">
+                    </androidx.cardview.widget.CardView>
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/menu_dictionary" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/geomanistregular"
+                        android:text="Dictionary"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
 
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/geomanistregular"
-                    android:text="Dictionary"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    tools:ignore="HardcodedText" />
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="vertical">-->
-
-        <!--            <TextView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_marginStart="25dp"-->
-        <!--                android:layout_marginTop="10dp"-->
-        <!--                android:layout_marginEnd="25dp"-->
-        <!--                android:fontFamily="@font/osextrabold"-->
-        <!--                android:text="What can we help you find?"-->
-        <!--                android:textColor="#000000"-->
-        <!--                android:textSize="22sp"-->
-        <!--                tools:ignore="HardcodedText" />-->
-
-        <!--            <HorizontalScrollView-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:clipToPadding="false"-->
-        <!--                android:paddingStart="15dp"-->
-        <!--                android:paddingEnd="15dp"-->
-        <!--                android:scrollbars="none">-->
-
-        <!--                <LinearLayout-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:orientation="horizontal">-->
-
-        <!--                    <androidx.cardview.widget.CardView-->
-        <!--                        android:id="@+id/foodButton"-->
-        <!--                        android:layout_width="150dp"-->
-        <!--                        android:layout_height="130dp"-->
-        <!--                        android:layout_marginStart="10dp"-->
-        <!--                        android:layout_marginTop="10dp"-->
-        <!--                        android:layout_marginBottom="10dp"-->
-        <!--                        app:cardCornerRadius="10dp"-->
-        <!--                        app:cardElevation="5dp">-->
-
-        <!--                        <LinearLayout-->
-        <!--                            android:layout_width="match_parent"-->
-        <!--                            android:layout_height="match_parent"-->
-        <!--                            android:orientation="vertical">-->
-
-        <!--                            <ImageView-->
-        <!--                                android:layout_width="match_parent"-->
-        <!--                                android:layout_height="0dp"-->
-        <!--                                android:layout_weight="7.3"-->
-        <!--                                android:scaleType="centerCrop"-->
-        <!--                                android:src="@drawable/menu_foodbeverages"-->
-        <!--                                tools:ignore="ContentDescription" />-->
-
-        <!--                            <RelativeLayout-->
-        <!--                                android:layout_width="match_parent"-->
-        <!--                                android:layout_height="0dp"-->
-        <!--                                android:layout_weight="2.7">-->
-
-        <!--                                <TextView-->
-        <!--                                    android:layout_width="match_parent"-->
-        <!--                                    android:layout_height="wrap_content"-->
-        <!--                                    android:layout_alignParentStart="true"-->
-        <!--                                    android:layout_centerInParent="true"-->
-        <!--                                    android:layout_marginStart="12dp"-->
-        <!--                                    android:layout_marginEnd="12dp"-->
-        <!--                                    android:fontFamily="@font/ossemibold"-->
-        <!--                                    android:text="Food"-->
-        <!--                                    android:textColor="#000000"-->
-        <!--                                    android:textSize="15sp"-->
-        <!--                                    tools:ignore="HardcodedText" />-->
-
-        <!--                            </RelativeLayout>-->
-
-        <!--                        </LinearLayout>-->
-
-        <!--                    </androidx.cardview.widget.CardView>-->
-
-        <!--                    <androidx.cardview.widget.CardView-->
-        <!--                        android:id="@+id/tourismButton"-->
-        <!--                        android:layout_width="150dp"-->
-        <!--                        android:layout_height="130dp"-->
-        <!--                        android:layout_marginStart="15dp"-->
-        <!--                        android:layout_marginTop="10dp"-->
-        <!--                        android:layout_marginBottom="10dp"-->
-        <!--                        app:cardCornerRadius="10dp"-->
-        <!--                        app:cardElevation="5dp">-->
-
-        <!--                        <LinearLayout-->
-        <!--                            android:layout_width="match_parent"-->
-        <!--                            android:layout_height="match_parent"-->
-        <!--                            android:orientation="vertical">-->
-
-        <!--                            <ImageView-->
-        <!--                                android:layout_width="match_parent"-->
-        <!--                                android:layout_height="0dp"-->
-        <!--                                android:layout_weight="7.3"-->
-        <!--                                android:scaleType="centerCrop"-->
-        <!--                                android:src="@drawable/menu_tourism"-->
-        <!--                                tools:ignore="ContentDescription" />-->
-
-        <!--                            <RelativeLayout-->
-        <!--                                android:layout_width="match_parent"-->
-        <!--                                android:layout_height="0dp"-->
-        <!--                                android:layout_weight="2.7">-->
-
-        <!--                                <TextView-->
-        <!--                                    android:layout_width="match_parent"-->
-        <!--                                    android:layout_height="wrap_content"-->
-        <!--                                    android:layout_alignParentStart="true"-->
-        <!--                                    android:layout_centerInParent="true"-->
-        <!--                                    android:layout_marginStart="12dp"-->
-        <!--                                    android:layout_marginEnd="12dp"-->
-        <!--                                    android:fontFamily="@font/ossemibold"-->
-        <!--                                    android:text="Tourism"-->
-        <!--                                    android:textColor="#000000"-->
-        <!--                                    android:textSize="15sp"-->
-        <!--                                    tools:ignore="HardcodedText" />-->
-
-        <!--                            </RelativeLayout>-->
-
-        <!--                        </LinearLayout>-->
-
-        <!--                    </androidx.cardview.widget.CardView>-->
-
-        <!--                    <androidx.cardview.widget.CardView-->
-        <!--                        android:id="@+id/dictionaryButton"-->
-        <!--                        android:layout_width="150dp"-->
-        <!--                        android:layout_height="130dp"-->
-        <!--                        android:layout_marginStart="15dp"-->
-        <!--                        android:layout_marginTop="10dp"-->
-        <!--                        android:layout_marginEnd="10dp"-->
-        <!--                        android:layout_marginBottom="10dp"-->
-        <!--                        app:cardCornerRadius="10dp"-->
-        <!--                        app:cardElevation="5dp">-->
-
-        <!--                        <LinearLayout-->
-        <!--                            android:layout_width="match_parent"-->
-        <!--                            android:layout_height="match_parent"-->
-        <!--                            android:orientation="vertical">-->
-
-        <!--                            <ImageView-->
-        <!--                                android:layout_width="match_parent"-->
-        <!--                                android:layout_height="0dp"-->
-        <!--                                android:layout_weight="7.3"-->
-        <!--                                android:scaleType="centerCrop"-->
-        <!--                                android:src="@drawable/menu_dictionary"-->
-        <!--                                tools:ignore="ContentDescription" />-->
-
-        <!--                            <RelativeLayout-->
-        <!--                                android:layout_width="match_parent"-->
-        <!--                                android:layout_height="0dp"-->
-        <!--                                android:layout_weight="2.7">-->
-
-        <!--                                <TextView-->
-        <!--                                    android:layout_width="match_parent"-->
-        <!--                                    android:layout_height="wrap_content"-->
-        <!--                                    android:layout_alignParentStart="true"-->
-        <!--                                    android:layout_centerInParent="true"-->
-        <!--                                    android:layout_marginStart="12dp"-->
-        <!--                                    android:layout_marginEnd="12dp"-->
-        <!--                                    android:fontFamily="@font/ossemibold"-->
-        <!--                                    android:text="Dictionary"-->
-        <!--                                    android:textColor="#000000"-->
-        <!--                                    android:textSize="15sp"-->
-        <!--                                    tools:ignore="HardcodedText" />-->
-
-        <!--                            </RelativeLayout>-->
-
-        <!--                        </LinearLayout>-->
-
-        <!--                    </androidx.cardview.widget.CardView>-->
-
-        <!--                </LinearLayout>-->
-
-        <!--            </HorizontalScrollView>-->
-
-        <!--        </LinearLayout>-->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/geomanistbold"
                 android:text="Explore something new!"
-                android:textColor="#000000"
-                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:textSize="20sp"
                 tools:ignore="HardcodedText" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_article"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:clipToPadding="false"
-                android:paddingStart="20dp"
-                android:paddingEnd="15dp" />
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp" />
 
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/geomanistbold"
                 android:text="Wanna go on vacation?"
-                android:textColor="#000000"
-                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:textSize="20sp"
                 tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/geomanistregular"
                 android:text="Here are some tips for you!"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="17sp"
                 tools:ignore="HardcodedText" />
 
@@ -515,9 +347,10 @@
                 android:id="@+id/list_tips"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:clipToPadding="false"
-                android:paddingStart="20dp"
-                android:paddingEnd="15dp" />
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp" />
 
         </LinearLayout>
 

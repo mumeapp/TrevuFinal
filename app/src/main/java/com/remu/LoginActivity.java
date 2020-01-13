@@ -40,16 +40,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
-    Button loginButton, registerButton, googleButton;
+    Button loginButton;
     private LoginButton facebookButton;
     private FirebaseAuth mAuth;
     private TextInputEditText loginEmail, loginPassword;
     static final int GOOGLE_SIGN = 123;
     GoogleSignInClient mGoogleSignInClient;
     private CallbackManager callbackManager;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,13 +83,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder().requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(view -> signIn());
-
     }
 
     public void registerClicked(View view) {
