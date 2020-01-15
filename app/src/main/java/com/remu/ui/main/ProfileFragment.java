@@ -138,8 +138,7 @@ public class ProfileFragment extends Fragment {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
-                    else{
+                    } else {
                         searchable.setChecked(false);
                         try {
                             SharedPreferences privacyPreference = getActivity()
