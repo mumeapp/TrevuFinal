@@ -2,7 +2,6 @@ package com.remu.ui.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.remu.BuildConfig;
 import com.remu.ChangeProfileActivity;
 import com.remu.HelpCenterActivity;
@@ -124,8 +121,30 @@ public class ProfileFragment extends Fragment {
             searchable.setChecked(true);
         }
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
+
+        databaseReference.child("status").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    if (dataSnapshot.getValue().equals(true)) {
+                        searchable.setChecked(true);
+                    }
+                    else{
+                        searchable.setChecked(false);
+                    }
+                } catch (NullPointerException np) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         searchable.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
             try {
                 SharedPreferences privacyPreference = getActivity()
                         .getSharedPreferences("privacy", MODE_PRIVATE);
@@ -135,6 +154,7 @@ public class ProfileFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             if (getActivity().getSharedPreferences("privacy", MODE_PRIVATE).getBoolean("searchable", true)) {
                 databaseReference.child("status").setValue(true);
             } else {
