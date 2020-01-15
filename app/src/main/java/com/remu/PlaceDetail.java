@@ -366,7 +366,7 @@ public class PlaceDetail extends SlideBackActivity {
                         tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_border_black_24dp));
                         tpdBookmark.setOnClickListener(view -> {
                             saved.child(place.getId()).setValue(true);
-                            saved.child("distance").setValue(Objects.requireNonNull(place.getLatLng()).latitude + ", " + place.getLatLng().longitude);
+                            saved.child("latlong").setValue(Objects.requireNonNull(place.getLatLng()).latitude + ", " + place.getLatLng().longitude);
                             saved.child("image").setValue(place.getPhotoMetadatas().get(0).getAttributions());
                             saved.child("rating").setValue(place.getRating());
                             saved.child("title").setValue(place.getName());
