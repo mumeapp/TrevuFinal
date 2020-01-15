@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
         if (currentUser != null) {
             Glide.with(ProfileFragment.this)
                     .load(currentUser.getPhotoUrl())
-                    .placeholder(R.drawable.profile_annasaha)
+                    .placeholder(R.drawable.ic_default_avatar)
                     .into(profilePicture);
 
             String name = currentUser.getDisplayName();

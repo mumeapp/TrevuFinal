@@ -73,7 +73,7 @@
                     <ImageView
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:src="@drawable/profile_annasaha"
+                        android:src="@drawable/ic_default_avatar"
                         tools:ignore="ContentDescription" />
 
                 </androidx.cardview.widget.CardView>
