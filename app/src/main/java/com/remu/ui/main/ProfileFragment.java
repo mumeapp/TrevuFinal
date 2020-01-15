@@ -129,9 +129,27 @@ public class ProfileFragment extends Fragment {
                 try {
                     if (dataSnapshot.getValue().equals(true)) {
                         searchable.setChecked(true);
+                        try {
+                            SharedPreferences privacyPreference = getActivity()
+                                    .getSharedPreferences("privacy", MODE_PRIVATE);
+                            SharedPreferences.Editor prefsEditor = privacyPreference.edit();
+                            prefsEditor.putBoolean("searchable", true);
+                            prefsEditor.apply();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     else{
                         searchable.setChecked(false);
+                        try {
+                            SharedPreferences privacyPreference = getActivity()
+                                    .getSharedPreferences("privacy", MODE_PRIVATE);
+                            SharedPreferences.Editor prefsEditor = privacyPreference.edit();
+                            prefsEditor.putBoolean("searchable", false);
+                            prefsEditor.apply();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 } catch (NullPointerException np) {
 
