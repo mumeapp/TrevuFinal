@@ -1,14 +1,21 @@
 package com.remu;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.google.android.material.textfield.TextInputEditText;
 import com.saber.chentianslideback.SlideBackActivity;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class ChangeProfileActivity extends SlideBackActivity {
 
+    private TextInputEditText dateOfBirth;
     private AutoCompleteTextView genderSpinner;
 
     @Override
@@ -19,7 +26,60 @@ public class ChangeProfileActivity extends SlideBackActivity {
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
-        initializeSpinner();
+        dateOfBirth.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
+
+            @SuppressLint("SetTextI18n") DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        switch (monthOfYear) {
+                            case 0:
+                                dateOfBirth.setText(dayOfMonth + " " + "January" + " " + year1);
+                                break;
+                            case 1:
+                                dateOfBirth.setText(dayOfMonth + " " + "February" + " " + year1);
+                                break;
+                            case 2:
+                                dateOfBirth.setText(dayOfMonth + " " + "March" + " " + year1);
+                                break;
+                            case 3:
+                                dateOfBirth.setText(dayOfMonth + " " + "April" + " " + year1);
+                                break;
+                            case 4:
+                                dateOfBirth.setText(dayOfMonth + " " + "May" + " " + year1);
+                                break;
+                            case 5:
+                                dateOfBirth.setText(dayOfMonth + " " + "June" + " " + year1);
+                                break;
+                            case 6:
+                                dateOfBirth.setText(dayOfMonth + " " + "July" + " " + year1);
+                                break;
+                            case 7:
+                                dateOfBirth.setText(dayOfMonth + " " + "August" + " " + year1);
+                                break;
+                            case 8:
+                                dateOfBirth.setText(dayOfMonth + " " + "September" + " " + year1);
+                                break;
+                            case 9:
+                                dateOfBirth.setText(dayOfMonth + " " + "October" + " " + year1);
+                                break;
+                            case 10:
+                                dateOfBirth.setText(dayOfMonth + " " + "November" + " " + year1);
+                                break;
+                            case 11:
+                                dateOfBirth.setText(dayOfMonth + " " + "December" + " " + year1);
+                                break;
+                        }
+                    }, year, month, day);
+            datePickerDialog.getDatePicker().setMaxDate(new GregorianCalendar(year - 10, month, day).getTimeInMillis());
+            datePickerDialog.show();
+        });
+
+        String[] arrayOfGender = new String[]{"Male", "Female"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.adapter_gender_edit_profile, arrayOfGender);
+        genderSpinner.setAdapter(arrayAdapter);
 
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
@@ -36,14 +96,8 @@ public class ChangeProfileActivity extends SlideBackActivity {
     }
 
     private void initializeUI() {
+        dateOfBirth = findViewById(R.id.ep_dateofbirth);
         genderSpinner = findViewById(R.id.ep_gender);
-    }
-
-    private void initializeSpinner() {
-        String[] arrayOfGender = new String[]{"Male", "Female"};
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.adapter_gender_edit_profile, arrayOfGender);
-        genderSpinner.setAdapter(arrayAdapter);
     }
 
 }

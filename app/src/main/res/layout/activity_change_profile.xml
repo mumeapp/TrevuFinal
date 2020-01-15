@@ -91,30 +91,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/geomanistregular"
+                android:focusableInTouchMode="false"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/il_ep_dateofbirth"-->
-<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:layout_marginEnd="20dp"-->
-<!--            android:layout_marginBottom="5dp"-->
-<!--            android:hint="Date of Birth"-->
-<!--            app:endIconMode=""-->
-<!--            app:errorEnabled="true"-->
-<!--            tools:ignore="HardcodedText">-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_ep_dateofbirth"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:hint="Date of Birth"
+            app:errorEnabled="true"
+            tools:ignore="HardcodedText">
 
-<!--            <DatePicker-->
-<!--                android:id="@+id/ep_dateofbirth"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:fontFamily="@font/geomanistregular" />-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ep_dateofbirth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/geomanistregular" />
 
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/il_ep_about"
