@@ -182,6 +182,20 @@ public class HomeFragment extends Fragment {
                 articleViewHolder.setImage(article.getImage());
                 articleViewHolder.setHighlight(article.getHighlight());
                 articleViewHolder.setJudul(article.getTitle());
+
+                articleViewHolder.explore.setOnClickListener(v -> {
+
+                });
+
+                articleViewHolder.bookmark.setOnClickListener(v -> {
+                    if (articleViewHolder.isSaved) {
+                        articleViewHolder.bookmark.setImageDrawable(getActivity().getDrawable(R.drawable.ic_bookmark_border_black_24dp));
+                        articleViewHolder.isSaved = false;
+                    } else {
+                        articleViewHolder.bookmark.setImageDrawable(getActivity().getDrawable(R.drawable.ic_bookmark_fill_black_24dp));
+                        articleViewHolder.isSaved = true;
+                    }
+                });
             }
 
             @NonNull
@@ -213,14 +227,20 @@ public class HomeFragment extends Fragment {
 
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
+        ImageView bookmark;
         TextView judul;
         TextView highlight;
+        TextView explore;
+        boolean isSaved;
 
         ArticleViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.img_article);
+            bookmark = itemView.findViewById(R.id.bookmark_article);
             judul = itemView.findViewById(R.id.title_article);
             highlight = itemView.findViewById(R.id.highlight_article);
+            explore = itemView.findViewById(R.id.explore_article);
+            isSaved = false;
         }
 
         void setJudul(String judul) {

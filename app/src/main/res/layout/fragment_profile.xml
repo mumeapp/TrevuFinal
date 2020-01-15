@@ -4,11 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_200"
+    android:scrollbars="none"
     tools:context=".ui.main.ProfileFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/grey_200"
         android:orientation="vertical">
 
         <LinearLayout
@@ -340,7 +343,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="78dp"
             android:background="@drawable/button_pinkt"
             android:text="Sign Out"
             android:textAllCaps="false"
