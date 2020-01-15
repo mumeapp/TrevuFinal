@@ -91,7 +91,7 @@ public class PlaceDetail extends SlideBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tourism_detail);
+        setContentView(R.layout.activity_place_detail);
 
         Intent content = getIntent();
 

@@ -62,7 +62,7 @@ public class ChangeProfileActivity extends SlideBackActivity {
         Glide.with(ChangeProfileActivity.this)
                 .load(Uri.parse(getIntent().getStringExtra("image")))
                 .centerCrop()
-                .placeholder(R.drawable.profile_annasaha)
+                .placeholder(R.drawable.ic_default_avatar)
                 .into(profilePicture);
 
         name.setText(getIntent().getStringExtra("name"));
@@ -213,7 +213,7 @@ public class ChangeProfileActivity extends SlideBackActivity {
             Glide.with(ChangeProfileActivity.this)
                     .load(filePath)
                     .centerCrop()
-                    .placeholder(R.drawable.bg_loading_image)
+                    .placeholder(R.drawable.ic_default_avatar)
                     .into(profilePicture);
         }
     }
@@ -237,7 +237,6 @@ public class ChangeProfileActivity extends SlideBackActivity {
     }
 
     private void uploadImage() {
-
         if (filePath != null) {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(FirebaseAuth.getInstance().getUid());
             final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -247,22 +246,16 @@ public class ChangeProfileActivity extends SlideBackActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             assert user != null;
             StorageReference ref = FirebaseStorage.getInstance().getReference().child("user").child(user.getUid());
-            ref.putFile(filePath).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                            .getTotalByteCount());
-                    progressDialog.setMessage("Uploaded "+(int)progress+"%");
+            ref.putFile(filePath).addOnProgressListener(taskSnapshot -> {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                        .getTotalByteCount());
+                progressDialog.setMessage("Uploaded " + (int) progress + "%");
+            }).continueWithTask(task -> {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
                 }
-            }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
 
-                    return ref.getDownloadUrl();
-                }
+                return ref.getDownloadUrl();
             }).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     databaseReference.child("id").setValue(FirebaseAuth.getInstance().getUid());
@@ -280,7 +273,6 @@ public class ChangeProfileActivity extends SlideBackActivity {
             });
         }
     }
-
 
     private void initializeUI() {
         saveButton = findViewById(R.id.ep_save_info);

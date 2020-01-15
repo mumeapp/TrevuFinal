@@ -68,9 +68,23 @@ public class ProfileFragment extends Fragment {
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    gender[0] = dataSnapshot.child("gender").getValue().toString();
-                    birthdate[0] = dataSnapshot.child("birthdate").getValue().toString();
-                    about[0] = dataSnapshot.child("about").getValue().toString();
+                    if (dataSnapshot.child("gender").exists()) {
+                        gender[0] = dataSnapshot.child("gender").getValue().toString();
+                    } else {
+                        gender[0] = "";
+                    }
+
+                    if (dataSnapshot.child("birthdate").exists()) {
+                        birthdate[0] = dataSnapshot.child("birthdate").getValue().toString();
+                    } else {
+                        birthdate[0] = "";
+                    }
+
+                    if (dataSnapshot.child("birthdate").exists()) {
+                        about[0] = dataSnapshot.child("about").getValue().toString();
+                    } else {
+                        about[0] = "";
+                    }
                 }
 
                 @Override
@@ -88,9 +102,15 @@ public class ProfileFragment extends Fragment {
 
         changeProfile.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileFragment.super.getContext(), ChangeProfileActivity.class);
-            if(currentUser!=null){
+            if (currentUser != null) {
                 intent.putExtra("name", currentUser.getDisplayName());
-                intent.putExtra("image", currentUser.getPhotoUrl().toString());
+
+                if (currentUser.getPhotoUrl() != null) {
+                    intent.putExtra("image", currentUser.getPhotoUrl().toString());
+                } else {
+                    intent.putExtra("image", "");
+                }
+
                 intent.putExtra("birthdate", birthdate[0]);
                 intent.putExtra("gender", gender[0]);
                 intent.putExtra("about", about[0]);
@@ -117,8 +137,7 @@ public class ProfileFragment extends Fragment {
             }
             if (getActivity().getSharedPreferences("privacy", MODE_PRIVATE).getBoolean("searchable", true)) {
                 databaseReference.child("status").setValue(true);
-            }
-            else{
+            } else {
                 databaseReference.child("status").setValue(false);
             }
         }));
