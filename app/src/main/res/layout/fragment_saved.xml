@@ -61,190 +61,144 @@
             android:layout_marginBottom="30dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/article_collection"
+            <TextView
+                android:id="@+id/article_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/geomanistmedium"
+                android:text="Article Collection"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ac_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp" />
+
+            <TextView
+                android:id="@+id/tips_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/geomanistmedium"
+                android:text="Tips Collection"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tpc_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp" />
+
+            <TextView
+                android:id="@+id/gift_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/geomanistmedium"
+                android:text="Gift Places Collection"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gc_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp" />
+
+            <TextView
+                android:id="@+id/food_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/geomanistmedium"
+                android:text="Food Places Collection"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fc_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp" />
+
+            <TextView
+                android:id="@+id/beverages_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/geomanistmedium"
+                android:text="Beverages Places Collection"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bc_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp" />
+
+            <TextView
+                android:id="@+id/tour_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="15dp"
-                android:orientation="vertical">
+                android:fontFamily="@font/geomanistmedium"
+                android:text="Tour Places Collection"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
 
-                <TextView
-                    android:id="@+id/article_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/geomanistmedium"
-                    android:text="Article Collection"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:visibility="gone"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/ac_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:clipToPadding="false"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="10dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tips_collection"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/toc_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tips_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/geomanistmedium"
-                    android:text="Tips Collection"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:visibility="gone"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/tpc_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:clipToPadding="false"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="10dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/gift_collection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/gift_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/geomanistmedium"
-                    android:text="Gift Places Collection"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:visibility="gone"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/gc_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:clipToPadding="false"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="10dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/food_collection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/food_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/geomanistmedium"
-                    android:text="Food Places Collection"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:visibility="gone"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fc_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:clipToPadding="false"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="10dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/beverages_collection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/beverages_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/geomanistmedium"
-                    android:text="Beverages Places Collection"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:visibility="gone"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/bc_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:clipToPadding="false"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="10dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tour_collection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tour_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/geomanistmedium"
-                    android:text="Tour Places Collection"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:visibility="gone"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/toc_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:clipToPadding="false"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="10dp" />
-
-            </LinearLayout>
+                android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp" />
 
         </LinearLayout>
 
