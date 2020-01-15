@@ -74,13 +74,14 @@ public class PlaceDetail extends SlideBackActivity {
     private TextView headerAddress, headerPlusCode, headerCloseHours, headerPhone;
     private ImageView starRating2;
     private CardView tpdDiscoverButton, tpdReviewCard;
-    private ImageView tpdPhoto, tpdBookmarkBorder, tpdBookmarkFilled, tpdProfilePicture;
+    private ImageView tpdPhoto, tpdBookmark, tpdProfilePicture;
     private RatingBar tpdInputRating;
     private EditText tpdInputReview;
     private RecyclerView tpdListUserReview;
     private Button tpdSubmitButon;
     private String uId;
     private String nama;
+    private Place place;
 
     private PlacesClient placesClient;
     private Geocoder mGeocoder;
@@ -111,6 +112,10 @@ public class PlaceDetail extends SlideBackActivity {
         getMean();
         getReview();
 
+        Glide.with(PlaceDetail.this)
+                .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
+                .placeholder(R.drawable.ic_default_avatar)
+                .into(tpdProfilePicture);
         getPlace(content.getStringExtra("place_id"));
 
         setSlideBackDirection(SlideBackActivity.LEFT);
@@ -267,7 +272,23 @@ public class PlaceDetail extends SlideBackActivity {
             @Override
             protected void onBindViewHolder(@NonNull PlaceDetail.TourismDetailAdapter tourismDetailAdapter, int i, @NonNull Rating rating) {
                 tourismDetailAdapter.setNama(rating.getNamaUser());
-                tourismDetailAdapter.setImage("");
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(rating.getIdUser()).child("image");
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        try {
+                            tourismDetailAdapter.setImage(dataSnapshot.getValue().toString());
+                        } catch (NullPointerException np) {
+                            tourismDetailAdapter.setImage("");
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
                 tourismDetailAdapter.setReview(rating.getReview());
 
             }
@@ -312,7 +333,7 @@ public class PlaceDetail extends SlideBackActivity {
         FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
 
         placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-            Place place = response.getPlace();
+            place = response.getPlace();
             Log.i(TAG, "Place found: " + place.getName());
             applyPlaceInfoToView(place);
         }).addOnFailureListener((exception) -> {
@@ -327,14 +348,38 @@ public class PlaceDetail extends SlideBackActivity {
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void applyPlaceInfoToView(Place tourismPlace) {
         if (tourismPlace != null) {
-            tpdBookmarkBorder.setOnClickListener((view) -> {
-                tpdBookmarkFilled.setVisibility(View.VISIBLE);
-                tpdBookmarkBorder.setVisibility(View.GONE);
-            });
 
-            tpdBookmarkFilled.setOnClickListener((view) -> {
-                tpdBookmarkBorder.setVisibility(View.VISIBLE);
-                tpdBookmarkFilled.setVisibility(View.GONE);
+            DatabaseReference saved = FirebaseDatabase.getInstance().getReference().child("Saved").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(Objects.requireNonNull(getIntent().getStringExtra("sender"))).child(Objects.requireNonNull(place.getId()));
+            saved.addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        if (dataSnapshot.child(place.getId()).getValue().equals(true)) {
+                            tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_fill_black_24dp));
+                            tpdBookmark.setOnClickListener(view -> {
+                                saved.removeValue();
+                                tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_border_black_24dp));
+                            });
+                        }
+                    } catch (NullPointerException np) {
+                        tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_border_black_24dp));
+                        tpdBookmark.setOnClickListener(view -> {
+                            saved.child(place.getId()).setValue(true);
+                            saved.child("distance").setValue(Objects.requireNonNull(place.getLatLng()).latitude + ", " + place.getLatLng().longitude);
+                            saved.child("image").setValue(place.getPhotoMetadatas().get(0).getAttributions());
+                            saved.child("rating").setValue(place.getRating());
+                            saved.child("title").setValue(place.getName());
+                            tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_fill_black_24dp));
+                        });
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
             });
 
             if (tourismPlace.getPhotoMetadatas() != null) {
@@ -415,8 +460,7 @@ public class PlaceDetail extends SlideBackActivity {
         tpdDistance = findViewById(R.id.tpd_distance);
         tpdDiscoverButton = findViewById(R.id.tpd_discoverbutton);
         tpdPhoto = findViewById(R.id.tpd_photo);
-        tpdBookmarkBorder = findViewById(R.id.tpd_bookmark_border);
-        tpdBookmarkFilled = findViewById(R.id.tpd_bookmark_filled);
+        tpdBookmark = findViewById(R.id.tpd_bookmark);
         tpdAddress = findViewById(R.id.tpd_address);
         tpdPlusCode = findViewById(R.id.tpd_plus_code);
         tpdIsOpen = findViewById(R.id.tpd_is_open);
@@ -699,8 +743,8 @@ public class PlaceDetail extends SlideBackActivity {
 
         void setImage(String foto) {
             Glide.with(PlaceDetail.this)
-                    .load(foto)
-                    .placeholder(R.drawable.profile_annasaha)
+                    .load(Uri.parse(foto))
+                    .placeholder(R.drawable.ic_default_avatar)
                     .into(image);
         }
 

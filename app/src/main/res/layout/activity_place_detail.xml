@@ -194,7 +194,7 @@
                 android:src="@drawable/gradient_black" />
 
             <ImageView
-                android:id="@+id/tpd_bookmark_border"
+                android:id="@+id/tpd_bookmark"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignParentTop="true"
@@ -204,17 +204,6 @@
                 android:tint="@color/white"
                 app:srcCompat="@drawable/ic_bookmark_border_black_24dp" />
 
-            <ImageView
-                android:id="@+id/tpd_bookmark_filled"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="20dp"
-                android:tint="@color/white"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_bookmark_fill_black_24dp" />
 
         </RelativeLayout>
 
