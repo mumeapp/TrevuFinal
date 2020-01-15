@@ -1,8 +1,11 @@
 package com.remu.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,16 +36,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Article;
+import com.remu.POJO.Distance;
+import com.remu.POJO.SavedFoodBeveragesTour;
 import com.remu.R;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class SavedFragment extends Fragment {
 
     private LinearLayout savedEmpty;
-    private RecyclerView listArticle;
-    private TextView articleText;
-    private FirebaseRecyclerAdapter<Article, SavedFragment.SavedArticleViewHolder> firebaseRecyclerAdapter;
+    private RecyclerView listArticle, listFood, listTour;
+    private TextView articleText, foodText, tourText;
+    private String latitude, longitude;
+    private FirebaseRecyclerAdapter<Article, SavedFragment.SavedArticleViewHolder> firebaseRecyclerAdapterArticle;
+    private FirebaseRecyclerAdapter<SavedFoodBeveragesTour, SavedFragment.SavedFoodBeveragesTourViewHolder> firebaseRecyclerAdapterFood, firebaseRecyclerAdapterTour, firebaseRecyclerAdapterBeverages;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +67,13 @@ public class SavedFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_saved, container, false);
 
         initializeUI(root);
+
+        latitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
+        longitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
+
         initializeArticle();
+        initializeHalalFood();
+        initializeTour();
 
         return root;
     }
@@ -51,13 +81,107 @@ public class SavedFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        firebaseRecyclerAdapter.startListening();
+        firebaseRecyclerAdapterArticle.startListening();
+        firebaseRecyclerAdapterFood.startListening();
+        firebaseRecyclerAdapterTour.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        firebaseRecyclerAdapter.stopListening();
+        firebaseRecyclerAdapterArticle.stopListening();
+        firebaseRecyclerAdapterFood.stopListening();
+        firebaseRecyclerAdapterTour.stopListening();
+    }
+
+    private void initializeTour(){
+        LinearLayoutManager tourLayoutManager = new LinearLayoutManager(SavedFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        listTour.setLayoutManager(tourLayoutManager);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Saved").child(FirebaseAuth.getInstance().getUid()).child("Tourism");
+
+        Query query = databaseReference.orderByKey();
+
+        FirebaseRecyclerOptions<SavedFoodBeveragesTour> options = new FirebaseRecyclerOptions.Builder<SavedFoodBeveragesTour>()
+                .setQuery(query, SavedFoodBeveragesTour.class).build();
+        firebaseRecyclerAdapterTour = new FirebaseRecyclerAdapter<SavedFoodBeveragesTour, SavedFoodBeveragesTourViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull SavedFoodBeveragesTourViewHolder savedFoodViewHolder, int i, @NonNull SavedFoodBeveragesTour savedFoodBeveragesTour) {
+                savedEmpty.setVisibility(View.GONE);
+                tourText.setVisibility(View.VISIBLE);
+                savedFoodViewHolder.setImage(savedFoodBeveragesTour.getId());
+                String[] latlong = savedFoodBeveragesTour.getLatlong().split(",");
+                savedFoodViewHolder.setDistance(Distance.distance(Double.parseDouble(latitude), Double.parseDouble(latlong[0]), Double.parseDouble(longitude), Double.parseDouble(latlong[1])));
+                savedFoodViewHolder.setRating(savedFoodBeveragesTour.getRating() + "");
+                savedFoodViewHolder.setTitle(savedFoodBeveragesTour.getTitle());
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getChildrenCount() == 0) {
+                            tourText.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public SavedFoodBeveragesTourViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_horizontal_mode, parent, false);
+
+                return new SavedFragment.SavedFoodBeveragesTourViewHolder(view);
+            }
+        };
+        listTour.setAdapter(firebaseRecyclerAdapterTour);
+    }
+
+    private void initializeHalalFood() {
+        LinearLayoutManager foodLayoutManager = new LinearLayoutManager(SavedFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        listFood.setLayoutManager(foodLayoutManager);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Saved").child(FirebaseAuth.getInstance().getUid()).child("HalalFood");
+
+        Query query = databaseReference.orderByKey();
+
+        FirebaseRecyclerOptions<SavedFoodBeveragesTour> options = new FirebaseRecyclerOptions.Builder<SavedFoodBeveragesTour>()
+                .setQuery(query, SavedFoodBeveragesTour.class).build();
+        firebaseRecyclerAdapterFood = new FirebaseRecyclerAdapter<SavedFoodBeveragesTour, SavedFoodBeveragesTourViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull SavedFoodBeveragesTourViewHolder savedFoodViewHolder, int i, @NonNull SavedFoodBeveragesTour savedFoodBeveragesTour) {
+                savedEmpty.setVisibility(View.GONE);
+                foodText.setVisibility(View.VISIBLE);
+                savedFoodViewHolder.setImage(savedFoodBeveragesTour.getId());
+                String[] latlong = savedFoodBeveragesTour.getLatlong().split(",");
+                savedFoodViewHolder.setDistance(Distance.distance(Double.parseDouble(latitude), Double.parseDouble(latlong[0]), Double.parseDouble(longitude), Double.parseDouble(latlong[1])));
+                savedFoodViewHolder.setRating(savedFoodBeveragesTour.getRating() + "");
+                savedFoodViewHolder.setTitle(savedFoodBeveragesTour.getTitle());
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getChildrenCount() == 0) {
+                            foodText.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public SavedFoodBeveragesTourViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_horizontal_mode, parent, false);
+
+                return new SavedFragment.SavedFoodBeveragesTourViewHolder(view);
+            }
+        };
+        listFood.setAdapter(firebaseRecyclerAdapterFood);
     }
 
     private void initializeArticle() {
@@ -71,7 +195,7 @@ public class SavedFragment extends Fragment {
                 .setQuery(query, Article.class).build();
 
 
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Article, SavedFragment.SavedArticleViewHolder>(options) {
+        firebaseRecyclerAdapterArticle = new FirebaseRecyclerAdapter<Article, SavedFragment.SavedArticleViewHolder>(options) {
 
             @Override
             protected void onBindViewHolder(@NonNull SavedFragment.SavedArticleViewHolder articleViewHolder, int i, @NonNull Article article) {
@@ -86,7 +210,6 @@ public class SavedFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getChildrenCount() == 0) {
-                            savedEmpty.setVisibility(View.VISIBLE);
                             articleText.setVisibility(View.GONE);
                         }
                     }
@@ -148,13 +271,17 @@ public class SavedFragment extends Fragment {
 
         };
 
-        listArticle.setAdapter(firebaseRecyclerAdapter);
+        listArticle.setAdapter(firebaseRecyclerAdapterArticle);
     }
 
     private void initializeUI(View root) {
         savedEmpty = root.findViewById(R.id.saved_empty);
         listArticle = root.findViewById(R.id.ac_recyclerview);
         articleText = root.findViewById(R.id.article_text);
+        listFood = root.findViewById(R.id.fc_recyclerview);
+        foodText = root.findViewById(R.id.food_text);
+        listTour = root.findViewById(R.id.toc_recyclerview);
+        tourText = root.findViewById(R.id.tour_text);
     }
 
     public class SavedArticleViewHolder extends RecyclerView.ViewHolder {
@@ -189,6 +316,67 @@ public class SavedFragment extends Fragment {
         void setHighlight(String waktu) {
             this.highlight.setText(waktu);
         }
+    }
+
+    public class SavedFoodBeveragesTourViewHolder extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView title, distance, rating;
+
+        SavedFoodBeveragesTourViewHolder(@NonNull View itemView) {
+            super(itemView);
+            image = itemView.findViewById(R.id.food_image);
+            title = itemView.findViewById(R.id.food_name);
+            distance = itemView.findViewById(R.id.food_distance);
+            rating = itemView.findViewById(R.id.food_rating);
+        }
+
+        void setTitle(String title) {
+            this.title.setText(title);
+        }
+
+        @SuppressLint("SetTextI18n")
+        void setDistance(double distance) {
+            DecimalFormat df = new DecimalFormat("#.##");
+            this.distance.setText(df.format(distance)+ " Km");
+        }
+
+        void setRating(String rating) {
+            this.rating.setText(rating);
+        }
+
+        void setImage(String id) {
+            List<Place.Field> placeFields = Arrays.asList(Place.Field.PHOTO_METADATAS);
+            FetchPlaceRequest request = FetchPlaceRequest.newInstance(id, placeFields);
+            if (!Places.isInitialized()) {
+                Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
+            }
+            PlacesClient placesClient;
+            placesClient = Places.createClient(Objects.requireNonNull(getActivity()));
+            placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+                Place place = response.getPlace();
+            if (place.getPhotoMetadatas() != null) {
+                PhotoMetadata photoMetadata = place.getPhotoMetadatas().get(0);
+                Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
+                PlacesClient placesClient1 = Places.createClient(getActivity());
+                FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                        .setMaxHeight(750)
+                        .build();
+                placesClient1.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+                    Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                    image.setImageBitmap(bitmap);
+                }).addOnFailureListener((exception) -> Log.e("SavedFragment", exception.toString()));
+            } else {
+                LatLng location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+                Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
+                        + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+                        .error(R.drawable.bg_loading_image)
+                        .placeholder(R.drawable.bg_loading_image)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                        .into(image);
+            }
+        });
+        }
+
     }
 
 }
