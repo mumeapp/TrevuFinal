@@ -3,8 +3,11 @@ package com.remu;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.material.textfield.TextInputEditText;
@@ -15,8 +18,11 @@ import java.util.GregorianCalendar;
 
 public class ChangeProfileActivity extends SlideBackActivity {
 
-    private TextInputEditText dateOfBirth;
+    private TextView saveButton;
+    private TextInputEditText name, dateOfBirth, about;
     private AutoCompleteTextView genderSpinner;
+
+    private boolean isSaveButtonDisabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,62 @@ public class ChangeProfileActivity extends SlideBackActivity {
 
         initializeUI();
         Animatoo.animateSlideLeft(this);
+
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                saveButton.setTextColor(getResources().getColor(R.color.trevuMidPink));
+                isSaveButtonDisabled = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        genderSpinner.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                saveButton.setTextColor(getResources().getColor(R.color.trevuMidPink));
+                isSaveButtonDisabled = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        dateOfBirth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                saveButton.setTextColor(getResources().getColor(R.color.trevuMidPink));
+                isSaveButtonDisabled = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        about.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                saveButton.setTextColor(getResources().getColor(R.color.trevuMidPink));
+                isSaveButtonDisabled = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
 
         dateOfBirth.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
@@ -81,6 +143,14 @@ public class ChangeProfileActivity extends SlideBackActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.adapter_gender_edit_profile, arrayOfGender);
         genderSpinner.setAdapter(arrayAdapter);
 
+        saveButton.setOnClickListener(v -> {
+            if (!isSaveButtonDisabled) {
+                //TODO: Save edited info
+
+                finish();
+            }
+        });
+
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
@@ -96,8 +166,12 @@ public class ChangeProfileActivity extends SlideBackActivity {
     }
 
     private void initializeUI() {
+        saveButton = findViewById(R.id.ep_save_info);
+        name = findViewById(R.id.ep_name);
         dateOfBirth = findViewById(R.id.ep_dateofbirth);
         genderSpinner = findViewById(R.id.ep_gender);
+        about = findViewById(R.id.ep_about);
+        isSaveButtonDisabled = true;
     }
 
 }

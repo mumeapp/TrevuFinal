@@ -37,6 +37,7 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/ep_save_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -49,7 +50,71 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="37.5dp"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:src="@drawable/profile_annasaha"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/ep_edit_picture"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    app:cardBackgroundColor="@color/trevuMidPink"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_google_plus"
+                        android:tint="@color/white"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/ep_view_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/geomanistmedium"
+                android:text="VIEW PROFILE"
+                android:textColor="@color/trevuMidPink"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/il_ep_name"
@@ -90,8 +155,8 @@
                 android:id="@+id/ep_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/geomanistregular"
                 android:focusableInTouchMode="false"
+                android:fontFamily="@font/geomanistregular"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -105,6 +170,8 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="5dp"
             android:hint="Date of Birth"
+            app:endIconDrawable="@drawable/ic_icon_calendar"
+            app:endIconMode="custom"
             app:errorEnabled="true"
             tools:ignore="HardcodedText">
 
