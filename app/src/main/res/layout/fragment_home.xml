@@ -136,7 +136,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="25dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:id="@+id/fnb_button"
@@ -151,7 +152,8 @@
                         android:layout_height="50dp"
                         android:layout_margin="5dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_menu_fnb" />
+                        android:src="@drawable/ic_menu_fnb"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -178,7 +180,8 @@
                         android:layout_height="50dp"
                         android:layout_margin="5dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_menu_tourism" />
+                        android:src="@drawable/ic_menu_tourism"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -205,7 +208,8 @@
                         android:layout_height="50dp"
                         android:layout_margin="5dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_menu_findfriends" />
+                        android:src="@drawable/ic_menu_findfriends"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -232,7 +236,8 @@
                         android:layout_height="50dp"
                         android:layout_margin="5dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_menu_dictionary" />
+                        android:src="@drawable/ic_menu_dictionary"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:layout_width="wrap_content"
