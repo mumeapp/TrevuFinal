@@ -103,7 +103,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="@font/geomanistbold"
                 android:text="Account"
                 android:textColor="@color/black"
@@ -119,18 +119,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:src="@drawable/ic_crosshairs_gps_black_24dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_icon_changeprofile" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/geomanistmedium"
+                    android:fontFamily="@font/geomanistregular"
                     android:text="Change Profile"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
@@ -161,7 +161,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="@font/geomanistbold"
                 android:text="Privacy"
                 android:textColor="@color/black"
@@ -176,18 +176,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:src="@drawable/ic_crosshairs_gps_black_24dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_icon_allowtracking" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/geomanistmedium"
+                    android:fontFamily="@font/geomanistregular"
                     android:text="Allow people to find you"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
@@ -217,7 +217,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="@font/geomanistbold"
                 android:text="About"
                 android:textColor="@color/black"
@@ -233,18 +233,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:src="@drawable/ic_crosshairs_gps_black_24dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_icon_privacypolicy" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/geomanistmedium"
+                    android:fontFamily="@font/geomanistregular"
                     android:text="Privacy Policy"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
@@ -274,18 +274,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:src="@drawable/ic_crosshairs_gps_black_24dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_icon_helpcenter" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/geomanistmedium"
+                    android:fontFamily="@font/geomanistregular"
                     android:text="Help Center"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
