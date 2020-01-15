@@ -2,25 +2,52 @@ package com.remu;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.saber.chentianslideback.SlideBackActivity;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 public class ChangeProfileActivity extends SlideBackActivity {
 
+    private final int PICK_IMAGE_REQUEST = 71;
     private TextView saveButton;
     private TextInputEditText name, dateOfBirth, about;
     private AutoCompleteTextView genderSpinner;
+    private ImageView profilePicture;
+    private Uri filePath;
 
     private boolean isSaveButtonDisabled;
 
@@ -32,9 +59,21 @@ public class ChangeProfileActivity extends SlideBackActivity {
         initializeUI();
         Animatoo.animateSlideLeft(this);
 
+        Glide.with(ChangeProfileActivity.this)
+                .load(Uri.parse(getIntent().getStringExtra("image")))
+                .centerCrop()
+                .placeholder(R.drawable.profile_annasaha)
+                .into(profilePicture);
+
+        name.setText(getIntent().getStringExtra("name"));
+        dateOfBirth.setText(getIntent().getStringExtra("birthdate"));
+        genderSpinner.setText(getIntent().getStringExtra("gender"));
+        about.setText(getIntent().getStringExtra("about"));
+
         name.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -43,12 +82,14 @@ public class ChangeProfileActivity extends SlideBackActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         genderSpinner.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -57,12 +98,14 @@ public class ChangeProfileActivity extends SlideBackActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         dateOfBirth.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -71,12 +114,14 @@ public class ChangeProfileActivity extends SlideBackActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         about.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -85,7 +130,8 @@ public class ChangeProfileActivity extends SlideBackActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         dateOfBirth.setOnClickListener(v -> {
@@ -143,15 +189,33 @@ public class ChangeProfileActivity extends SlideBackActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.adapter_gender_edit_profile, arrayOfGender);
         genderSpinner.setAdapter(arrayAdapter);
 
+        profilePicture.setOnClickListener(view -> {
+            chooseImage();
+            saveButton.setTextColor(getResources().getColor(R.color.trevuMidPink));
+            isSaveButtonDisabled = false;
+        });
+
         saveButton.setOnClickListener(v -> {
             if (!isSaveButtonDisabled) {
-                //TODO: Save edited info
-
-                finish();
+                uploadImage();
             }
         });
 
         setSlideBackDirection(SlideBackActivity.LEFT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            filePath = data.getData();
+            Glide.with(ChangeProfileActivity.this)
+                    .load(filePath)
+                    .centerCrop()
+                    .placeholder(R.drawable.bg_loading_image)
+                    .into(profilePicture);
+        }
     }
 
     @Override
@@ -165,12 +229,66 @@ public class ChangeProfileActivity extends SlideBackActivity {
         Animatoo.animateSlideRight(this);
     }
 
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    private void uploadImage() {
+
+        if (filePath != null) {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(FirebaseAuth.getInstance().getUid());
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Loading...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            assert user != null;
+            StorageReference ref = FirebaseStorage.getInstance().getReference().child("user").child(user.getUid());
+            ref.putFile(filePath).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            .getTotalByteCount());
+                    progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                }
+            }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    databaseReference.child("id").setValue(FirebaseAuth.getInstance().getUid());
+                    databaseReference.child("name").setValue(Objects.requireNonNull(name.getText()).toString());
+                    databaseReference.child("gender").setValue(genderSpinner.getText().toString());
+                    databaseReference.child("birthdate").setValue(Objects.requireNonNull(dateOfBirth.getText()).toString());
+                    databaseReference.child("about").setValue(Objects.requireNonNull(about.getText()).toString());
+                    databaseReference.child("image").setValue(Objects.requireNonNull(Objects.requireNonNull(task.getResult()).toString()));
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(Objects.requireNonNull(name.getText()).toString()).setPhotoUri(Objects.requireNonNull(task.getResult())).build();
+                    user.updateProfile(profileUpdates);
+                    progressDialog.dismiss();
+                    finish();
+                }
+            });
+        }
+    }
+
+
     private void initializeUI() {
         saveButton = findViewById(R.id.ep_save_info);
         name = findViewById(R.id.ep_name);
         dateOfBirth = findViewById(R.id.ep_dateofbirth);
         genderSpinner = findViewById(R.id.ep_gender);
         about = findViewById(R.id.ep_about);
+        profilePicture = findViewById(R.id.profile_picture);
         isSaveButtonDisabled = true;
     }
 

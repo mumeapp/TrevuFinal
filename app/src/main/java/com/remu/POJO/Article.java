@@ -8,6 +8,7 @@ public class Article {
     private String title;
     private String highlight;
     private String article;
+    private String source;
 
     public Article(String image, String title, String article) {
         this.image = image;
@@ -17,6 +18,14 @@ public class Article {
     }
     public Article(){
 
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public void setImage(String image) {

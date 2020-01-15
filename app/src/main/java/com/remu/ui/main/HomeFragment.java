@@ -2,15 +2,8 @@ package com.remu.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +12,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.remu.DictionaryActivity;
 import com.remu.FindFriendActivity;
 import com.remu.FoodActivity;
@@ -183,19 +186,45 @@ public class HomeFragment extends Fragment {
                 articleViewHolder.setHighlight(article.getHighlight());
                 articleViewHolder.setJudul(article.getTitle());
 
-                articleViewHolder.explore.setOnClickListener(v -> {
+                DatabaseReference saved = FirebaseDatabase.getInstance().getReference().child("Saved").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("Article").child(article.getTitle());
+                saved.addValueEventListener(new ValueEventListener() {
 
-                });
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        try {
+                            if (dataSnapshot.child(article.getTitle()).getValue().equals(true)) {
+                                articleViewHolder.bookmark.setImageDrawable(getActivity().getDrawable(R.drawable.ic_bookmark_fill_black_24dp));
+                                articleViewHolder.bookmark.setOnClickListener(view -> {
+                                    saved.removeValue();
+                                    articleViewHolder.bookmark.setImageDrawable(getActivity().getDrawable(R.drawable.ic_bookmark_border_black_24dp));
+                                });
+                            }
+                        } catch (NullPointerException np) {
+                            articleViewHolder.bookmark.setImageDrawable(getActivity().getDrawable(R.drawable.ic_bookmark_border_black_24dp));
+                            articleViewHolder.bookmark.setOnClickListener(view -> {
+                                saved.child(article.getTitle()).setValue(true);
+                                saved.child("highlight").setValue(article.getHighlight());
+                                saved.child("image").setValue(article.getImage());
+                                saved.child("source").setValue(article.getSource());
+                                saved.child("title").setValue(article.getTitle());
+                                articleViewHolder.bookmark.setImageDrawable(getActivity().getDrawable(R.drawable.ic_bookmark_fill_black_24dp));
+                            });
+                        }
 
-                articleViewHolder.bookmark.setOnClickListener(v -> {
-                    if (articleViewHolder.isSaved) {
-                        articleViewHolder.bookmark.setImageDrawable(getActivity().getDrawable(R.drawable.ic_bookmark_border_black_24dp));
-                        articleViewHolder.isSaved = false;
-                    } else {
-                        articleViewHolder.bookmark.setImageDrawable(getActivity().getDrawable(R.drawable.ic_bookmark_fill_black_24dp));
-                        articleViewHolder.isSaved = true;
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
                 });
+                articleViewHolder.explore.setOnClickListener(v -> {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(article.getSource()));
+                    startActivity(intent);
+                });
+
+
             }
 
             @NonNull
@@ -224,6 +253,7 @@ public class HomeFragment extends Fragment {
             userName.setText(name);
         }
     }
+
 
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
         ImageView image;

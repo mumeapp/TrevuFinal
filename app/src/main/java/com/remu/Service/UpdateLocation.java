@@ -49,6 +49,7 @@ public class UpdateLocation extends Service {
             if (userId != null) {
                 databaseReference.child("latlong").setValue(location.getLatitude() + "," + location.getLongitude());
                 databaseReference.child("userId").setValue(userId);
+                databaseReference.child(userId).setValue(true);
                 if(!getSharedPreferences("privacy", MODE_PRIVATE).contains("searchable")){
                     databaseReference.child("status").setValue(true);
                 }
