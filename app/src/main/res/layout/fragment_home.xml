@@ -108,7 +108,7 @@
                             android:fontFamily="@font/geomanistblack"
                             android:text=""
                             android:textColor="@color/black"
-                            android:textSize="45sp"
+                            android:textSize="50sp"
                             tools:ignore="RelativeOverlap" />
 
                         <TextView
