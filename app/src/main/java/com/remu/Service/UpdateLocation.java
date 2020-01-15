@@ -30,9 +30,6 @@ public class UpdateLocation extends Service {
             Log.e(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
             userId = FirebaseAuth.getInstance().getUid();
-            if (userId != null) {
-                databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
-            }
         }
 
         @Override
@@ -51,6 +48,10 @@ public class UpdateLocation extends Service {
             }
             if (userId != null) {
                 databaseReference.child("latlong").setValue(location.getLatitude() + "," + location.getLongitude());
+                databaseReference.child("userId").setValue(userId);
+                if(!getSharedPreferences("privacy", MODE_PRIVATE).contains("searchable")){
+                    databaseReference.child("status").setValue(true);
+                }
             }
         }
 
@@ -84,6 +85,9 @@ public class UpdateLocation extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
+        if (userId != null) {
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
+        }
         return START_STICKY;
     }
 
@@ -124,8 +128,8 @@ public class UpdateLocation extends Service {
                 }
             }
         }
-        if (userId != null) {
-            databaseReference.removeValue();
+        if(userId!=null){
+            databaseReference.child("status").setValue(false);
         }
     }
 

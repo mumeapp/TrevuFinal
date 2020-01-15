@@ -1,6 +1,7 @@
 package com.remu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -103,19 +104,27 @@ public class RegisterActivity extends AppCompatActivity {
 
                         String userID = user.getUid();
 
-                        User userr = new User("", "", "", "", "", email, "default", "", userID);
-
-                        databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(userID);
-                        databaseReference.setValue(userr).addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                updateUI(user);
-                            } else {
-                                Toast.makeText(RegisterActivity.this, "Register gagal", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        databaseReference= FirebaseDatabase.getInstance().getReference().child("User Location").child(userID).child("status");
+                        databaseReference.setValue(true);
+                        try {
+                            SharedPreferences privacyPreference =
+                                    getSharedPreferences("privacy", MODE_PRIVATE);
+                            SharedPreferences.Editor prefsEditor = privacyPreference.edit();
+                            prefsEditor.putBoolean("searchable", true);
+                            prefsEditor.apply();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        Intent service = new Intent(RegisterActivity.this, UpdateLocation.class);
+                        stopService(service);
+                        startService(service);
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Registration failed!", Toast.LENGTH_LONG).show();
                     }
+
                 });
     }
 

@@ -3,9 +3,6 @@ package com.remu.ui.main;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.remu.BuildConfig;
 import com.remu.ChangeProfileActivity;
 import com.remu.HelpCenterActivity;
@@ -26,8 +27,6 @@ import com.remu.LoginActivity;
 import com.remu.PrivacyPolicyActivity;
 import com.remu.R;
 import com.remu.Service.UpdateLocation;
-
-import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -48,11 +47,12 @@ public class ProfileFragment extends Fragment {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        String userId = FirebaseAuth.getInstance().getUid();
 
         if (currentUser != null) {
             Glide.with(ProfileFragment.this)
-                    .load(getActivity().getDrawable(R.drawable.profile_annasaha))
-                    .placeholder(R.drawable.bg_loading_image)
+                    .load(currentUser.getPhotoUrl())
+                    .placeholder(R.drawable.profile_annasaha)
                     .into(profilePicture);
 
             String name = currentUser.getDisplayName();
@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment {
         }
 
         searchable.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location").child(userId);
             try {
                 SharedPreferences privacyPreference = getActivity()
                         .getSharedPreferences("privacy", MODE_PRIVATE);
@@ -83,7 +84,14 @@ public class ProfileFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if (getActivity().getSharedPreferences("privacy", MODE_PRIVATE).getBoolean("searchable", true)) {
+                databaseReference.child("status").setValue(true);
+            }
+            else{
+                databaseReference.child("status").setValue(false);
+            }
         }));
+
 
         privacyPolicy.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileFragment.super.getContext(), PrivacyPolicyActivity.class);
