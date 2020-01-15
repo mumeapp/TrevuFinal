@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Article;
 import com.remu.POJO.Distance;
 import com.remu.POJO.SavedFoodBeveragesTour;
+import com.remu.PlaceDetail;
 import com.remu.R;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -54,8 +56,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class SavedFragment extends Fragment {
 
     private LinearLayout savedEmpty;
-    private RecyclerView listArticle, listFood, listTour;
-    private TextView articleText, foodText, tourText;
+    private RecyclerView listArticle, listFood, listTour, listBeverages;
+    private TextView articleText, foodText, tourText, textBeverages;
     private String latitude, longitude;
     private FirebaseRecyclerAdapter<Article, SavedFragment.SavedArticleViewHolder> firebaseRecyclerAdapterArticle;
     private FirebaseRecyclerAdapter<SavedFoodBeveragesTour, SavedFragment.SavedFoodBeveragesTourViewHolder> firebaseRecyclerAdapterFood, firebaseRecyclerAdapterTour, firebaseRecyclerAdapterBeverages;
@@ -74,6 +76,21 @@ public class SavedFragment extends Fragment {
         initializeArticle();
         initializeHalalFood();
         initializeTour();
+        initializeBeverages();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Saved").child(FirebaseAuth.getInstance().getUid());
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount()==0){
+                    savedEmpty.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         return root;
     }
@@ -84,6 +101,7 @@ public class SavedFragment extends Fragment {
         firebaseRecyclerAdapterArticle.startListening();
         firebaseRecyclerAdapterFood.startListening();
         firebaseRecyclerAdapterTour.startListening();
+        firebaseRecyclerAdapterBeverages.startListening();
     }
 
     @Override
@@ -92,6 +110,60 @@ public class SavedFragment extends Fragment {
         firebaseRecyclerAdapterArticle.stopListening();
         firebaseRecyclerAdapterFood.stopListening();
         firebaseRecyclerAdapterTour.stopListening();
+        firebaseRecyclerAdapterBeverages.stopListening();
+    }
+
+    private void initializeBeverages(){
+        LinearLayoutManager beveragesLayoutManager = new LinearLayoutManager(SavedFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        listBeverages.setLayoutManager(beveragesLayoutManager);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Saved").child(FirebaseAuth.getInstance().getUid()).child("HalalBeverages");
+
+        Query query = databaseReference.orderByKey();
+
+        FirebaseRecyclerOptions<SavedFoodBeveragesTour> options = new FirebaseRecyclerOptions.Builder<SavedFoodBeveragesTour>()
+                .setQuery(query, SavedFoodBeveragesTour.class).build();
+        firebaseRecyclerAdapterBeverages = new FirebaseRecyclerAdapter<SavedFoodBeveragesTour, SavedFoodBeveragesTourViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull SavedFoodBeveragesTourViewHolder savedFoodViewHolder, int i, @NonNull SavedFoodBeveragesTour savedFoodBeveragesTour) {
+                savedEmpty.setVisibility(View.GONE);
+                textBeverages.setVisibility(View.VISIBLE);
+                savedFoodViewHolder.setImage(savedFoodBeveragesTour.getId());
+                String[] latlong = savedFoodBeveragesTour.getLatlong().split(",");
+                savedFoodViewHolder.setDistance(Distance.distance(Double.parseDouble(latitude), Double.parseDouble(latlong[0]), Double.parseDouble(longitude), Double.parseDouble(latlong[1])));
+                savedFoodViewHolder.setRating(savedFoodBeveragesTour.getRating() + "");
+                savedFoodViewHolder.setTitle(savedFoodBeveragesTour.getTitle());
+
+                savedFoodViewHolder.cardView.setOnClickListener(view -> {
+                    Intent intent = new Intent(getActivity(), PlaceDetail.class);
+                    intent.putExtra("sender", "HalalBeverages");
+                    intent.putExtra("place_id",savedFoodBeveragesTour.getId());
+                    startActivity(intent);
+                });
+
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getChildrenCount() == 0) {
+                            textBeverages.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public SavedFoodBeveragesTourViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_horizontal_mode, parent, false);
+
+                return new SavedFragment.SavedFoodBeveragesTourViewHolder(view);
+            }
+        };
+        listBeverages.setAdapter(firebaseRecyclerAdapterBeverages);
     }
 
     private void initializeTour(){
@@ -113,6 +185,12 @@ public class SavedFragment extends Fragment {
                 savedFoodViewHolder.setDistance(Distance.distance(Double.parseDouble(latitude), Double.parseDouble(latlong[0]), Double.parseDouble(longitude), Double.parseDouble(latlong[1])));
                 savedFoodViewHolder.setRating(savedFoodBeveragesTour.getRating() + "");
                 savedFoodViewHolder.setTitle(savedFoodBeveragesTour.getTitle());
+                savedFoodViewHolder.cardView.setOnClickListener(view -> {
+                    Intent intent = new Intent(getActivity(), PlaceDetail.class);
+                    intent.putExtra("sender", "Tourism");
+                    intent.putExtra("place_id",savedFoodBeveragesTour.getId());
+                    startActivity(intent);
+                });
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -158,6 +236,12 @@ public class SavedFragment extends Fragment {
                 savedFoodViewHolder.setDistance(Distance.distance(Double.parseDouble(latitude), Double.parseDouble(latlong[0]), Double.parseDouble(longitude), Double.parseDouble(latlong[1])));
                 savedFoodViewHolder.setRating(savedFoodBeveragesTour.getRating() + "");
                 savedFoodViewHolder.setTitle(savedFoodBeveragesTour.getTitle());
+                savedFoodViewHolder.cardView.setOnClickListener(view -> {
+                    Intent intent = new Intent(getActivity(), PlaceDetail.class);
+                    intent.putExtra("sender", "HalalFood");
+                    intent.putExtra("place_id",savedFoodBeveragesTour.getId());
+                    startActivity(intent);
+                });
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -282,6 +366,8 @@ public class SavedFragment extends Fragment {
         foodText = root.findViewById(R.id.food_text);
         listTour = root.findViewById(R.id.toc_recyclerview);
         tourText = root.findViewById(R.id.tour_text);
+        listBeverages = root.findViewById(R.id.bc_recyclerview);
+        textBeverages = root.findViewById(R.id.beverages_text);
     }
 
     public class SavedArticleViewHolder extends RecyclerView.ViewHolder {
@@ -321,6 +407,7 @@ public class SavedFragment extends Fragment {
     public class SavedFoodBeveragesTourViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView title, distance, rating;
+        CardView cardView;
 
         SavedFoodBeveragesTourViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -328,6 +415,7 @@ public class SavedFragment extends Fragment {
             title = itemView.findViewById(R.id.food_name);
             distance = itemView.findViewById(R.id.food_distance);
             rating = itemView.findViewById(R.id.food_rating);
+            cardView = itemView.findViewById(R.id.food_card);
         }
 
         void setTitle(String title) {
