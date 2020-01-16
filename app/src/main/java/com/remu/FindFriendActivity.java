@@ -28,18 +28,21 @@ public class FindFriendActivity extends SlideBackActivity implements FragmentCha
 
     @Override
     protected void slideBackSuccess() {
-        super.slideBackSuccess();
-
-        finish();
+        if (currentView == 3) {
+        } else {
+            super.slideBackSuccess();
+            finish();
+        }
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (currentView == 1) {
             finish();
-        } else {
+        } else if (currentView == 2) {
             navController.navigate(R.id.nav_findfriend1);
+        } else {
+
         }
     }
 
