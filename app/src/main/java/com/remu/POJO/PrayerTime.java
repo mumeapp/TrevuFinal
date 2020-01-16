@@ -29,7 +29,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
 
     private String TAG;
     private Context context;
-    private String todayUrl, tommorowURL;
+    private String todayUrl, tomorrowURL;
     private ArrayList<HashMap<String, String>> prayerList;
     private ArrayList<TextView> textViews;
     private ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
@@ -40,7 +40,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         this.TAG = TAG;
         this.textViews = textViews;
         setTodayURL(latitude, longitude);
-        setTommorowURL(latitude, longitude);
+        setTomorrowURL(latitude, longitude);
     }
 
     public PrayerTime(Context context, String TAG, String latitude, String longitude, ArrayList<TextView> textViews, ArrayList<LinearLayout> linearLayouts) {
@@ -49,7 +49,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         this.textViews = textViews;
         this.linearLayouts = linearLayouts;
         setTodayURL(latitude, longitude);
-        setTommorowURL(latitude, longitude);
+        setTomorrowURL(latitude, longitude);
     }
 
     @Override
@@ -71,10 +71,10 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         HttpHandler httpHandler = new HttpHandler();
 
         String todayJsonStr = httpHandler.makeServiceCall(todayUrl);
-        String tommorowJsonStr = httpHandler.makeServiceCall(tommorowURL);
+        String tomorrowJsonStr = httpHandler.makeServiceCall(tomorrowURL);
 
         Log.d(TAG, "Response from url: " + todayJsonStr);
-        Log.d(TAG, "Response from url: " + tommorowJsonStr);
+        Log.d(TAG, "Response from url: " + tomorrowJsonStr);
 
         if (todayJsonStr != null) {
             try {
@@ -82,9 +82,9 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
                         .getJSONObject(0).getJSONObject("times");
 
                 if (isPassed(todayTimes.getString("Isha"))) {
-                    JSONObject tommorowTimes = new JSONObject(tommorowJsonStr).getJSONObject("results").getJSONArray("datetime")
+                    JSONObject tomorrowTimes = new JSONObject(tomorrowJsonStr).getJSONObject("results").getJSONArray("datetime")
                             .getJSONObject(0).getJSONObject("times");
-                    parseJson(tommorowTimes);
+                    parseJson(tomorrowTimes);
                 } else {
                     parseJson(todayTimes);
                 }
@@ -211,8 +211,13 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         todayUrl = "http://api.pray.zone/v2/times/today.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666";
     }
 
-    private void setTommorowURL(String latitude, String longitude) {
-        tommorowURL = "http://api.pray.zone/v2/times/tomorrow.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666";
+    private void setTomorrowURL(String latitude, String longitude) {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String nextDate = df.format(c.getTime());
+
+        tomorrowURL = "http://api.pray.zone/v2/times/day.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666&date=" + nextDate;
     }
 
 }
