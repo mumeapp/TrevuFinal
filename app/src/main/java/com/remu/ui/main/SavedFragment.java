@@ -98,11 +98,11 @@ public class SavedFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        firebaseRecyclerAdapterArticle.startListening();
         final Handler handler = new Handler();
-        handler.postDelayed(() -> firebaseRecyclerAdapterFood.startListening(), 300);
-        handler.postDelayed(() -> firebaseRecyclerAdapterTour.startListening(), 600);
-        handler.postDelayed(() -> firebaseRecyclerAdapterBeverages.startListening(), 900);
+        handler.postDelayed(() -> firebaseRecyclerAdapterArticle.startListening(), 200);
+        handler.postDelayed(() -> firebaseRecyclerAdapterFood.startListening(), 400);
+        handler.postDelayed(() -> firebaseRecyclerAdapterTour.startListening(), 800);
+        handler.postDelayed(() -> firebaseRecyclerAdapterBeverages.startListening(), 1200);
     }
 
     @Override
