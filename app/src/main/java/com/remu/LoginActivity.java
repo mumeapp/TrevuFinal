@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                System.out.println("error "+error.getMessage());
+                System.out.println("error " + error.getMessage());
 
             }
         });
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signIntent, GOOGLE_SIGN);
     }
 
-    public void loginWithFacebook(View view){
+    public void loginWithFacebook(View view) {
         facebookButton.performClick();
     }
 
@@ -128,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
@@ -142,12 +143,15 @@ public class LoginActivity extends AppCompatActivity {
                         String email = user.getEmail();
                         //
 //                        assert email != null;
-                        int index = email.indexOf('@');
-                        Uri foto = user.getPhotoUrl();
-                        String defaultName = email.substring(0, index);
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(defaultName).setPhotoUri(foto).build();
-                        user.updateProfile(profileUpdates);
+                        if (user.getDisplayName() == null || user.getPhotoUrl() == null) {
+                            int index = email.indexOf('@');
+                            Uri foto = user.getPhotoUrl();
+                            String defaultName = email.substring(0, index);
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(defaultName).setPhotoUri(foto).build();
+                            user.updateProfile(profileUpdates);
+                        }
+
                         databaseReference.child(mAuth.getUid()).child("status").setValue(true);
                         try {
                             SharedPreferences privacyPreference =
@@ -190,11 +194,13 @@ public class LoginActivity extends AppCompatActivity {
                 String email = user.getEmail();
                 //
                 assert email != null;
-                int index = email.indexOf('@');
-                String defaultName = email.substring(0, index);
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(defaultName).build();
-                user.updateProfile(profileUpdates);
+                if (user.getDisplayName() == null || user.getPhotoUrl() == null) {
+                    int index = email.indexOf('@');
+                    String defaultName = email.substring(0, index);
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(defaultName).build();
+                    user.updateProfile(profileUpdates);
+                }
                 databaseReference.child(mAuth.getUid()).child("status").setValue(true);
                 try {
                     SharedPreferences privacyPreference =
