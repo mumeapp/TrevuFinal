@@ -35,7 +35,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.remu.DictionaryActivity;
 import com.remu.FindFriendActivity;
 import com.remu.FoodActivity;
-import com.remu.LoginActivity;
 import com.remu.MosqueActivity;
 import com.remu.POJO.Article;
 import com.remu.POJO.PrayerTime;
@@ -131,7 +130,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        firebaseRecyclerAdapter.startListening();
+        new Handler().postDelayed(() -> firebaseRecyclerAdapter.startListening(), 200);
     }
 
     @Override
@@ -178,6 +177,7 @@ public class HomeFragment extends Fragment {
     private void initializeArticle() {
         LinearLayoutManager articleLayoutManager = new LinearLayoutManager(HomeFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         listArticle.setLayoutManager(articleLayoutManager);
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Article");
 
         Query query = databaseReference.orderByKey();
@@ -240,8 +240,8 @@ public class HomeFragment extends Fragment {
                 return new ArticleViewHolder(view);
             }
         };
-
-        listArticle.setAdapter(firebaseRecyclerAdapter);
+        Handler handler = new Handler();
+        handler.postDelayed(() -> listArticle.setAdapter(firebaseRecyclerAdapter), 1500);
         MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
         multiSnapHelper.attachToRecyclerView(listArticle);
     }
@@ -250,7 +250,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager tipsLayoutManager = new LinearLayoutManager(HomeFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         listTips.setLayoutManager(tipsLayoutManager);
         RecyclerView.Adapter tipsAdapter = new TipsAdapter(getActivity().getApplication(), tipsDataSet);
-        listTips.setAdapter(tipsAdapter);
+        new Handler().postDelayed(() -> listTips.setAdapter(tipsAdapter), 400);
     }
 
     private void getCurrentUser(FirebaseUser user) {

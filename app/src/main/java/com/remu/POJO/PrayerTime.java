@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Range;
 import android.widget.LinearLayout;
@@ -122,7 +123,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
                 setPrayerList(textViews.get(2), textViews.get(3), textViews.get(4), textViews.get(5), textViews.get(6));
                 highlightNextPrayerTime(linearLayouts.get(getIndexNextPrayerTime()), textViews.get(getIndexNextPrayerTime() + 2));
             case "HomeFragment":
-                setNextPrayerTime(textViews.get(0));
+                new Handler().postDelayed(() -> setNextPrayerTime(textViews.get(0)), 300);
         }
     }
 
