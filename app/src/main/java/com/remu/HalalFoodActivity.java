@@ -399,7 +399,6 @@ public class HalalFoodActivity extends SlideBackActivity {
             progressDialog.setMessage("Fetching result...");
             progressDialog.setCancelable(false);
             progressDialog.show();
-            progressDialog.dismiss();
         }
 
         @Override
