@@ -138,7 +138,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         }
     }
 
-    private void getGoogleJson(){
+    private void getGoogleJson() {
         HttpHandler httpHandler = new HttpHandler();
 
         String url1 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
@@ -172,8 +172,8 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         doWeighting();
     }
 
-    private void getFirebaseData(MyCallBack myCallBack){
-        for (int i = 0; i < 20; i++) {
+    private void getFirebaseData(MyCallBack myCallBack) {
+        for (int i = 0; i < places.size(); i++) {
             DatabaseReference intensity = firebaseDatabase.getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
             DatabaseReference rating = firebaseDatabase.getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
@@ -183,7 +183,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                     try {
                         places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
-                        System.out.println("placeName "+places.get(finalI).getPlaceId()+" Name "+places.get(finalI).getPlaceName());
+                        System.out.println("placeName " + places.get(finalI).getPlaceId() + " Name " + places.get(finalI).getPlaceName());
                         myCallBack.onCallback(places);
 
                     } catch (NullPointerException np) {
@@ -204,13 +204,13 @@ public class HalalBeveragesActivity extends SlideBackActivity {
             rating.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try{
+                    try {
                         places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
-                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                        System.out.println("Rating " + places.get(finalI).getTrevuRating());
                         myCallBack.onCallback(places);
-                    }catch (NullPointerException np){
+                    } catch (NullPointerException np) {
                         places.get(finalI).setTrevuRating(1);
-                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                        System.out.println("Rating " + places.get(finalI).getTrevuRating());
                         myCallBack.onCallback(places);
                     }
                 }
@@ -233,7 +233,9 @@ public class HalalBeveragesActivity extends SlideBackActivity {
             places.get(i).setPlaceWeight(weight.get(i));
         }
         Collections.sort(places, new MyComparator());
-        places = new ArrayList<>(places.subList(0, 20));
+        if (places.size() > 20) {
+            places = new ArrayList<>(places.subList(0, 20));
+        }
     }
 
     @Override

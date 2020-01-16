@@ -2,8 +2,8 @@ package com.remu.ui.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,10 +57,6 @@ public class ProfileFragment extends Fragment {
         final String[] birthdate = new String[1];
         final String[] about = new String[1];
         if (currentUser != null) {
-//            Glide.with(ProfileFragment.this)
-//                    .load(currentUser.getPhotoUrl())
-//                    .placeholder(R.drawable.ic_default_avatar)
-//                    .into(profilePicture);
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(FirebaseAuth.getInstance().getUid());
             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -68,10 +64,10 @@ public class ProfileFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     if(dataSnapshot.child("image").exists()){
-                        Glide.with(ProfileFragment.this)
+                        new Handler().postDelayed(() -> Glide.with(ProfileFragment.this)
                                 .load(dataSnapshot.child("image").getValue().toString())
                                 .placeholder(R.drawable.ic_default_avatar)
-                                .into(profilePicture);
+                                .into(profilePicture),500);
                     }
                     if (dataSnapshot.child("gender").exists()) {
                         gender[0] = dataSnapshot.child("gender").getValue().toString();

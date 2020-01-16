@@ -32,7 +32,6 @@ import com.remu.POJO.MyCallBack;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
 import com.remu.POJO.Weighting;
-import com.remu.adapter.FoodBeveragesTourismResultAdapter;
 import com.remu.adapter.TourismAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
 
@@ -140,7 +139,7 @@ public class TourismActivity extends SlideBackActivity {
         }
     }
 
-    private void getGoogleJson(){
+    private void getGoogleJson() {
         HttpHandler httpHandler = new HttpHandler();
 
         String url1 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
@@ -185,11 +184,13 @@ public class TourismActivity extends SlideBackActivity {
         }
 
         Collections.sort(places, new MyComparator());
-        places = new ArrayList<>(places.subList(0, 20));
+        if (places.size() > 20) {
+            places = new ArrayList<>(places.subList(0, 20));
+        }
     }
 
     private void getFirebaseData(MyCallBack myCallBack) {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < places.size(); i++) {
             DatabaseReference intensity = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
             DatabaseReference rating = FirebaseDatabase.getInstance().getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
@@ -217,13 +218,13 @@ public class TourismActivity extends SlideBackActivity {
             rating.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try{
+                    try {
                         places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
-                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                        System.out.println("Rating " + places.get(finalI).getTrevuRating());
                         myCallBack.onCallback(places);
-                    }catch (NullPointerException np){
+                    } catch (NullPointerException np) {
                         places.get(finalI).setTrevuRating(1);
-                        System.out.println("Rating "+places.get(finalI).getTrevuRating());
+                        System.out.println("Rating " + places.get(finalI).getTrevuRating());
                         myCallBack.onCallback(places);
                     }
                 }
@@ -336,7 +337,6 @@ public class TourismActivity extends SlideBackActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
-
 
 
         @Override
