@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,6 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -81,7 +81,7 @@ public class SavedFragment extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getChildrenCount()==0){
+                if (dataSnapshot.getChildrenCount() == 0) {
                     savedEmpty.setVisibility(View.VISIBLE);
                 }
             }
@@ -99,9 +99,10 @@ public class SavedFragment extends Fragment {
     public void onStart() {
         super.onStart();
         firebaseRecyclerAdapterArticle.startListening();
-        firebaseRecyclerAdapterFood.startListening();
-        firebaseRecyclerAdapterTour.startListening();
-        firebaseRecyclerAdapterBeverages.startListening();
+        final Handler handler = new Handler();
+        handler.postDelayed(() -> firebaseRecyclerAdapterFood.startListening(), 300);
+        handler.postDelayed(() -> firebaseRecyclerAdapterTour.startListening(), 600);
+        handler.postDelayed(() -> firebaseRecyclerAdapterBeverages.startListening(), 900);
     }
 
     @Override
@@ -113,7 +114,7 @@ public class SavedFragment extends Fragment {
         firebaseRecyclerAdapterBeverages.stopListening();
     }
 
-    private void initializeBeverages(){
+    private void initializeBeverages() {
         LinearLayoutManager beveragesLayoutManager = new LinearLayoutManager(SavedFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         listBeverages.setLayoutManager(beveragesLayoutManager);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Saved").child(FirebaseAuth.getInstance().getUid()).child("HalalBeverages");
@@ -136,7 +137,7 @@ public class SavedFragment extends Fragment {
                 savedFoodViewHolder.cardView.setOnClickListener(view -> {
                     Intent intent = new Intent(getActivity(), PlaceDetail.class);
                     intent.putExtra("sender", "HalalBeverages");
-                    intent.putExtra("place_id",savedFoodBeveragesTour.getId());
+                    intent.putExtra("place_id", savedFoodBeveragesTour.getId());
                     startActivity(intent);
                 });
 
@@ -166,7 +167,7 @@ public class SavedFragment extends Fragment {
         listBeverages.setAdapter(firebaseRecyclerAdapterBeverages);
     }
 
-    private void initializeTour(){
+    private void initializeTour() {
         LinearLayoutManager tourLayoutManager = new LinearLayoutManager(SavedFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
         listTour.setLayoutManager(tourLayoutManager);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Saved").child(FirebaseAuth.getInstance().getUid()).child("Tourism");
@@ -188,7 +189,7 @@ public class SavedFragment extends Fragment {
                 savedFoodViewHolder.cardView.setOnClickListener(view -> {
                     Intent intent = new Intent(getActivity(), PlaceDetail.class);
                     intent.putExtra("sender", "Tourism");
-                    intent.putExtra("place_id",savedFoodBeveragesTour.getId());
+                    intent.putExtra("place_id", savedFoodBeveragesTour.getId());
                     startActivity(intent);
                 });
                 databaseReference.addValueEventListener(new ValueEventListener() {
@@ -239,7 +240,7 @@ public class SavedFragment extends Fragment {
                 savedFoodViewHolder.cardView.setOnClickListener(view -> {
                     Intent intent = new Intent(getActivity(), PlaceDetail.class);
                     intent.putExtra("sender", "HalalFood");
-                    intent.putExtra("place_id",savedFoodBeveragesTour.getId());
+                    intent.putExtra("place_id", savedFoodBeveragesTour.getId());
                     startActivity(intent);
                 });
                 databaseReference.addValueEventListener(new ValueEventListener() {
@@ -425,7 +426,7 @@ public class SavedFragment extends Fragment {
         @SuppressLint("SetTextI18n")
         void setDistance(double distance) {
             DecimalFormat df = new DecimalFormat("#.##");
-            this.distance.setText(df.format(distance)+ " Km");
+            this.distance.setText(df.format(distance) + " Km");
         }
 
         void setRating(String rating) {
@@ -442,27 +443,27 @@ public class SavedFragment extends Fragment {
             placesClient = Places.createClient(Objects.requireNonNull(getActivity()));
             placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
                 Place place = response.getPlace();
-            if (place.getPhotoMetadatas() != null) {
-                PhotoMetadata photoMetadata = place.getPhotoMetadatas().get(0);
-                Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
-                PlacesClient placesClient1 = Places.createClient(getActivity());
-                FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                        .setMaxHeight(750)
-                        .build();
-                placesClient1.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
-                    Bitmap bitmap = fetchPhotoResponse.getBitmap();
-                    image.setImageBitmap(bitmap);
-                }).addOnFailureListener((exception) -> Log.e("SavedFragment", exception.toString()));
-            } else {
-                LatLng location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-                Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                        + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
-                        .error(R.drawable.bg_loading_image)
-                        .placeholder(R.drawable.bg_loading_image)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                        .into(image);
-            }
-        });
+                if (place.getPhotoMetadatas() != null) {
+                    PhotoMetadata photoMetadata = place.getPhotoMetadatas().get(0);
+                    Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
+                    PlacesClient placesClient1 = Places.createClient(getActivity());
+                    FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                            .setMaxHeight(750)
+                            .build();
+                    placesClient1.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+                        Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                        image.setImageBitmap(bitmap);
+                    }).addOnFailureListener((exception) -> Log.e("SavedFragment", exception.toString()));
+                } else {
+                    LatLng location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+                    Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
+                            + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+                            .error(R.drawable.bg_loading_image)
+                            .placeholder(R.drawable.bg_loading_image)
+                            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                            .into(image);
+                }
+            });
         }
 
     }
