@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment {
                         new Handler().postDelayed(() -> Glide.with(ProfileFragment.this)
                                 .load(dataSnapshot.child("image").getValue().toString())
                                 .placeholder(R.drawable.ic_default_avatar)
-                                .into(profilePicture),500);
+                                .into(profilePicture),200);
                     }
                     if (dataSnapshot.child("gender").exists()) {
                         gender[0] = dataSnapshot.child("gender").getValue().toString();
