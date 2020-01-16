@@ -13,27 +13,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.saber.chentianslideback.SlideBackActivity;
 
 import java.util.Calendar;
@@ -237,13 +228,26 @@ public class ChangeProfileActivity extends SlideBackActivity {
     }
 
     private void uploadImage() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please Wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(FirebaseAuth.getInstance().getUid());
+        databaseReference.child("name").setValue(Objects.requireNonNull(name.getText()).toString()).addOnSuccessListener(aVoid -> {
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name.getText().toString()).build();
+            user.updateProfile(profileUpdates);
+            databaseReference.child("id").setValue(FirebaseAuth.getInstance().getUid()).addOnSuccessListener(aVoid1 ->
+                    databaseReference.child("gender").setValue(genderSpinner.getText().toString()).addOnSuccessListener(aVoid11 ->
+                            databaseReference.child("birthdate").setValue(Objects.requireNonNull(dateOfBirth.getText()).toString()).addOnSuccessListener(aVoid111 ->
+                                    databaseReference.child("about").setValue(Objects.requireNonNull(about.getText()).toString()).addOnSuccessListener(aVoid1111 -> {
+                                        if (filePath == null) {
+                                            progressDialog.dismiss();
+                                            finish();
+                                        }
+                                    }))));
+        });
         if (filePath != null) {
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(FirebaseAuth.getInstance().getUid());
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Loading...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             assert user != null;
             StorageReference ref = FirebaseStorage.getInstance().getReference().child("user").child(user.getUid());
             ref.putFile(filePath).addOnProgressListener(taskSnapshot -> {
@@ -258,14 +262,8 @@ public class ChangeProfileActivity extends SlideBackActivity {
                 return ref.getDownloadUrl();
             }).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    databaseReference.child("id").setValue(FirebaseAuth.getInstance().getUid());
-                    databaseReference.child("name").setValue(Objects.requireNonNull(name.getText()).toString());
-                    databaseReference.child("gender").setValue(genderSpinner.getText().toString());
-                    databaseReference.child("birthdate").setValue(Objects.requireNonNull(dateOfBirth.getText()).toString());
-                    databaseReference.child("about").setValue(Objects.requireNonNull(about.getText()).toString());
                     databaseReference.child("image").setValue(Objects.requireNonNull(Objects.requireNonNull(task.getResult()).toString()));
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(Objects.requireNonNull(name.getText()).toString()).setPhotoUri(Objects.requireNonNull(task.getResult())).build();
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setPhotoUri(Objects.requireNonNull(task.getResult())).build();
                     user.updateProfile(profileUpdates);
                     progressDialog.dismiss();
                     finish();

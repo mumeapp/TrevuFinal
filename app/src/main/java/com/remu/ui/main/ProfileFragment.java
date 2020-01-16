@@ -2,6 +2,7 @@ package com.remu.ui.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,9 +63,16 @@ public class ProfileFragment extends Fragment {
                     .into(profilePicture);
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(FirebaseAuth.getInstance().getUid());
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    if(dataSnapshot.child("image").exists()){
+                        Glide.with(ProfileFragment.this)
+                                .load(dataSnapshot.child("image").getValue().toString())
+                                .placeholder(R.drawable.ic_default_avatar)
+                                .into(profilePicture);
+                    }
                     if (dataSnapshot.child("gender").exists()) {
                         gender[0] = dataSnapshot.child("gender").getValue().toString();
                     } else {
@@ -205,6 +213,13 @@ public class ProfileFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        profileName.setText(name);
     }
 
     private void initializeUI(View root) {
