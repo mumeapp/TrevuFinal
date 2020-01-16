@@ -57,10 +57,10 @@ public class ProfileFragment extends Fragment {
         final String[] birthdate = new String[1];
         final String[] about = new String[1];
         if (currentUser != null) {
-            Glide.with(ProfileFragment.this)
-                    .load(currentUser.getPhotoUrl())
-                    .placeholder(R.drawable.ic_default_avatar)
-                    .into(profilePicture);
+//            Glide.with(ProfileFragment.this)
+//                    .load(currentUser.getPhotoUrl())
+//                    .placeholder(R.drawable.ic_default_avatar)
+//                    .into(profilePicture);
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(FirebaseAuth.getInstance().getUid());
             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -85,7 +85,7 @@ public class ProfileFragment extends Fragment {
                         birthdate[0] = "";
                     }
 
-                    if (dataSnapshot.child("birthdate").exists()) {
+                    if (dataSnapshot.child("about").exists()) {
                         about[0] = dataSnapshot.child("about").getValue().toString();
                     } else {
                         about[0] = "";
