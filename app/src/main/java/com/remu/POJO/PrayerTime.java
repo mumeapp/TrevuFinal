@@ -29,7 +29,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
 
     private String TAG;
     private Context context;
-    private String url;
+    private String todayUrl, tommorowURL;
     private ArrayList<HashMap<String, String>> prayerList;
     private ArrayList<TextView> textViews;
     private ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
@@ -39,7 +39,8 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         this.context = context;
         this.TAG = TAG;
         this.textViews = textViews;
-        setURL(latitude, longitude);
+        setTodayURL(latitude, longitude);
+        setTommorowURL(latitude, longitude);
     }
 
     public PrayerTime(Context context, String TAG, String latitude, String longitude, ArrayList<TextView> textViews, ArrayList<LinearLayout> linearLayouts) {
@@ -47,7 +48,8 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         this.TAG = TAG;
         this.textViews = textViews;
         this.linearLayouts = linearLayouts;
-        setURL(latitude, longitude);
+        setTodayURL(latitude, longitude);
+        setTommorowURL(latitude, longitude);
     }
 
     @Override
@@ -68,36 +70,24 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         HttpHandler httpHandler = new HttpHandler();
 
-        String jsonStr = httpHandler.makeServiceCall(url);
+        String todayJsonStr = httpHandler.makeServiceCall(todayUrl);
+        String tommorowJsonStr = httpHandler.makeServiceCall(tommorowURL);
 
-        Log.d(TAG, "Response from url: " + jsonStr);
+        Log.d(TAG, "Response from url: " + todayJsonStr);
+        Log.d(TAG, "Response from url: " + tommorowJsonStr);
 
-        if (jsonStr != null) {
+        if (todayJsonStr != null) {
             try {
-                JSONObject timings = new JSONObject(jsonStr).getJSONObject("data").getJSONObject("timings");
+                JSONObject todayTimes = new JSONObject(todayJsonStr).getJSONObject("results").getJSONArray("datetime")
+                        .getJSONObject(0).getJSONObject("times");
 
-                prayerList = new ArrayList<HashMap<String, String>>() {{
-                    add(new HashMap<String, String>() {{
-                        put("name", "Fajr");
-                        put("time", timings.getString("Fajr"));
-                    }});
-                    add(new HashMap<String, String>() {{
-                        put("name", "Dhuhr");
-                        put("time", timings.getString("Dhuhr"));
-                    }});
-                    add(new HashMap<String, String>() {{
-                        put("name", "Asr");
-                        put("time", timings.getString("Asr"));
-                    }});
-                    add(new HashMap<String, String>() {{
-                        put("name", "Maghrib");
-                        put("time", timings.getString("Maghrib"));
-                    }});
-                    add(new HashMap<String, String>() {{
-                        put("name", "Isha");
-                        put("time", timings.getString("Isha"));
-                    }});
-                }};
+                if (isPassed(todayTimes.getString("Isha"))) {
+                    JSONObject tommorowTimes = new JSONObject(tommorowJsonStr).getJSONObject("results").getJSONArray("datetime")
+                            .getJSONObject(0).getJSONObject("times");
+                    parseJson(tommorowTimes);
+                } else {
+                    parseJson(todayTimes);
+                }
             } catch (final JSONException e) {
                 Log.e(TAG, "Json parsing error: " + e.getMessage());
             }
@@ -162,7 +152,6 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
                     break;
                 }
             } catch (IllegalArgumentException ignored) {
-
             }
         }
 
@@ -178,8 +167,52 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         nextPrayerTime.setTypeface(typeface);
     }
 
-    private void setURL(String latitude, String longitude) {
-        url = "http://api.aladhan.com/v1/timings?latitude=" + latitude + "&longitude=" + longitude + "&method=3";
+
+    private boolean isPassed(String isyaTimes) {
+        Calendar c = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+        String currentTime = df.format(c.getTime());
+
+        if (Integer.parseInt(currentTime.split(":")[0]) > Integer.parseInt(isyaTimes.split(":")[0])) {
+            return true;
+        } else if (Integer.parseInt(currentTime.split(":")[0]) == Integer.parseInt(isyaTimes.split(":")[0])) {
+            return Integer.parseInt(currentTime.split(":")[1]) >= Integer.parseInt(isyaTimes.split(":")[1]);
+        } else {
+            return false;
+        }
+    }
+
+    private void parseJson(JSONObject times) throws JSONException {
+        prayerList = new ArrayList<HashMap<String, String>>() {{
+            add(new HashMap<String, String>() {{
+                put("name", "Fajr");
+                put("time", times.getString("Fajr"));
+            }});
+            add(new HashMap<String, String>() {{
+                put("name", "Dhuhr");
+                put("time", times.getString("Dhuhr"));
+            }});
+            add(new HashMap<String, String>() {{
+                put("name", "Asr");
+                put("time", times.getString("Asr"));
+            }});
+            add(new HashMap<String, String>() {{
+                put("name", "Maghrib");
+                put("time", times.getString("Maghrib"));
+            }});
+            add(new HashMap<String, String>() {{
+                put("name", "Isha");
+                put("time", times.getString("Isha"));
+            }});
+        }};
+    }
+
+    private void setTodayURL(String latitude, String longitude) {
+        todayUrl = "http://api.pray.zone/v2/times/today.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666";
+    }
+
+    private void setTommorowURL(String latitude, String longitude) {
+        tommorowURL = "http://api.pray.zone/v2/times/tomorrow.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666";
     }
 
 }
