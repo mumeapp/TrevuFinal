@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,7 +59,8 @@ public class HomeFragment extends Fragment {
     private CardView mosqueCardView;
     private LinearLayout fnBButton, tourismButton, findFriendButton, dictionaryButton;
     private TextView userName;
-    private RecyclerView listArticle, listTips;
+    private ShimmerRecyclerView listArticle;
+    private RecyclerView listTips;
 
     private FirebaseRecyclerAdapter<Article, HomeFragment.ArticleViewHolder> firebaseRecyclerAdapter;
     private ArrayList<Tips> tipsDataSet;
@@ -151,6 +154,8 @@ public class HomeFragment extends Fragment {
 
         // explore
         listArticle = root.findViewById(R.id.list_article);
+        listArticle.showShimmerAdapter();
+
         initializeArticle();
 
         // tips
