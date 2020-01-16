@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.onboard.OnBoarding2Fragment">
+    tools:context=".ui.findfriends.FindFriend1Fragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,55 +17,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_new_onboarding_2"
+            android:src="@drawable/ic_new_onboarding_1"
             tools:ignore="ContentDescription" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="5dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:fontFamily="@font/geomanistbold"
-                    android:text="@string/app_name"
-                    android:textColor="#000000"
-                    android:textSize="40sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/geomanistregular"
-                    android:text="can do"
-                    android:textColor="#000000"
-                    android:textSize="40sp"
-                    tools:ignore="HardcodedText" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-10dp"
-                android:fontFamily="@font/geomanistregular"
-                android:text="everything"
-                android:textColor="#000000"
-                android:textSize="40sp"
-                tools:ignore="HardcodedText" />
-
-        </LinearLayout>
+            android:fontFamily="@font/geomanistbold"
+            android:textSize="40sp"
+            android:text="Find Friends"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:layout_width="match_parent"
@@ -74,7 +40,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="50dp"
             android:fontFamily="@font/geomanistregular"
-            android:text="From food to talking to locals, Remu can help with most of it, so you don't have to hassle with everything minor."
+            android:text="We know traveling around is kinda harsh. Find nearby Muslim friends to accompany you with your trip!"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="14sp"
@@ -94,7 +60,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_2_to_3"
+            android:id="@+id/button_start_now"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
@@ -103,7 +69,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_green"
             android:fontFamily="@font/geomanistmedium"
-            android:text="Get Started"
+            android:text="Start now"
             android:textAllCaps="false"
             android:textColor="#ffffff"
             android:textSize="16sp"
