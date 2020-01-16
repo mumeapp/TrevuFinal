@@ -115,7 +115,6 @@ public class HomeFragment extends Fragment {
         //go to tourism activity
         findFriendButton.setOnClickListener(view -> {
             Intent viewFindFriend = new Intent(HomeFragment.super.getContext(), FindFriendActivity.class);
-            viewFindFriend.putExtra("sender", "HomeFragment");
             startActivity(viewFindFriend);
         });
 

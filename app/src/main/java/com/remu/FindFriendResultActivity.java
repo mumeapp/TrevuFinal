@@ -1,6 +1,5 @@
 package com.remu;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
@@ -22,22 +21,13 @@ public class FindFriendResultActivity extends SlideBackActivity {
     protected void slideBackSuccess() {
         super.slideBackSuccess();
 
-        overrideFinish();
+        finish();
+
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        overrideFinish();
-    }
-
-    private void overrideFinish() {
+    public void finish() {
+        super.finish();
         Animatoo.animateSlideRight(this);
-        Intent intent = new Intent(FindFriendResultActivity.this, FindFriendActivity.class);
-        intent.putExtra("sender", "FindFriendResult");
-        startActivity(intent);
-        finish();
     }
-
 }

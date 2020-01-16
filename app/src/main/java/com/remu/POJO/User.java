@@ -7,6 +7,11 @@ public class User {
 
     }
 
+    public User(String id, String foto){
+        this.id = id;
+        this.foto = foto;
+    }
+
     public User(String nama, String gender, String age, String tanggal, String deskripsi, String email, String foto,String LatLong, String id) {
         this.nama = nama;
         this.gender = gender;

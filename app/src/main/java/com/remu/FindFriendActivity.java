@@ -12,17 +12,14 @@ import com.saber.chentianslideback.SlideBackActivity;
 public class FindFriendActivity extends SlideBackActivity implements FragmentChangeListener {
 
     private NavController navController;
+    private int currentView = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_friend);
 
-        if (getIntent().getStringExtra("sender").equals("FindFriendResult")) {
-            Animatoo.animateSlideRight(this);
-        } else {
-            Animatoo.animateSlideLeft(this);
-        }
+        Animatoo.animateSlideLeft(this);
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_findfriends);
 
@@ -37,6 +34,16 @@ public class FindFriendActivity extends SlideBackActivity implements FragmentCha
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (currentView == 1) {
+            finish();
+        } else {
+            navController.navigate(R.id.nav_findfriend1);
+        }
+    }
+
+    @Override
     public void finish() {
         super.finish();
 
@@ -48,12 +55,15 @@ public class FindFriendActivity extends SlideBackActivity implements FragmentCha
         switch (idFragment) {
             case 1:
                 navController.navigate(R.id.nav_findfriend1);
+                currentView = 1;
                 break;
             case 2:
                 navController.navigate(R.id.nav_findfriend2);
+                currentView = 2;
                 break;
             case 3:
                 navController.navigate(R.id.nav_findfriend3);
+                currentView = 3;
                 break;
         }
     }
