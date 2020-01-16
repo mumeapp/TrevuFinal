@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.remu.DictionaryActivity;
 import com.remu.FindFriendActivity;
 import com.remu.FoodActivity;
+import com.remu.LoginActivity;
 import com.remu.MosqueActivity;
 import com.remu.POJO.Article;
 import com.remu.POJO.PrayerTime;
