@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.remu.DictionaryActivity;
 import com.remu.FindFriendActivity;
 import com.remu.FoodActivity;
+import com.remu.LoginActivity;
 import com.remu.MosqueActivity;
 import com.remu.POJO.Article;
 import com.remu.POJO.PrayerTime;
@@ -73,6 +74,11 @@ public class HomeFragment extends Fragment {
 
         latitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
         longitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
+
+        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        }
 
         Log.e(TAG, "Latitude: " + latitude);
         Log.e(TAG, "Longitude: " + longitude);
