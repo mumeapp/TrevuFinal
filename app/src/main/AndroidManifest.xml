@@ -111,6 +111,9 @@
         <activity
             android:name=".ChangeProfileActivity"
             android:theme="@style/ChangeProfileTheme" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:theme="@style/WhiteTheme" />
 
         <!-- settings and about -->
         <activity
