@@ -78,26 +78,34 @@ public class FindFriend3Fragment extends Fragment {
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User Location");
         databaseReference.orderByChild(FirebaseAuth.getInstance().getUid()).equalTo(null).addListenerForSingleValueEvent(new ValueEventListener() {
-            long state = 0;
+
+            int state = 0;
+            long child = 0;
+            int count1 = 0;
+            boolean check = false;
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<User> userList = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String[] latlong = ds.child("latlong").getValue().toString().split(",");
+                    ++state;
+                    child = dataSnapshot.getChildrenCount();
                     if (ds.child("status").getValue().equals(true) && Distance.distance(Double.parseDouble(latlong[0]), Double.parseDouble(latitude), Double.parseDouble(latlong[1]), Double.parseDouble(longitude)) <= 10) {
-                        ++state;
                         String id = ds.child("userId").getValue().toString();
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Profile").child(id).child("image");
+                        ++count1;
+                        check =true;
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Profile").child(id);
                         reference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 try {
-                                    System.out.println("foto" + dataSnapshot.getValue().toString());
-                                    userList.add(new User(id, dataSnapshot.getValue().toString()));
+                                    userList.add(new User(id, dataSnapshot.child("image").getValue().toString(), dataSnapshot.child("birthdate").getValue().toString(), dataSnapshot.child("gender").getValue().toString(), dataSnapshot.child("name").getValue().toString()));
                                 } catch (NullPointerException np) {
-                                    userList.add(new User(id, ""));
+                                    --count1;
                                 }
+                                Gson gson = new Gson();
+                                String friends = gson.toJson(userList);
                                 int delay = 1000;
                                 for (int i = 0; i < friendPicture.size(); i++) {
                                     if (i < userList.size()) {
@@ -111,9 +119,8 @@ public class FindFriend3Fragment extends Fragment {
                                         delay += 2000;
                                     }
                                 }
-                                Gson gson = new Gson();
-                                String friends = gson.toJson(userList);
-                                if (userList.size() == state) {
+
+                                if (userList.size()==count1) {
                                     new Handler().postDelayed(() -> {
                                         Intent intent = new Intent(mActivity, FindFriendResultActivity.class);
                                         intent.putExtra("friendList", friends);
@@ -132,6 +139,18 @@ public class FindFriend3Fragment extends Fragment {
                             }
                         });
 
+                    }
+                    else{
+                        if (state == child&&!check) {
+                            new Handler().postDelayed(() -> {
+                                Intent intent = new Intent(mActivity, FindFriendResultActivity.class);
+                                startActivity(intent);
+                                FragmentChangeListener fragmentChangeListener = (FragmentChangeListener) getActivity();
+                                assert fragmentChangeListener != null;
+                                fragmentChangeListener.replaceFragment(1);
+                                mActivity.finish();
+                            }, 6000);
+                        }
                     }
                 }
             }

@@ -1,28 +1,21 @@
 package com.remu.POJO;
 
 public class User {
-    private String nama, gender, age, tanggal, deskripsi, email, foto, LatLong, id;
+    private String name, gender,  birthdate, about, email, image, LatLong, id;
 
     public User(){
 
     }
 
-    public User(String id, String foto){
+    public User(String id, String foto, String birthdate, String gender, String name){
         this.id = id;
-        this.foto = foto;
+        this.image = foto;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.name = name;
     }
 
-    public User(String nama, String gender, String age, String tanggal, String deskripsi, String email, String foto,String LatLong, String id) {
-        this.nama = nama;
-        this.gender = gender;
-        this.age = age;
-        this.tanggal = tanggal;
-        this.deskripsi = deskripsi;
-        this.email = email;
-        this.foto = foto;
-        this.LatLong = LatLong;
-        this.id = id;
-    }
+
 
     public String getId() {
         return id;
@@ -33,11 +26,11 @@ public class User {
     }
 
     public String getNama() {
-        return nama;
+        return name;
     }
 
     public void setNama(String nama) {
-        this.nama = nama;
+        this.name = nama;
     }
 
     public String getGender() {
@@ -48,28 +41,20 @@ public class User {
         this.gender = gender;
     }
 
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
     public String getTanggal() {
-        return tanggal;
+        return birthdate;
     }
 
     public void setTanggal(String tanggal) {
-        this.tanggal = tanggal;
+        this.birthdate = tanggal;
     }
 
     public String getDeskripsi() {
-        return deskripsi;
+        return about;
     }
 
     public void setDeskripsi(String deskripsi) {
-        this.deskripsi = deskripsi;
+        this.about = deskripsi;
     }
 
     public String getEmail() {
@@ -81,11 +66,11 @@ public class User {
     }
 
     public String getFoto() {
-        return foto;
+        return image;
     }
 
     public void setFoto(String foto) {
-        this.foto = foto;
+        this.image = foto;
     }
 
     public String getLatLong() {
