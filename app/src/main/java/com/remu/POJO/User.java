@@ -1,7 +1,7 @@
 package com.remu.POJO;
 
 public class User {
-    private String name, gender,  birthdate, about, email, image, LatLong, id;
+    private String name, gender,  birthdate, about, image, LatLong, id;
 
     public User(){
 
@@ -25,61 +25,30 @@ public class User {
         this.id = id;
     }
 
-    public String getNama() {
+    public String getName() {
         return name;
-    }
-
-    public void setNama(String nama) {
-        this.name = nama;
     }
 
     public String getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
     public String getTanggal() {
         return birthdate;
-    }
-
-    public void setTanggal(String tanggal) {
-        this.birthdate = tanggal;
     }
 
     public String getDeskripsi() {
         return about;
     }
 
-    public void setDeskripsi(String deskripsi) {
-        this.about = deskripsi;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFoto() {
+    public String getImage() {
         return image;
-    }
-
-    public void setFoto(String foto) {
-        this.image = foto;
     }
 
     public String getLatLong() {
         return LatLong;
     }
 
-    public void setLatLong(String LatLong) {
-        this.LatLong = LatLong;
-    }
 
 
 

@@ -110,7 +110,7 @@ public class FindFriend3Fragment extends Fragment {
                                 for (int i = 0; i < friendPicture.size(); i++) {
                                     if (i < userList.size()) {
                                         Glide.with(FindFriend3Fragment.this)
-                                                .load(userList.get(i).getFoto())
+                                                .load(userList.get(i).getImage())
                                                 .centerCrop()
                                                 .placeholder(R.drawable.ic_default_avatar)
                                                 .into(friendPicture.get(i));

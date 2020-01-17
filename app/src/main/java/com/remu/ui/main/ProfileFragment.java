@@ -63,11 +63,11 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    if(dataSnapshot.child("image").exists()){
+                    if (dataSnapshot.child("image").exists()) {
                         new Handler().postDelayed(() -> Glide.with(ProfileFragment.this)
                                 .load(dataSnapshot.child("image").getValue().toString())
                                 .placeholder(R.drawable.ic_default_avatar)
-                                .into(profilePicture),200);
+                                .into(profilePicture), 200);
                     }
                     if (dataSnapshot.child("gender").exists()) {
                         gender[0] = dataSnapshot.child("gender").getValue().toString();
