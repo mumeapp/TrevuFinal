@@ -116,12 +116,14 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
                 setNextPrayerName(textViews.get(1));
                 setPrayerList(textViews.get(2), textViews.get(3), textViews.get(4), textViews.get(5), textViews.get(6));
                 highlightNextPrayerTime(linearLayouts.get(getIndexNextPrayerTime()), textViews.get(getIndexNextPrayerTime() + 2));
+                break;
             case "HomeFragment":
                 new Handler().postDelayed(() -> {
                     setNextPrayerTime(textViews.get(0));
                     jamSholatShimmerLoad.stopShimmer();
                     jamSholatShimmerLoad.setVisibility(View.GONE);
                 }, 300);
+                break;
         }
     }
 
