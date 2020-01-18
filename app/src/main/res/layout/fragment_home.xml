@@ -98,18 +98,42 @@
                             android:textSize="17sp"
                             tools:ignore="HardcodedText" />
 
-                        <TextView
-                            android:id="@+id/jam_solat_selanjutnya"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_marginStart="15dp"
                             android:layout_marginBottom="10dp"
-                            android:fontFamily="@font/geomanistblack"
-                            android:text=""
-                            android:textColor="@color/black"
-                            android:textSize="50sp"
-                            tools:ignore="RelativeOverlap" />
+                            android:orientation="horizontal">
+
+                            <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/shimmer_load_jam_sholat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:shimmer_duration="800">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <include layout="@layout/adapter_load_time_sholat" />
+
+                                </LinearLayout>
+
+                            </com.facebook.shimmer.ShimmerFrameLayout>
+
+                            <TextView
+                                android:id="@+id/jam_solat_selanjutnya"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/geomanistblack"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="50sp"
+                                tools:ignore="RelativeOverlap" />
+
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -136,8 +160,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/fnb_button"
@@ -160,8 +184,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/geomanistregular"
                         android:text="Food and\nDrinks"
-                        android:textColor="@color/black"
                         android:textAlignment="center"
+                        android:textColor="@color/black"
                         android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
@@ -188,9 +212,9 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/geomanistregular"
                         android:text="Tourism"
+                        android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="15sp"
-                        android:textAlignment="center"
                         tools:ignore="HardcodedText" />
 
                 </LinearLayout>
@@ -216,8 +240,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/geomanistregular"
                         android:text="Find\nFriends"
-                        android:textColor="@color/black"
                         android:textAlignment="center"
+                        android:textColor="@color/black"
                         android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
@@ -244,8 +268,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/geomanistregular"
                         android:text="Dictionary"
-                        android:textColor="@color/black"
                         android:textAlignment="center"
+                        android:textColor="@color/black"
                         android:textSize="15sp"
                         tools:ignore="HardcodedText" />
 
@@ -278,18 +302,41 @@
                 android:textSize="20sp"
                 tools:ignore="HardcodedText" />
 
-            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
-                android:id="@+id/list_article"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:clipToPadding="false"
-                android:paddingStart="15dp"
-                android:paddingEnd="10dp"
-                app:shimmer_demo_child_count="2"
-                app:shimmer_demo_layout="@layout/adapter_load_article"
-                app:shimmer_demo_angle="20"
-                app:shimmer_demo_shimmer_color="#73ffffff" />
+                android:orientation="horizontal">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_load_article"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="10dp"
+                    app:shimmer_duration="800">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/adapter_load_article" />
+
+                        <include layout="@layout/adapter_load_article" />
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_article"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:clipToPadding="false"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="10dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -327,14 +374,43 @@
                 android:textSize="17sp"
                 tools:ignore="HardcodedText" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_tips"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:clipToPadding="false"
-                android:paddingStart="15dp"
-                android:paddingEnd="10dp" />
+                android:orientation="horizontal">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_load_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="10dp"
+                    app:shimmer_duration="800">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/adapter_load_tips" />
+
+                        <include layout="@layout/adapter_load_tips" />
+
+                        <include layout="@layout/adapter_load_tips" />
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_tips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:clipToPadding="false"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="10dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -10,11 +10,13 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 import android.util.Range;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.remu.R;
 
 import org.json.JSONException;
@@ -31,13 +33,16 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     private Context context;
     private String todayUrl, tomorrowURL;
     private ArrayList<HashMap<String, String>> prayerList;
+
+    private ShimmerFrameLayout jamSholatShimmerLoad;
     private ArrayList<TextView> textViews;
     private ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
     private ProgressDialog progressDialog;
 
-    public PrayerTime(Context context, String TAG, String latitude, String longitude, ArrayList<TextView> textViews) {
+    public PrayerTime(Context context, String TAG, String latitude, String longitude, ShimmerFrameLayout jamSholatShimmerLoad, ArrayList<TextView> textViews) {
         this.context = context;
         this.TAG = TAG;
+        this.jamSholatShimmerLoad = jamSholatShimmerLoad;
         this.textViews = textViews;
         setTodayURL(latitude, longitude);
         setTomorrowURL(latitude, longitude);
@@ -55,7 +60,6 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Please wait...");
@@ -113,7 +117,11 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
                 setPrayerList(textViews.get(2), textViews.get(3), textViews.get(4), textViews.get(5), textViews.get(6));
                 highlightNextPrayerTime(linearLayouts.get(getIndexNextPrayerTime()), textViews.get(getIndexNextPrayerTime() + 2));
             case "HomeFragment":
-                new Handler().postDelayed(() -> setNextPrayerTime(textViews.get(0)), 300);
+                new Handler().postDelayed(() -> {
+                    setNextPrayerTime(textViews.get(0));
+                    jamSholatShimmerLoad.stopShimmer();
+                    jamSholatShimmerLoad.setVisibility(View.GONE);
+                }, 300);
         }
     }
 
