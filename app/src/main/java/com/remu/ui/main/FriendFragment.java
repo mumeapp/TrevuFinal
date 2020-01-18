@@ -1,6 +1,5 @@
 package com.remu.ui.main;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -51,10 +50,9 @@ public class FriendFragment extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getChildrenCount()!=0){
+                if (dataSnapshot.getChildrenCount() != 0) {
                     friendEmpty.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     friendEmpty.setVisibility(View.VISIBLE);
                 }
             }
@@ -100,28 +98,43 @@ public class FriendFragment extends Fragment {
         friendRequestTxt = root.findViewById(R.id.friend_request_text);
     }
 
-    private void initializeFriendList(){
-        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(FriendFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
+    private void initializeFriendList() {
+        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(FriendFragment.this.getContext(), LinearLayoutManager.VERTICAL, false);
         friendList.setLayoutManager(articleLayoutManager);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(FirebaseAuth.getInstance().getUid());
 
         Query query = databaseReference.orderByChild(FirebaseAuth.getInstance().getUid()).equalTo(true);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    friendListTxt.setVisibility(View.GONE);
+                } else {
+                    friendListTxt.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class).build();
 
+
         firebaseRecyclerAdapterList = new FirebaseRecyclerAdapter<User, FriendListViewHolder>(options) {
-            @SuppressLint("SetTextI18n")
+
             @Override
             protected void onBindViewHolder(@NonNull FriendFragment.FriendListViewHolder friendRequestViewHolder, int i, @NonNull User user) {
-                friendListTxt.setVisibility(View.VISIBLE);
                 DatabaseReference profileReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(user.getId());
-                friendRequestViewHolder.addFriend.setText("View Profile");
-
                 profileReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        friendRequestViewHolder.addFriend.setText("View Profile");
                         friendRequestViewHolder.setName(dataSnapshot.child("name").getValue().toString());
                         friendRequestViewHolder.setGender(dataSnapshot.child("gender").getValue().toString());
                         friendRequestViewHolder.setImage(dataSnapshot.child("image").getValue().toString());
@@ -199,20 +212,35 @@ public class FriendFragment extends Fragment {
     }
 
     private void initializeFriendRequest() {
-        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(FriendFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(FriendFragment.this.getContext(), LinearLayoutManager.VERTICAL, false);
         friendRequest.setLayoutManager(articleLayoutManager);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(FirebaseAuth.getInstance().getUid());
 
         Query query = databaseReference.orderByChild(FirebaseAuth.getInstance().getUid()).equalTo(false);
 
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    friendRequestTxt.setVisibility(View.GONE);
+                } else {
+                    friendRequestTxt.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class).build();
 
         firebaseRecyclerAdapterrequest = new FirebaseRecyclerAdapter<User, FriendFragment.FriendRequestViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull FriendFragment.FriendRequestViewHolder friendRequestViewHolder, int i, @NonNull User user) {
-                friendRequestTxt.setVisibility(View.VISIBLE);
                 DatabaseReference friendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(user.getId()).child(FirebaseAuth.getInstance().getUid());
                 friendRequestViewHolder.setName(user.getName());
                 friendRequestViewHolder.setImage(user.getImage());
@@ -249,11 +277,11 @@ public class FriendFragment extends Fragment {
             btnDecline = itemView.findViewById(R.id.button_decline);
         }
 
-        void setName(String name) {
+        public void setName(String name) {
             this.name.setText(name);
         }
 
-        void setImage(String foto) {
+        public void setImage(String foto) {
             Glide.with(FriendFragment.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading_image)
@@ -275,11 +303,11 @@ public class FriendFragment extends Fragment {
             addFriend = itemView.findViewById(R.id.button_add_friend);
         }
 
-        void setName(String name) {
+        public void setName(String name) {
             this.name.setText(name);
         }
 
-        void setImage(String foto) {
+        public void setImage(String foto) {
             Glide.with(FriendFragment.this)
                     .load(foto)
                     .placeholder(R.drawable.bg_loading_image)
