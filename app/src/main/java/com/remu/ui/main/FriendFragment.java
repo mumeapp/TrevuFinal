@@ -36,6 +36,7 @@ public class FriendFragment extends Fragment {
     private Button btnFindFriend;
     private LinearLayout friendEmpty;
     private RecyclerView friendRequest, friendList;
+    private TextView friendRequestTxt, friendListTxt;
     private FirebaseRecyclerAdapter<User, FriendFragment.FriendRequestViewHolder> firebaseRecyclerAdapterrequest;
     private FirebaseRecyclerAdapter<User, FriendFragment.FriendListViewHolder> firebaseRecyclerAdapterList;
 
@@ -95,6 +96,8 @@ public class FriendFragment extends Fragment {
         friendRequest = root.findViewById(R.id.friends_request_recyclerview);
         friendList = root.findViewById(R.id.friends_recyclerview);
         friendEmpty = root.findViewById(R.id.friends_empty);
+        friendListTxt = root.findViewById(R.id.friend_list_text);
+        friendRequestTxt = root.findViewById(R.id.friend_request_text);
     }
 
     private void initializeFriendList(){
@@ -112,9 +115,9 @@ public class FriendFragment extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             protected void onBindViewHolder(@NonNull FriendFragment.FriendListViewHolder friendRequestViewHolder, int i, @NonNull User user) {
+                friendListTxt.setVisibility(View.VISIBLE);
                 DatabaseReference profileReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(user.getId());
-                friendRequestViewHolder.addFriend.setText("Delete");
-                friendRequestViewHolder.addFriend.setTextColor(getActivity().getColor(R.color.quantum_error_dark));
+                friendRequestViewHolder.addFriend.setText("View Profile");
 
                 profileReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -209,6 +212,7 @@ public class FriendFragment extends Fragment {
         firebaseRecyclerAdapterrequest = new FirebaseRecyclerAdapter<User, FriendFragment.FriendRequestViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull FriendFragment.FriendRequestViewHolder friendRequestViewHolder, int i, @NonNull User user) {
+                friendRequestTxt.setVisibility(View.VISIBLE);
                 DatabaseReference friendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(user.getId()).child(FirebaseAuth.getInstance().getUid());
                 friendRequestViewHolder.setName(user.getName());
                 friendRequestViewHolder.setImage(user.getImage());
