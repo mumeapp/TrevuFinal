@@ -1,5 +1,6 @@
 package com.remu;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +35,7 @@ import com.remu.POJO.HttpHandler;
 import com.remu.POJO.MyCallBack;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
+import com.remu.POJO.Rating;
 import com.remu.POJO.Weighting;
 import com.remu.adapter.FoodBeveragesTourismResultAdapter;
 import com.remu.adapter.MidnightFoodAdapter;
@@ -41,11 +45,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class HalalFoodActivity extends SlideBackActivity {
 
@@ -270,7 +276,6 @@ public class HalalFoodActivity extends SlideBackActivity {
     private void getFirebaseData(MyCallBack myCallBack) {
         for (int i = 0; i < places.size(); i++) {
             DatabaseReference intensity = firebaseDatabase.getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
-            DatabaseReference rating = firebaseDatabase.getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
             intensity.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -292,19 +297,46 @@ public class HalalFoodActivity extends SlideBackActivity {
 
                 }
             });
+            DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(i).getPlaceId());
+            databaseReview.addChildEventListener(new ChildEventListener() {
+                double rataRata = 0;
+                double jumlah = 0;
 
-            rating.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @SuppressLint("SetTextI18n")
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
                     try {
-                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
-                        System.out.println("Rating " + places.get(finalI).getTrevuRating());
+                        ++jumlah;
+                        rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
+                        rataRata /= jumlah;
+
+                        places.get(finalI).setTrevuRating(rataRata);
+                        System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
                         myCallBack.onCallback(places);
+
                     } catch (NullPointerException np) {
                         places.get(finalI).setTrevuRating(1);
-                        System.out.println("Rating " + places.get(finalI).getTrevuRating());
+                        System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
                         myCallBack.onCallback(places);
+
                     }
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
                 }
 
                 @Override
