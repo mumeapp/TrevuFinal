@@ -38,6 +38,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Distance;
 import com.remu.POJO.Rating;
+import com.remu.ui.main.FriendFragment;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -73,8 +74,12 @@ public class HalalGiftDetail extends SlideBackActivity {
         Animatoo.animateSlideLeft(this);
 
         String uId = FirebaseAuth.getInstance().getUid();
-        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        String nama = email.split("@")[0];
+        String nama = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+
+        Glide.with(HalalGiftDetail.this)
+                .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
+                .placeholder(R.drawable.ic_default_avatar)
+                .into(userImage);
 
         LinearLayoutManager articleLayoutManager = new LinearLayoutManager(HalalGiftDetail.this, LinearLayoutManager.VERTICAL, false);
         listReviews.setLayoutManager(articleLayoutManager);
@@ -89,9 +94,27 @@ public class HalalGiftDetail extends SlideBackActivity {
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Rating, HalalGiftDetailAdapter>(options) {
             @Override
             protected void onBindViewHolder(@NonNull HalalGiftDetailAdapter halalGiftDetailAdapter, int i, @NonNull Rating rating) {
-                    halalGiftDetailAdapter.setNama(rating.getNamaUser());
-                    halalGiftDetailAdapter.setImage("");
-                    halalGiftDetailAdapter.setReview(rating.getReview());
+                halalGiftDetailAdapter.setReview(rating.getReview());
+                DatabaseReference profileReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(rating.getIdUser());
+                profileReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        try {
+                            halalGiftDetailAdapter.setNama(dataSnapshot.child("name").getValue().toString());
+                            halalGiftDetailAdapter.setImage(dataSnapshot.child("image").getValue().toString());
+                        } catch (NullPointerException np) {
+                            halalGiftDetailAdapter.setNama(rating.getNamaUser());
+                            halalGiftDetailAdapter.setImage("");
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @NonNull
@@ -257,7 +280,7 @@ public class HalalGiftDetail extends SlideBackActivity {
         public void setImage(String foto) {
             Glide.with(HalalGiftDetail.this)
                     .load(foto)
-                    .placeholder(R.drawable.profile_annasaha)
+                    .placeholder(R.drawable.ic_default_avatar)
                     .into(image);
         }
 
