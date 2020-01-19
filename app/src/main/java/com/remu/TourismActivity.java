@@ -212,7 +212,7 @@ public class TourismActivity extends SlideBackActivity {
                         myCallBack.onCallback(places);
                     }
 
-                    DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(i).getPlaceId());
+                    DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(finalI).getPlaceId());
                     databaseReview.addChildEventListener(new ChildEventListener() {
                         double rataRata = 0;
                         double jumlah = 0;
