@@ -13,8 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.User;
 import com.remu.R;
 
@@ -42,6 +45,39 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull FriendAdapter.ViewHolder holder, int position) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(FirebaseAuth.getInstance().getUid()).child(mDataset.get(position).getId()).child("id");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    holder.addFriend.setVisibility(View.GONE);
+                }
+                else{
+                    holder.addFriend.setOnClickListener(view -> {
+                        DatabaseReference friendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mDataset.get(position).getId()).child(FirebaseAuth.getInstance().getUid());
+                        friendDatabase.child(mDataset.get(position).getId()).setValue(false);
+                        friendDatabase.child("id").setValue(FirebaseAuth.getInstance().getUid());
+                        friendDatabase.child("image").setValue(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
+                        friendDatabase.child("name").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        DatabaseReference yourDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(FirebaseAuth.getInstance().getUid()).child(mDataset.get(position).getId());
+                        yourDatabase.child("id").setValue(mDataset.get(position).getId());
+                        yourDatabase.child("image").setValue(mDataset.get(position).getImage());
+                        yourDatabase.child("name").setValue(mDataset.get(position).getName());
+
+                        holder.addFriend.setText("Request sent");
+                        holder.addFriend.setTextColor(app.getColor(R.color.grey_300));
+                        holder.addFriend.setOnClickListener(view1 -> {
+
+                        });
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         holder.name.setText(mDataset.get(position).getName());
 
         Glide.with(app.getApplicationContext())
@@ -102,23 +138,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         }
         holder.age.setText(Integer.toString(age));
         holder.gender.setText(mDataset.get(position).getGender());
-        holder.addFriend.setOnClickListener(view -> {
-            DatabaseReference friendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mDataset.get(position).getId()).child(FirebaseAuth.getInstance().getUid());
-            friendDatabase.child(mDataset.get(position).getId()).setValue(false);
-            friendDatabase.child("id").setValue(FirebaseAuth.getInstance().getUid());
-            friendDatabase.child("image").setValue(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
-            friendDatabase.child("name").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-            DatabaseReference yourDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(FirebaseAuth.getInstance().getUid()).child(mDataset.get(position).getId());
-            yourDatabase.child("id").setValue(mDataset.get(position).getId());
-            yourDatabase.child("image").setValue(mDataset.get(position).getImage());
-            yourDatabase.child("name").setValue(mDataset.get(position).getName());
 
-            holder.addFriend.setText("Request sent");
-            holder.addFriend.setTextColor(app.getColor(R.color.grey_300));
-            holder.addFriend.setOnClickListener(view1 -> {
-
-            });
-        });
     }
 
     @Override
