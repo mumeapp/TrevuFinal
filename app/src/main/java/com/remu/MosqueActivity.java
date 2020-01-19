@@ -295,7 +295,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
         jamSolat = findViewById(R.id.jamSolat);
         CardView cardJamSolat = jamSolat.findViewById(R.id.card);
-        cardJamSolat.setRadius(getPixelFromDp(12));
+        cardJamSolat.setRadius(getPixelFromDp(10));
         cardJamSolat.setElevation(0);
         TextView captionCardSholat = cardJamSolat.findViewById(R.id.title);
         captionCardSholat.setTypeface(ResourcesCompat.getFont(this, R.font.geomanistregular));
