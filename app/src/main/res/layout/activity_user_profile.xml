@@ -47,6 +47,7 @@
                 app:cardElevation="0dp">
 
                 <ImageView
+                    android:id="@+id/view_profile_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_default_avatar" />

@@ -271,15 +271,16 @@ public class PlaceDetail extends SlideBackActivity {
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Rating, PlaceDetail.TourismDetailAdapter>(options) {
             @Override
             protected void onBindViewHolder(@NonNull PlaceDetail.TourismDetailAdapter tourismDetailAdapter, int i, @NonNull Rating rating) {
-                tourismDetailAdapter.setNama(rating.getNamaUser());
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(rating.getIdUser()).child("image");
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(rating.getIdUser());
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         try {
-                            tourismDetailAdapter.setImage(dataSnapshot.getValue().toString());
+                            tourismDetailAdapter.setNama(dataSnapshot.child("name").getValue().toString());
+                            tourismDetailAdapter.setImage(dataSnapshot.child("image").getValue().toString());
                         } catch (NullPointerException np) {
                             tourismDetailAdapter.setImage("");
+                            tourismDetailAdapter.setNama(rating.getNamaUser());
                         }
 
                     }
