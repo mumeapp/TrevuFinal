@@ -290,6 +290,53 @@ public class HalalFoodActivity extends SlideBackActivity {
                         System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
                         myCallBack.onCallback(places);
                     }
+                    DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(finalI).getPlaceId());
+                    databaseReview.addChildEventListener(new ChildEventListener() {
+                        double rataRata = 0;
+                        double jumlah = 0;
+
+
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            try {
+                                ++jumlah;
+                                rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
+                                rataRata /= jumlah;
+
+                                places.get(finalI).setTrevuRating(rataRata);
+                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
+                                myCallBack.onCallback(places);
+
+                            } catch (NullPointerException np) {
+                                places.get(finalI).setTrevuRating(1);
+                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
+                                myCallBack.onCallback(places);
+
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
                 @Override
@@ -297,53 +344,7 @@ public class HalalFoodActivity extends SlideBackActivity {
 
                 }
             });
-            DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(i).getPlaceId());
-            databaseReview.addChildEventListener(new ChildEventListener() {
-                double rataRata = 0;
-                double jumlah = 0;
 
-
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    try {
-                        ++jumlah;
-                        rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
-                        rataRata /= jumlah;
-
-                        places.get(finalI).setTrevuRating(rataRata);
-                        System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
-                        myCallBack.onCallback(places);
-
-                    } catch (NullPointerException np) {
-                        places.get(finalI).setTrevuRating(1);
-                        System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
-                        myCallBack.onCallback(places);
-
-                    }
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
         }
     }
 
