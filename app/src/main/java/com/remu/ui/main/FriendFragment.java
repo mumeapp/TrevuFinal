@@ -1,5 +1,6 @@
 package com.remu.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.remu.FindFriendActivity;
 import com.remu.POJO.User;
 import com.remu.R;
+import com.remu.UserProfileActivity;
 
 import java.util.Calendar;
 
@@ -128,13 +130,14 @@ public class FriendFragment extends Fragment {
 
         firebaseRecyclerAdapterList = new FirebaseRecyclerAdapter<User, FriendListViewHolder>(options) {
 
+            @SuppressLint("SetTextI18n")
             @Override
             protected void onBindViewHolder(@NonNull FriendFragment.FriendListViewHolder friendRequestViewHolder, int i, @NonNull User user) {
+                friendRequestViewHolder.addFriend.setText("View Profile");
                 DatabaseReference profileReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(user.getId());
                 profileReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        friendRequestViewHolder.addFriend.setText("View Profile");
                         friendRequestViewHolder.setName(dataSnapshot.child("name").getValue().toString());
                         friendRequestViewHolder.setGender(dataSnapshot.child("gender").getValue().toString());
                         friendRequestViewHolder.setImage(dataSnapshot.child("image").getValue().toString());
@@ -190,6 +193,16 @@ public class FriendFragment extends Fragment {
                         } else {
                             age = year - Integer.parseInt(birthDate[2]) - 1;
                         }
+                        friendRequestViewHolder.addFriend.setOnClickListener(view -> {
+                            Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+                            intent.putExtra("id", user.getId());
+                            intent.putExtra("name", dataSnapshot.child("name").getValue().toString());
+                            intent.putExtra("gender", dataSnapshot.child("gender").getValue().toString());
+                            intent.putExtra("image", dataSnapshot.child("image").getValue().toString());
+                            intent.putExtra("age", age + "");
+                            intent.putExtra("about", dataSnapshot.child("about").getValue().toString());
+                            startActivity(intent);
+                        });
                         friendRequestViewHolder.setAge(Integer.toString(age));
                     }
 
@@ -284,7 +297,7 @@ public class FriendFragment extends Fragment {
         public void setImage(String foto) {
             Glide.with(FriendFragment.this)
                     .load(foto)
-                    .placeholder(R.drawable.bg_loading_image)
+                    .placeholder(R.drawable.ic_default_avatar)
                     .into(image);
         }
     }
@@ -310,7 +323,7 @@ public class FriendFragment extends Fragment {
         public void setImage(String foto) {
             Glide.with(FriendFragment.this)
                     .load(foto)
-                    .placeholder(R.drawable.bg_loading_image)
+                    .placeholder(R.drawable.ic_default_avatar)
                     .into(image);
         }
 
