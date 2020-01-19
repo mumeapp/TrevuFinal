@@ -11,8 +11,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="-2dp" />
+        android:layout_alignParentTop="true" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -20,8 +19,8 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="75dp"
         android:layout_marginEnd="50dp"
-        android:elevation="12dp"
-        app:cardCornerRadius="12dp">
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
 
         <com.alespero.expandablecardview.ExpandableCardView
             android:id="@+id/jamSolat"
