@@ -1,5 +1,6 @@
 package com.remu;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +34,7 @@ import com.remu.POJO.HttpHandler;
 import com.remu.POJO.MyCallBack;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
+import com.remu.POJO.Rating;
 import com.remu.POJO.Weighting;
 import com.remu.adapter.FoodBeveragesTourismResultAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
@@ -175,7 +179,6 @@ public class HalalBeveragesActivity extends SlideBackActivity {
     private void getFirebaseData(MyCallBack myCallBack) {
         for (int i = 0; i < places.size(); i++) {
             DatabaseReference intensity = firebaseDatabase.getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
-            DatabaseReference rating = firebaseDatabase.getReference().child("Places").child(places.get(i).getPlaceId()).child("Rating");
             int finalI = i;
             intensity.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -193,6 +196,54 @@ public class HalalBeveragesActivity extends SlideBackActivity {
 
                         myCallBack.onCallback(places);
                     }
+
+                    DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(finalI).getPlaceId());
+                    databaseReview.addChildEventListener(new ChildEventListener() {
+                        double rataRata = 0;
+                        double jumlah = 0;
+
+
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            try {
+                                ++jumlah;
+                                rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
+                                rataRata /= jumlah;
+
+                                places.get(finalI).setTrevuRating(rataRata);
+                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
+                                myCallBack.onCallback(places);
+
+                            } catch (NullPointerException np) {
+                                places.get(finalI).setTrevuRating(1);
+                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
+                                myCallBack.onCallback(places);
+
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
                 @Override
@@ -201,25 +252,6 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                 }
             });
 
-            rating.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try {
-                        places.get(finalI).setTrevuRating(Double.parseDouble(dataSnapshot.getValue().toString()));
-                        System.out.println("Rating " + places.get(finalI).getTrevuRating());
-                        myCallBack.onCallback(places);
-                    } catch (NullPointerException np) {
-                        places.get(finalI).setTrevuRating(1);
-                        System.out.println("Rating " + places.get(finalI).getTrevuRating());
-                        myCallBack.onCallback(places);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
         }
     }
 
