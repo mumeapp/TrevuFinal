@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.remu.POJO.HttpHandler;
 import com.remu.POJO.MyComparator;
@@ -35,6 +37,7 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
 
     private static final String TAG = "FbBnTourResult";
 
+    private ShimmerFrameLayout resultShimmerLoad;
     private RecyclerView listCategoryResult;
 
     private double latitude, longitude;
@@ -67,6 +70,18 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
         Animatoo.animateSlideRight(this);
     }
 
+    @Override
+    protected void onPause() {
+        resultShimmerLoad.stopShimmer();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resultShimmerLoad.startShimmer();
+    }
+
     private void changeThemeBySender(String sender) {
         switch (sender) {
             case "HalalFood":
@@ -84,6 +99,7 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
     }
 
     private void initializeUI(Intent intent) {
+        resultShimmerLoad = findViewById(R.id.shimmer_load_result);
         TextView categoryName = findViewById(R.id.category_name);
         categoryName.setText(capitalize(intent.getStringExtra("name")));
 
@@ -103,7 +119,7 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
         }
 
         listCategoryResult = findViewById(R.id.listCategoyResult);
-        new GetCategoryResult(this, intent).execute();
+        new GetCategoryResult(intent).execute();
     }
 
     private String capitalize(String capString) {
@@ -119,15 +135,11 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
 
     private class GetCategoryResult extends AsyncTask<Void, Void, Void> {
 
-        private Context context;
-
         private String url;
-        private ProgressDialog progressDialog;
         private ArrayList<PlaceModel> places;
         private String senderType;
 
-        GetCategoryResult(Context context, Intent intent) {
-            this.context = context;
+        GetCategoryResult(Intent intent) {
             places = new ArrayList<>();
             senderType = intent.getStringExtra("sender");
             setURL(senderType, intent.getStringExtra("category"));
@@ -153,11 +165,6 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Fetching result...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
         }
 
         @Override
@@ -226,8 +233,8 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
             listCategoryResult.setLayoutManager(new LinearLayoutManager(FoodBeverageTourismResult.this, LinearLayoutManager.VERTICAL, false));
             FoodBeveragesTourismResultAdapter foodBeveragesTourismResultAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), FoodBeverageTourismResult.this, senderType, places);
             listCategoryResult.setAdapter(foodBeveragesTourismResultAdapter);
-
-            progressDialog.dismiss();
+            resultShimmerLoad.stopShimmer();
+            resultShimmerLoad.setVisibility(View.GONE);
         }
 
     }

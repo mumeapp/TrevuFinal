@@ -18,14 +18,44 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_load_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/adapter_load_vertical_mode" />
+
+                    <include layout="@layout/adapter_load_vertical_mode" />
+
+                    <include layout="@layout/adapter_load_vertical_mode" />
+
+                    <include layout="@layout/adapter_load_vertical_mode" />
+
+                    <include layout="@layout/adapter_load_vertical_mode" />
+
+                    <include layout="@layout/adapter_load_vertical_mode" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listCategoyResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:layout_marginBottom="5dp"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -60,10 +90,10 @@
                 android:id="@+id/category_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/osextrabold"
+                android:fontFamily="@font/geomanistbold"
                 android:maxLines="1"
                 android:text="name"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
 
         </LinearLayout>

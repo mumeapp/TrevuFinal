@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/gift_detail_image"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="320dp"
             android:scaleType="centerCrop"
             android:src="@drawable/bg_loading_image"
             tools:ignore="ContentDescription" />
@@ -22,7 +22,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="275dp"
+            android:layout_marginTop="295dp"
             app:cardCornerRadius="25dp"
             app:cardElevation="0dp">
 
@@ -37,11 +37,13 @@
                     android:id="@+id/gift_detail_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="85dp"
                     android:layout_marginBottom="5dp"
-                    android:fontFamily="@font/osbold"
+                    android:fontFamily="@font/geomanistbold"
                     android:text="title"
-                    android:textColor="#000000"
-                    android:textSize="22sp" />
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    tools:ignore="HardcodedText" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -56,34 +58,38 @@
                         android:layout_height="17dp"
                         android:layout_marginEnd="5dp"
                         android:src="@drawable/ic_distance"
-                        android:tint="#000000" />
+                        android:tint="@color/black"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:id="@+id/gift_detail_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:fontFamily="@font/oslight"
+                        android:fontFamily="@font/geomanistregular"
                         android:text="distance"
-                        android:textColor="#000000"
-                        android:textSize="12sp" />
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
 
                     <ImageView
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:layout_marginEnd="5dp"
                         android:src="@drawable/ic_star_yellow_24dp"
-                        android:tint="#000000" />
+                        android:tint="@color/black"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:id="@+id/gift_detail_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:fontFamily="@font/oslight"
+                        android:fontFamily="@font/geomanistregular"
                         android:text="rating"
-                        android:textColor="#000000"
-                        android:textSize="12sp" />
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
 
                 </LinearLayout>
 
@@ -93,24 +99,26 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="top"
                         android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_map_marker_select_red_48dp" />
+                        android:src="@drawable/ic_map_marker_select_red_48dp"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:id="@+id/gift_detail_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:fontFamily="@font/osregular"
+                        android:fontFamily="@font/geomanistmedium"
                         android:text="address"
-                        android:textColor="#000000"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
 
                 </LinearLayout>
 
@@ -119,24 +127,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@color/trevuGreen"
+                    app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:clipToPadding="false"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
-                        android:padding="15dp"
-                        android:clipToPadding="false">
+                        android:padding="15dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/osregular"
+                            android:fontFamily="@font/geomanistmedium"
                             android:text="Give Review"
-                            android:textColor="#000000"
-                            android:textSize="14sp" />
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            tools:ignore="HardcodedText" />
 
                         <RatingBar
                             android:id="@+id/gift_detail_rating_bar"
@@ -145,8 +155,9 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:numStars="5"
-                            android:scaleY="0.75"
-                            android:scaleX="0.75" />
+                            android:progressTint="@color/white"
+                            android:scaleX="0.75"
+                            android:scaleY="0.75" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -167,7 +178,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/profile_annasaha" />
+                                    android:src="@drawable/ic_default_avatar"
+                                    tools:ignore="ContentDescription" />
 
                             </androidx.cardview.widget.CardView>
 
@@ -176,26 +188,30 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
-                                android:fontFamily="@font/oslight"
+                                android:fontFamily="@font/geomanistregular"
                                 android:hint="write your thoughts"
                                 android:inputType="textImeMultiLine"
-                                android:textColor="#000000"
-                                android:textSize="14sp" />
+                                android:textColor="@color/white"
+                                android:textColorHint="@color/grey_300"
+                                android:textSize="14sp"
+                                tools:ignore="HardcodedText"
+                                android:importantForAutofill="no" />
 
                         </LinearLayout>
 
                         <Button
                             android:id="@+id/gift_detail_submit_button"
-                            android:layout_gravity="end"
                             android:layout_width="100dp"
                             android:layout_height="40dp"
+                            android:layout_gravity="end"
                             android:layout_marginTop="5dp"
                             android:background="@drawable/button_green"
-                            android:backgroundTint="#217C36"
-                            android:fontFamily="@font/ossemibold"
+                            android:backgroundTint="@color/white"
+                            android:fontFamily="@font/geomanistmedium"
                             android:text="Submit"
                             android:textAllCaps="false"
-                            android:textColor="#ffffff" />
+                            android:textColor="@color/trevuGreen"
+                            tools:ignore="HardcodedText" />
 
                     </LinearLayout>
 
@@ -204,21 +220,22 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="5dp"
-                    android:fontFamily="@font/osbold"
+                    android:fontFamily="@font/geomanistbold"
                     android:text="Review"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/list_gift_detail_review_users"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="5dp"
                     android:nestedScrollingEnabled="false" />
 
@@ -226,9 +243,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/powered_by_google_light" />
+                    android:src="@drawable/powered_by_google_light"
+                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/toggle_gift_save"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginTop="270dp"
+            android:layout_alignParentEnd="true"
+            app:cardCornerRadius="25dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
 
         </androidx.cardview.widget.CardView>
 

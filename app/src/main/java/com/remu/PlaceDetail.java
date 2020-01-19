@@ -97,7 +97,7 @@ public class PlaceDetail extends SlideBackActivity {
         Intent content = getIntent();
 
         uId = FirebaseAuth.getInstance().getUid();
-        String email = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         assert email != null;
         nama = email.split("@")[0];
 
@@ -106,7 +106,8 @@ public class PlaceDetail extends SlideBackActivity {
         mGeocoder = new Geocoder(this, Locale.getDefault());
 
         initializeUI();
-        changeThemeBySender(Objects.requireNonNull(content.getStringExtra("sender"), "White"));
+        changeThemeBySender(content.getStringExtra("sender"));
+        setType(content.getStringExtra("sender"));
         Animatoo.animateSlideDown(this);
         checkUserReview();
         getMean();
@@ -169,10 +170,25 @@ public class PlaceDetail extends SlideBackActivity {
         tpdRating2.setTextColor(color);
     }
 
+    private void setType(String sender) {
+        TextView type = findViewById(R.id.type_view_text);
+
+        switch (sender) {
+            case "HalalFood":
+                type.setText("food place");
+                break;
+            case "HalalBeverages":
+                type.setText("beverage place");
+                break;
+            case "Tourism":
+                type.setText("tourism destination");
+        }
+    }
+
     private void getMean() {
         tpdRating2.setText("-");
         tpdTotalRating2.setText("(0)");
-        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id")));
+        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
         databaseReview.addChildEventListener(new ChildEventListener() {
             double rataRata = 0;
             double jumlah = 0;
@@ -184,7 +200,7 @@ public class PlaceDetail extends SlideBackActivity {
 
                 try {
                     ++jumlah;
-                    rataRata += Double.parseDouble(Objects.requireNonNull(dataSnapshot.getValue(Rating.class)).getRating());
+                    rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
                     rataRata /= jumlah;
                     DecimalFormat df = new DecimalFormat("#.#");
                     DecimalFormat dfJumlah = new DecimalFormat("#");
@@ -221,7 +237,7 @@ public class PlaceDetail extends SlideBackActivity {
         LinearLayoutManager articleLayoutManager = new LinearLayoutManager(PlaceDetail.this, LinearLayoutManager.VERTICAL, false);
         tpdListUserReview.setLayoutManager(articleLayoutManager);
 
-        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id")));
+        DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
         databaseReview.addChildEventListener(new ChildEventListener() {
             double rataRata = 0;
             double jumlah = 0;
@@ -232,7 +248,7 @@ public class PlaceDetail extends SlideBackActivity {
 
                 try {
                     ++jumlah;
-                    rataRata += Double.parseDouble(Objects.requireNonNull(dataSnapshot.getValue(Rating.class)).getRating());
+                    rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
                     rataRata /= jumlah;
                     DecimalFormat df = new DecimalFormat("#.#");
                     DecimalFormat dfJumlah = new DecimalFormat("#");
@@ -306,14 +322,14 @@ public class PlaceDetail extends SlideBackActivity {
     }
 
     private void checkUserReview() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id"))).child(uId);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id")).child(uId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    tpdInputReview.setText(Objects.requireNonNull(dataSnapshot.child("review").getValue()).toString());
-                    tpdInputRating.setRating(Float.parseFloat(Objects.requireNonNull(dataSnapshot.child("rating").getValue()).toString()));
+                    tpdInputReview.setText(dataSnapshot.child("review").getValue().toString());
+                    tpdInputRating.setRating(Float.parseFloat(dataSnapshot.child("rating").getValue().toString()));
                     tpdSubmitButon.setText("Edit");
                 } catch (NullPointerException ignored) {
 
@@ -350,7 +366,8 @@ public class PlaceDetail extends SlideBackActivity {
     private void applyPlaceInfoToView(Place tourismPlace) {
         if (tourismPlace != null) {
 
-            DatabaseReference saved = FirebaseDatabase.getInstance().getReference().child("Saved").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(Objects.requireNonNull(getIntent().getStringExtra("sender"))).child(Objects.requireNonNull(place.getId()));
+            DatabaseReference saved = FirebaseDatabase.getInstance().getReference().child("Saved").child(FirebaseAuth.getInstance().getUid())
+                    .child(getIntent().getStringExtra("sender")).child(place.getId());
             saved.addValueEventListener(new ValueEventListener() {
 
                 @Override
@@ -367,7 +384,7 @@ public class PlaceDetail extends SlideBackActivity {
                         tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_border_black_24dp));
                         tpdBookmark.setOnClickListener(view -> {
                             saved.child(place.getId()).setValue(true);
-                            saved.child("latlong").setValue(Objects.requireNonNull(place.getLatLng()).latitude + ", " + place.getLatLng().longitude);
+                            saved.child("latlong").setValue(place.getLatLng().latitude + ", " + place.getLatLng().longitude);
                             saved.child("id").setValue(place.getId());
                             saved.child("rating").setValue(place.getRating());
                             saved.child("title").setValue(place.getName());
@@ -414,7 +431,7 @@ public class PlaceDetail extends SlideBackActivity {
             }
 
             try {
-                tpdCityLocation.setText(getCityNameByCoordinates(Objects.requireNonNull(tourismPlace.getLatLng()).latitude, tourismPlace.getLatLng().longitude));
+                tpdCityLocation.setText(getCityNameByCoordinates(tourismPlace.getLatLng().latitude, tourismPlace.getLatLng().longitude));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -428,7 +445,7 @@ public class PlaceDetail extends SlideBackActivity {
             });
 
             tpdAddress.setText(tourismPlace.getAddress());
-            tpdPlusCode.setText(Objects.requireNonNull(tourismPlace.getPlusCode()).getCompoundCode());
+            tpdPlusCode.setText(tourismPlace.getPlusCode().getCompoundCode());
 
             if (tourismPlace.getOpeningHours() != null) {
                 setOpenOrCLoseState(tourismPlace.getOpeningHours().getPeriods());
@@ -442,7 +459,7 @@ public class PlaceDetail extends SlideBackActivity {
             tpdSubmitButon.setOnClickListener(view -> {
                 progressDialog.show();
                 Rating rating = new Rating(uId, nama, tpdInputReview.getText().toString(), Float.toString(tpdInputRating.getRating()), getIntent().getStringExtra("place_id"), tpdName.getText().toString());
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(Objects.requireNonNull(getIntent().getStringExtra("place_id")));
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
                 databaseReference.child(uId).setValue(rating).addOnSuccessListener(aVoid -> {
                     databaseReference.child(uId).child(uId).setValue(true);
                     tpdSubmitButon.setText("Edit");
@@ -492,8 +509,8 @@ public class PlaceDetail extends SlideBackActivity {
     }
 
     private double countDistance(LatLng latLng) {
-        LatLng currentLatLng = new LatLng(Double.parseDouble(Objects.requireNonNull(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null))),
-                Double.parseDouble(Objects.requireNonNull(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null))));
+        LatLng currentLatLng = new LatLng(Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null)),
+                Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null)));
         return Distance.distance(currentLatLng.latitude, latLng.latitude, currentLatLng.longitude, latLng.longitude);
     }
 
@@ -538,7 +555,7 @@ public class PlaceDetail extends SlideBackActivity {
 
         Period todayPeriod = null;
         for (Period period : openOrCLosePeriod) {
-            if (Objects.requireNonNull(period.getOpen()).getDay() == dayOfWeek) {
+            if (period.getOpen().getDay() == dayOfWeek) {
                 todayPeriod = period;
                 break;
             }
@@ -550,40 +567,45 @@ public class PlaceDetail extends SlideBackActivity {
 
                 if (Integer.parseInt(currentTime[0]) < todayPeriod.getOpen().getTime().getHours()) {
                     tpdIsOpen.setText("Closed");
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                             .parse(todayPeriod.getOpen().getTime().getHours() + ":" +
-                                    todayPeriod.getOpen().getTime().getMinutes()))) + " today");
+                                    todayPeriod.getOpen().getTime().getMinutes())) + " today");
                 } else if (Integer.parseInt(currentTime[0]) == todayPeriod.getOpen().getTime().getHours()) {
                     if (Integer.parseInt(currentTime[1]) < todayPeriod.getOpen().getTime().getMinutes()) {
                         tpdIsOpen.setText("Closed");
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                                 .parse(todayPeriod.getOpen().getTime().getHours() + ":" +
-                                        todayPeriod.getOpen().getTime().getMinutes()))) + " today");
+                                        todayPeriod.getOpen().getTime().getMinutes())) + " today");
                     } else {
                         tpdIsOpen.setText("Open");
-                        tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
-                                .parse(Objects.requireNonNull(todayPeriod.getClose()).getTime().getHours() + ":" +
-                                        todayPeriod.getClose().getTime().getMinutes()))) + " today");
+                        tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                                .parse(todayPeriod.getClose().getTime().getHours() + ":" +
+                                        todayPeriod.getClose().getTime().getMinutes())) + " today");
                     }
                 } else {
-                    if (Integer.parseInt(currentTime[0]) < Objects.requireNonNull(todayPeriod.getClose()).getTime().getHours()) {
-                        tpdIsOpen.setText("Open");
-                        tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
-                                .parse(todayPeriod.getClose().getTime().getHours() + ":" +
-                                        todayPeriod.getClose().getTime().getMinutes()))) + " today");
-                    } else if (Integer.parseInt(currentTime[0]) == todayPeriod.getOpen().getTime().getHours()) {
-                        if (Integer.parseInt(currentTime[1]) < todayPeriod.getOpen().getTime().getMinutes()) {
+                    if (todayPeriod.getClose() != null) {
+                        if (Integer.parseInt(currentTime[0]) < todayPeriod.getClose().getTime().getHours()) {
                             tpdIsOpen.setText("Open");
-                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                            tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                                     .parse(todayPeriod.getClose().getTime().getHours() + ":" +
-                                            todayPeriod.getClose().getTime().getMinutes()))) + " today");
+                                            todayPeriod.getClose().getTime().getMinutes())) + " today");
+                        } else if (Integer.parseInt(currentTime[0]) == todayPeriod.getOpen().getTime().getHours()) {
+                            if (Integer.parseInt(currentTime[1]) < todayPeriod.getOpen().getTime().getMinutes()) {
+                                tpdIsOpen.setText("Open");
+                                tpdClosingHours.setText("Closes " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
+                                        .parse(todayPeriod.getClose().getTime().getHours() + ":" +
+                                                todayPeriod.getClose().getTime().getMinutes())) + " today");
+                            } else {
+                                tpdIsOpen.setText("Closed");
+                                getOpenHoursNextDay(openOrCLosePeriod, day);
+                            }
                         } else {
                             tpdIsOpen.setText("Closed");
                             getOpenHoursNextDay(openOrCLosePeriod, day);
                         }
                     } else {
-                        tpdIsOpen.setText("Closed");
-                        getOpenHoursNextDay(openOrCLosePeriod, day);
+                        tpdIsOpen.setText("Open");
+                        tpdClosingHours.setText("24 hours today");
                     }
                 }
 
@@ -602,7 +624,7 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.SUNDAY:
                 Period mondayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.MONDAY) {
+                    if (period.getOpen().getDay() == DayOfWeek.MONDAY) {
                         mondayPeriod = period;
                         break;
                     }
@@ -610,9 +632,9 @@ public class PlaceDetail extends SlideBackActivity {
 
                 if (mondayPeriod != null) {
                     try {
-                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                        tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                                 .parse(mondayPeriod.getOpen().getTime().getHours() + ":" +
-                                        mondayPeriod.getOpen().getTime().getMinutes()))) + " MON");
+                                        mondayPeriod.getOpen().getTime().getMinutes())) + " MON");
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -623,16 +645,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.MONDAY:
                 Period tuesdayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.TUESDAY) {
+                    if (period.getOpen().getDay() == DayOfWeek.TUESDAY) {
                         tuesdayPeriod = period;
                         break;
                     }
                 }
 
                 if (tuesdayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                             .parse(tuesdayPeriod.getOpen().getTime().getHours() + ":" +
-                                    tuesdayPeriod.getOpen().getTime().getMinutes()))) + " TUE");
+                                    tuesdayPeriod.getOpen().getTime().getMinutes())) + " TUE");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.TUESDAY);
                 }
@@ -640,7 +662,7 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.TUESDAY:
                 Period wednesdayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.WEDNESDAY) {
+                    if (period.getOpen().getDay() == DayOfWeek.WEDNESDAY) {
                         wednesdayPeriod = period;
                         break;
                     }
@@ -648,9 +670,9 @@ public class PlaceDetail extends SlideBackActivity {
 
                 if (wednesdayPeriod != null) {
                     Log.e(TAG, wednesdayPeriod.getOpen().getTime().toString());
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                             .parse(wednesdayPeriod.getOpen().getTime().getHours() + ":" +
-                                    wednesdayPeriod.getOpen().getTime().getMinutes()))) + " WED");
+                                    wednesdayPeriod.getOpen().getTime().getMinutes())) + " WED");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.WEDNESDAY);
                 }
@@ -658,16 +680,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.WEDNESDAY:
                 Period thursdayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.THURSDAY) {
+                    if (period.getOpen().getDay() == DayOfWeek.THURSDAY) {
                         thursdayPeriod = period;
                         break;
                     }
                 }
 
                 if (thursdayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                             .parse(thursdayPeriod.getOpen().getTime().getHours() + ":" +
-                                    thursdayPeriod.getOpen().getTime().getMinutes()))) + " THU");
+                                    thursdayPeriod.getOpen().getTime().getMinutes())) + " THU");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.THURSDAY);
                 }
@@ -675,16 +697,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.THURSDAY:
                 Period fridayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.FRIDAY) {
+                    if (period.getOpen().getDay() == DayOfWeek.FRIDAY) {
                         fridayPeriod = period;
                         break;
                     }
                 }
 
                 if (fridayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                             .parse(fridayPeriod.getOpen().getTime().getHours() + ":" +
-                                    fridayPeriod.getOpen().getTime().getMinutes()))) + " FRI");
+                                    fridayPeriod.getOpen().getTime().getMinutes())) + " FRI");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.FRIDAY);
                 }
@@ -692,16 +714,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.FRIDAY:
                 Period saturdayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.SATURDAY) {
+                    if (period.getOpen().getDay() == DayOfWeek.SATURDAY) {
                         saturdayPeriod = period;
                         break;
                     }
                 }
 
                 if (saturdayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                             .parse(saturdayPeriod.getOpen().getTime().getHours() + ":" +
-                                    saturdayPeriod.getOpen().getTime().getMinutes()))) + " SAT");
+                                    saturdayPeriod.getOpen().getTime().getMinutes())) + " SAT");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.SATURDAY);
                 }
@@ -709,16 +731,16 @@ public class PlaceDetail extends SlideBackActivity {
             case Calendar.SATURDAY:
                 Period sundayPeriod = null;
                 for (Period period : openOrCLosePeriod) {
-                    if (Objects.requireNonNull(period.getOpen()).getDay() == DayOfWeek.SUNDAY) {
+                    if (period.getOpen().getDay() == DayOfWeek.SUNDAY) {
                         sundayPeriod = period;
                         break;
                     }
                 }
 
                 if (sundayPeriod != null) {
-                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(Objects.requireNonNull(new SimpleDateFormat("HH:mm")
+                    tpdClosingHours.setText("Opens " + new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("HH:mm")
                             .parse(sundayPeriod.getOpen().getTime().getHours() + ":" +
-                                    sundayPeriod.getOpen().getTime().getMinutes()))) + " SUN");
+                                    sundayPeriod.getOpen().getTime().getMinutes())) + " SUN");
                 } else {
                     getOpenHoursNextDay(openOrCLosePeriod, Calendar.SUNDAY);
                 }

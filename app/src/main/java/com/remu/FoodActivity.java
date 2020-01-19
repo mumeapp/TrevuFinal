@@ -89,6 +89,7 @@ public class FoodActivity extends SlideBackActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        foodScrollView.post(() -> foodScrollView.scrollTo(0, 0));
         giftShimmerLoad.startShimmer();
     }
 

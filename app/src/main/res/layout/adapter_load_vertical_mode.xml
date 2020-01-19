@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/food_layout"
     android:layout_width="match_parent"
     android:layout_height="120dp"
     android:layout_marginTop="5dp"
@@ -18,18 +17,9 @@
             android:layout_width="110dp"
             android:layout_height="100dp"
             android:layout_margin="10dp"
+            app:cardBackgroundColor="@color/grey_300"
             app:cardCornerRadius="10dp"
-            app:cardElevation="1dp">
-
-            <ImageView
-                android:id="@+id/food_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bg_loading_image" />
-
-        </androidx.cardview.widget.CardView>
+            app:cardElevation="1dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,27 +30,25 @@
             android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/food_name"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/geomanistbold"
-                android:maxLines="1"
-                android:text="name"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                tools:ignore="HardcodedText" />
+                android:layout_height="20dp"
+                app:cardBackgroundColor="@color/grey_300"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="1dp" />
 
-            <TextView
-                android:id="@+id/food_description"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="13dp"
+                android:layout_marginTop="5dp"
+                app:cardBackgroundColor="@color/grey_300"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="1dp" />
+
+            <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/geomanistregular"
-                android:maxLines="2"
-                android:text="address"
-                android:textSize="15sp"
-                tools:ignore="HardcodedText" />
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,39 +56,36 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
+                <androidx.cardview.widget.CardView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:background="@drawable/ic_star_yellow_24dp"
-                    tools:ignore="ContentDescription" />
+                    app:cardBackgroundColor="@color/grey_300"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="1dp" />
 
-                <TextView
-                    android:id="@+id/food_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="35dp"
+                    android:layout_height="13dp"
                     android:layout_marginStart="5dp"
-                    android:fontFamily="@font/geomanistbold"
-                    android:text="rating"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    tools:ignore="HardcodedText" />
+                    app:cardBackgroundColor="@color/grey_300"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="1dp" />
 
-                <ImageView
+                <androidx.cardview.widget.CardView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/ic_distance" />
+                    app:cardBackgroundColor="@color/grey_300"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="1dp" />
 
-                <TextView
-                    android:id="@+id/food_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="35dp"
+                    android:layout_height="13dp"
                     android:layout_marginStart="5dp"
-                    android:fontFamily="@font/geomanistbold"
-                    android:text="distance"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    tools:ignore="HardcodedText" />
+                    app:cardBackgroundColor="@color/grey_300"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="1dp" />
 
             </LinearLayout>
 

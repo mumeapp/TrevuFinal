@@ -1,8 +1,6 @@
 package com.remu;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -45,13 +44,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class HalalFoodActivity extends SlideBackActivity {
 
@@ -60,11 +57,12 @@ public class HalalFoodActivity extends SlideBackActivity {
     private double latitude, longitude;
 
     private LinearLayout layoutMidnight;
+    private ShimmerFrameLayout shimmerLoadMidnight, shimmerLoadRecommended;
     private RecyclerView listCategory, listOpenAtNight, listRecommendedFood;
+
     private EditText manualCategory;
     private ArrayList<PlaceModel> places;
     private FirebaseDatabase firebaseDatabase;
-    private ProgressDialog progressDialog;
     private String userId;
 
     @Override
@@ -87,11 +85,13 @@ public class HalalFoodActivity extends SlideBackActivity {
             listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.VERTICAL, false));
             FoodBeveragesTourismResultAdapter recommendedAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), HalalFoodActivity.this, "HalalFood", places);
             listRecommendedFood.setAdapter(recommendedAdapter);
-            progressDialog.dismiss();
+            shimmerLoadRecommended.stopShimmer();
+            shimmerLoadRecommended.setVisibility(View.GONE);
+//            progressDialog.dismiss();
         });
 
         generateListOpenNight();
-        new GetRecommended(this).execute(getGoogleJSON, getFirebaseData);
+        new GetRecommended().execute(getGoogleJSON, getFirebaseData);
 
         manualCategory.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -123,7 +123,24 @@ public class HalalFoodActivity extends SlideBackActivity {
         Animatoo.animateSlideRight(this);
     }
 
+    @Override
+    protected void onPause() {
+        shimmerLoadMidnight.stopShimmer();
+        shimmerLoadRecommended.stopShimmer();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        manualCategory.setText("");
+        shimmerLoadMidnight.startShimmer();
+        shimmerLoadRecommended.startShimmer();
+    }
+
     private void initializeUI() {
+        shimmerLoadMidnight = findViewById(R.id.shimmer_load_midnight_food);
+        shimmerLoadRecommended = findViewById(R.id.shimmer_load_recommended_food);
         layoutMidnight = findViewById(R.id.ly_food_midnight);
         listCategory = findViewById(R.id.listFoodCategory);
         listOpenAtNight = findViewById(R.id.listFoodOpenAtNight);
@@ -134,17 +151,17 @@ public class HalalFoodActivity extends SlideBackActivity {
 
     private String changeSpace(String input) {
         String[] strings = input.split(" ");
-        String returnVal = "";
+        StringBuilder returnVal = new StringBuilder();
 
         for (int i = 0; i < strings.length; i++) {
             if (i + 1 != strings.length) {
-                returnVal += strings[i] + "%20";
+                returnVal.append(strings[i]).append("%20");
             } else {
-                returnVal += strings[i];
+                returnVal.append(strings[i]);
             }
         }
 
-        return returnVal;
+        return returnVal.toString();
     }
 
     private void generateListCategory() {
@@ -207,17 +224,17 @@ public class HalalFoodActivity extends SlideBackActivity {
         }};
 
         listCategory.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, RecyclerView.HORIZONTAL, false));
-        RecyclerView.Adapter<CatergoryViewHolder> categoryAdapter = new RecyclerView.Adapter<CatergoryViewHolder>() {
+        RecyclerView.Adapter<CategoryViewHolder> categoryAdapter = new RecyclerView.Adapter<CategoryViewHolder>() {
             @NonNull
             @Override
-            public CatergoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.adapter_category_foodbeverages, parent, false);
-                return new CatergoryViewHolder(view);
+                        .inflate(R.layout.adapter_category_tourfoodbeverages, parent, false);
+                return new CategoryViewHolder(view);
             }
 
             @Override
-            public void onBindViewHolder(@NonNull CatergoryViewHolder holder, int position) {
+            public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
                 holder.categoryImage.setImageDrawable(getDrawable((int) categoryDataSet.get(position).get("category_image")));
                 holder.categoryName.setText((String) categoryDataSet.get(position).get("category_name"));
 
@@ -407,7 +424,7 @@ public class HalalFoodActivity extends SlideBackActivity {
 
         if (currentHour < 7 || currentHour > 21) {
             layoutMidnight.setVisibility(View.VISIBLE);
-            new GetMidnight(this).execute();
+            new GetMidnight().execute();
         } else {
             layoutMidnight.setVisibility(View.GONE);
         }
@@ -415,23 +432,13 @@ public class HalalFoodActivity extends SlideBackActivity {
 
     private class GetRecommended extends AsyncTask<Runnable, Void, Void> {
 
-        private Context context;
-
-        private String userId;
-
-        GetRecommended(Context context) {
-            this.context = context;
+        GetRecommended() {
             places = new ArrayList<>();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Fetching result...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
         }
 
         @Override
@@ -443,35 +450,23 @@ public class HalalFoodActivity extends SlideBackActivity {
             return null;
         }
 
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
-
         }
     }
 
     private class GetMidnight extends AsyncTask<Void, Void, Void> {
 
-        private Context context;
+        private ArrayList<PlaceModel> midnightPlaces;
 
-        private ProgressDialog progressDialog;
-        private ArrayList<PlaceModel> places;
-
-        GetMidnight(Context context) {
-            this.context = context;
-            places = new ArrayList<>();
+        GetMidnight() {
+            midnightPlaces = new ArrayList<>();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Fetching result...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
         }
 
         @Override
@@ -494,7 +489,7 @@ public class HalalFoodActivity extends SlideBackActivity {
                         JSONObject row = results.getJSONObject(i);
 
                         if (row.isNull("photos")) {
-                            places.add(new PlaceModel(
+                            midnightPlaces.add(new PlaceModel(
                                     row.getString("place_id"),
                                     row.getString("name"),
                                     row.getString("vicinity"),
@@ -503,7 +498,7 @@ public class HalalFoodActivity extends SlideBackActivity {
                                             row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
                             ));
                         } else {
-                            places.add(new PlaceModel(
+                            midnightPlaces.add(new PlaceModel(
                                     row.getString("place_id"),
                                     row.getString("name"),
                                     row.getString("vicinity"),
@@ -528,20 +523,20 @@ public class HalalFoodActivity extends SlideBackActivity {
             super.onPostExecute(aVoid);
 
             listOpenAtNight.setLayoutManager(new LinearLayoutManager(HalalFoodActivity.this, LinearLayoutManager.HORIZONTAL, false));
-            MidnightFoodAdapter openAtNightAdapter = new MidnightFoodAdapter(getApplication(), HalalFoodActivity.this, places);
+            MidnightFoodAdapter openAtNightAdapter = new MidnightFoodAdapter(getApplication(), HalalFoodActivity.this, midnightPlaces);
             listOpenAtNight.setAdapter(openAtNightAdapter);
-
-            progressDialog.dismiss();
+            shimmerLoadMidnight.stopShimmer();
+            shimmerLoadMidnight.setVisibility(View.GONE);
         }
     }
 
-    class CatergoryViewHolder extends RecyclerView.ViewHolder {
+    class CategoryViewHolder extends RecyclerView.ViewHolder {
 
         ImageView categoryImage;
         TextView categoryName;
         CardView categoryCard;
 
-        CatergoryViewHolder(View itemView) {
+        CategoryViewHolder(View itemView) {
             super(itemView);
 
             categoryImage = itemView.findViewById(R.id.food_category_image);

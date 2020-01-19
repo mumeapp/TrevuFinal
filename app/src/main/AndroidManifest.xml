@@ -77,13 +77,14 @@
         <!-- halal gift activities -->
         <activity
             android:name=".HalalGiftDetail"
-            android:theme="@style/GreenTheme"
+            android:theme="@style/GiftDetailTheme"
             android:windowSoftInputMode="stateHidden" />
 
         <!-- tourism activities -->
         <activity
             android:name=".TourismActivity"
-            android:theme="@style/BlueTheme" />
+            android:theme="@style/BlueTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".PlaceDetail"
             android:theme="@style/FullScreenTheme" />

@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -52,12 +55,14 @@ public class TourismActivity extends SlideBackActivity {
 
     private static final String TAG = "TourismActivity";
 
+    private ShimmerFrameLayout tourismShimmerLoad;
     private RecyclerView listCategory, rvTour;
     private TourismAdapter tourismAdapter;
     private double latitude, longitude;
     private String userId;
     private ArrayList<PlaceModel> places;
-    private ProgressDialog progressDialog;
+
+    private EditText manualCategory;
 
     private NestedScrollView tourScrollView;
 
@@ -78,17 +83,32 @@ public class TourismActivity extends SlideBackActivity {
             rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
             tourismAdapter = new TourismAdapter(getApplication(), TourismActivity.this, places, new LatLng(latitude, longitude));
             rvTour.setAdapter(tourismAdapter);
-
-            progressDialog.dismiss();
+            tourismShimmerLoad.stopShimmer();
+            tourismShimmerLoad.setVisibility(View.GONE);
         });
 
         generateListCategory();
 
-        new GetTourPlace(this).execute(getGoogleJSON, getFirebaseData);
+        new GetTourPlace().execute(getGoogleJSON, getFirebaseData);
 
         tourScrollView = findViewById(R.id.tour_scroll);
-        tourScrollView.post(() -> {
-            tourScrollView.scrollTo(0, 0);
+        tourScrollView.post(() -> tourScrollView.scrollTo(0, 0));
+
+        manualCategory.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (!manualCategory.getText().toString().equals("")) {
+                    Intent intent = new Intent(TourismActivity.this, FoodBeverageTourismResult.class);
+                    intent.putExtra("sender", "Tourism");
+                    intent.putExtra("category", changeSpace(manualCategory.getText().toString()));
+                    intent.putExtra("name", manualCategory.getText().toString());
+                    startActivity(intent);
+                    manualCategory.setText("");
+                    return true;
+                } else {
+                    manualCategory.setError("Please put what category you want.");
+                }
+            }
+            return false;
         });
 
         setSlideBackDirection(SlideBackActivity.LEFT);
@@ -103,6 +123,19 @@ public class TourismActivity extends SlideBackActivity {
     public void finish() {
         super.finish();
         Animatoo.animateSlideRight(this);
+    }
+
+    @Override
+    protected void onPause() {
+        tourismShimmerLoad.stopShimmer();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        manualCategory.setText("");
+        tourismShimmerLoad.startShimmer();
     }
 
     private void parseJSON(String jsonStr, ArrayList<String> placeIds) {
@@ -270,9 +303,26 @@ public class TourismActivity extends SlideBackActivity {
     }
 
     private void initializeUI() {
+        tourismShimmerLoad = findViewById(R.id.shimmer_load_recommended_tourism);
+        manualCategory = findViewById(R.id.et_manual_tourism_category);
         listCategory = findViewById(R.id.listTourismCategories);
         rvTour = findViewById(R.id.listRecommendedTourism);
         userId = FirebaseAuth.getInstance().getUid();
+    }
+
+    private String changeSpace(String input) {
+        String[] strings = input.split(" ");
+        StringBuilder returnVal = new StringBuilder();
+
+        for (int i = 0; i < strings.length; i++) {
+            if (i + 1 != strings.length) {
+                returnVal.append(strings[i]).append("%20");
+            } else {
+                returnVal.append(strings[i]);
+            }
+        }
+
+        return returnVal.toString();
     }
 
     private void generateListCategory() {
@@ -315,7 +365,7 @@ public class TourismActivity extends SlideBackActivity {
             @Override
             public CatergoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.adapter_category_tourism, parent, false);
+                        .inflate(R.layout.adapter_category_tourfoodbeverages, parent, false);
                 return new CatergoryViewHolder(view);
             }
 
@@ -343,11 +393,7 @@ public class TourismActivity extends SlideBackActivity {
 
     private class GetTourPlace extends AsyncTask<Runnable, Void, Void> {
 
-        private Context context;
-
-
-        GetTourPlace(Context context) {
-            this.context = context;
+        GetTourPlace() {
             places = new ArrayList<>();
         }
 
@@ -363,11 +409,6 @@ public class TourismActivity extends SlideBackActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Fetching result...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
         }
 
 
@@ -389,9 +430,9 @@ public class TourismActivity extends SlideBackActivity {
         CatergoryViewHolder(View itemView) {
             super(itemView);
 
-            categoryImage = itemView.findViewById(R.id.tourism_category_image);
-            categoryName = itemView.findViewById(R.id.tourism_category_name);
-            categoryCard = itemView.findViewById(R.id.tourism_category_card);
+            categoryImage = itemView.findViewById(R.id.food_category_image);
+            categoryName = itemView.findViewById(R.id.food_category_name);
+            categoryCard = itemView.findViewById(R.id.food_category_card);
         }
 
     }

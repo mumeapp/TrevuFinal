@@ -1,8 +1,6 @@
 package com.remu;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -53,11 +52,11 @@ public class HalalBeveragesActivity extends SlideBackActivity {
 
     private double latitude, longitude;
 
-    private RecyclerView listCategory, listRecommendedFood;
+    private ShimmerFrameLayout recommendedShimmerLoad;
+    private RecyclerView listCategory, listRecommendedBeverages;
     private EditText manualCategory;
     private String userId;
     private ArrayList<PlaceModel> places;
-    private ProgressDialog progressDialog;
     private FirebaseDatabase firebaseDatabase;
 
     @Override
@@ -76,13 +75,14 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         Runnable getGoogleJson = this::getGoogleJson;
         Runnable getFirebaseData = () -> getFirebaseData(value -> {
             doWeighting();
-            listRecommendedFood.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, LinearLayoutManager.VERTICAL, false));
+            listRecommendedBeverages.setLayoutManager(new LinearLayoutManager(HalalBeveragesActivity.this, LinearLayoutManager.VERTICAL, false));
             FoodBeveragesTourismResultAdapter recommendedAdapter = new FoodBeveragesTourismResultAdapter(getApplication(), HalalBeveragesActivity.this, "HalalBeverages", places);
-            listRecommendedFood.setAdapter(recommendedAdapter);
-            progressDialog.dismiss();
+            listRecommendedBeverages.setAdapter(recommendedAdapter);
+            recommendedShimmerLoad.stopShimmer();
+            recommendedShimmerLoad.setVisibility(View.GONE);
         });
 
-        new GetRecommended(this).execute(getGoogleJson, getFirebaseData);
+        new GetRecommended().execute(getGoogleJson, getFirebaseData);
 
         manualCategory.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -281,26 +281,40 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         Animatoo.animateSlideRight(this);
     }
 
+    @Override
+    protected void onPause() {
+        recommendedShimmerLoad.stopShimmer();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        manualCategory.setText("");
+        recommendedShimmerLoad.startShimmer();
+    }
+
     private void initializeUI() {
+        recommendedShimmerLoad = findViewById(R.id.shimmer_load_recommended_beverages);
         listCategory = findViewById(R.id.listBeveragesCategory);
-        listRecommendedFood = findViewById(R.id.listRecommendedBeverages);
+        listRecommendedBeverages = findViewById(R.id.listRecommendedBeverages);
         manualCategory = findViewById(R.id.et_manual_beverages_category);
         firebaseDatabase = FirebaseDatabase.getInstance();
     }
 
     private String changeSpace(String input) {
         String[] strings = input.split(" ");
-        String returnVal = "";
+        StringBuilder returnVal = new StringBuilder();
 
         for (int i = 0; i < strings.length; i++) {
             if (i + 1 != strings.length) {
-                returnVal += strings[i] + "%20";
+                returnVal.append(strings[i]).append("%20");
             } else {
-                returnVal += strings[i];
+                returnVal.append(strings[i]);
             }
         }
 
-        return returnVal;
+        return returnVal.toString();
     }
 
     private void generateListCategory() {
@@ -333,7 +347,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
             @Override
             public CatergoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.adapter_category_foodbeverages, parent, false);
+                        .inflate(R.layout.adapter_category_tourfoodbeverages, parent, false);
                 return new CatergoryViewHolder(view);
             }
 
@@ -361,11 +375,13 @@ public class HalalBeveragesActivity extends SlideBackActivity {
 
     private class GetRecommended extends AsyncTask<Runnable, Void, Void> {
 
-        private Context context;
-
-        GetRecommended(Context context) {
-            this.context = context;
+        GetRecommended() {
             places = new ArrayList<>();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
 
         @Override
@@ -378,19 +394,8 @@ public class HalalBeveragesActivity extends SlideBackActivity {
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Fetching result...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
         }
 
     }

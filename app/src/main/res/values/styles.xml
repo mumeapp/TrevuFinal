@@ -108,6 +108,16 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
+    <style name="GiftDetailTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/trevuGreen</item>
+        <item name="colorPrimaryDark">@color/trevuGreen</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
     <style name="FullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
