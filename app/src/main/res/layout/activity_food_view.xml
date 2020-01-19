@@ -1,60 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/food_scroll"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     tools:context=".FoodActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:background="@drawable/bg_foodbeverages">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-20dp"
+            app:cardBackgroundColor="@color/trevuGreen"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:contentPaddingTop="20dp">
 
-            <ImageView
-                android:layout_width="220dp"
-                android:layout_height="220dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                app:srcCompat="@drawable/ic_chef"
-                tools:ignore="ContentDescription" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="220dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="25dp"
-                android:layout_marginBottom="100dp"
-                android:fontFamily="@font/geomanistblack"
-                android:text="What do you"
-                android:textColor="#ffffff"
-                android:textSize="30sp"
-                tools:ignore="HardcodedText" />
+                <ImageView
+                    android:layout_width="300dp"
+                    android:layout_height="218dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    app:srcCompat="@drawable/ic_img_fnb"
+                    tools:ignore="ContentDescription" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="25dp"
-                android:layout_marginBottom="65dp"
-                android:fontFamily="@font/geomanistblack"
-                android:text="want to eat?"
-                android:textColor="#ffffff"
-                android:textSize="30sp"
-                tools:ignore="HardcodedText" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
 
-        </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/geomanistblack"
+                        android:text="What do"
+                        android:textColor="@color/white"
+                        android:textSize="27sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/geomanistblack"
+                        android:text="you want"
+                        android:textColor="@color/white"
+                        android:textSize="27sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:fontFamily="@font/geomanistblack"
+                        android:text="to see?"
+                        android:textColor="@color/white"
+                        android:textSize="27sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="205dp"
+            android:layout_height="200dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -62,11 +88,11 @@
                 android:id="@+id/halalFoodButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="50"
+                android:layout_weight="1"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 tools:ignore="NestedWeights">
@@ -78,9 +104,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="115dp"
-                        app:cardBackgroundColor="#CCFFAC00"
-                        app:cardCornerRadius="10dp"
+                        android:layout_height="110dp"
                         app:cardElevation="0dp">
 
                         <ImageView
@@ -115,12 +139,12 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/HalalBeveragesButton"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="50"
+                android:layout_weight="1"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp">
 
@@ -131,8 +155,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="115dp"
-                        app:cardBackgroundColor="#CCA20000"
+                        android:layout_height="110dp"
                         app:cardCornerRadius="10dp"
                         app:cardElevation="0dp">
 
@@ -149,15 +172,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:fontFamily="@font/geomanistmedium"
-                        android:text="Halal Beverages"
-                        android:textColor="#000000"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/geomanistmedium"
+                            android:text="Halal Beverages"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
 
                     </RelativeLayout>
 
@@ -183,12 +206,39 @@
                 android:textSize="20sp"
                 tools:ignore="HardcodedText" />
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_load_gift"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/adapter_load_toko" />
+
+                    <include layout="@layout/adapter_load_toko" />
+
+                    <include layout="@layout/adapter_load_toko" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_listGift"
                 android:layout_width="match_parent"
-                android:layout_height="190dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
                 android:paddingStart="15dp"
                 android:paddingEnd="10dp" />
 
@@ -205,5 +255,4 @@
 
     </LinearLayout>
 
-
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

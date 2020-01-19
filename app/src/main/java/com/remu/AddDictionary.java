@@ -98,7 +98,6 @@ public class AddDictionary extends SlideBackActivity {
 
         Animatoo.animateSlideDown(this);
 
-
         makeNewTranslation();
         setAudio();
 

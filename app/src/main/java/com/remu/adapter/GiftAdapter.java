@@ -48,6 +48,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.giftName.setText(mDataset.get(position).getPlaceName());
+        holder.giftAddress.setText(mDataset.get(position).getPlaceAddress());
 
         if (mDataset.get(position).getPlaceRating() == 0) {
             holder.giftRating.setText("-");
@@ -96,7 +97,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
         CardView giftCard;
         ImageView giftImage;
-        TextView giftName, giftRating, giftDistance;
+        TextView giftName, giftAddress, giftRating, giftDistance;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -104,6 +105,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
             giftCard = itemView.findViewById(R.id.gift_card);
             giftImage = itemView.findViewById(R.id.gift_image);
             giftName = itemView.findViewById(R.id.gift_name);
+            giftAddress = itemView.findViewById(R.id.gift_address);
             giftRating = itemView.findViewById(R.id.gift_rating);
             giftDistance = itemView.findViewById(R.id.gift_distance);
         }

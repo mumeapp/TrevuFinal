@@ -1,6 +1,5 @@
 package com.remu;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
         if (navView.getCurrentActiveItemPosition() == ID_HOME) {
             finish();
         } else {

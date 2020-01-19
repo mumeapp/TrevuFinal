@@ -6,13 +6,16 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ScrollView;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.remu.POJO.HttpHandler;
@@ -34,13 +37,12 @@ public class FoodActivity extends SlideBackActivity {
 
     private double latitude, longitude;
     private CardView buttonHalalFood, buttonHalalBeverages;
+
+    private ShimmerFrameLayout giftShimmerLoad;
     private RecyclerView listGift;
     private ArrayList<PlaceModel> places;
-    private String userId;
 
-//    private GiftAdapter giftAdapter;
-
-    private ScrollView foodScrollView;
+    private NestedScrollView foodScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class FoodActivity extends SlideBackActivity {
 
         latitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
         longitude = Double.parseDouble(getApplication().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
-        new GetGiftData(this).execute();
+        new GetGiftData().execute();
 
         //initialize ui
         initializeUI();
@@ -79,38 +81,39 @@ public class FoodActivity extends SlideBackActivity {
     }
 
     @Override
+    protected void onPause() {
+        giftShimmerLoad.stopShimmer();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        giftShimmerLoad.startShimmer();
+    }
+
+    @Override
     public void finish() {
         super.finish();
         Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {
+        giftShimmerLoad = findViewById(R.id.shimmer_load_gift);
         buttonHalalFood = findViewById(R.id.halalFoodButton);
         buttonHalalBeverages = findViewById(R.id.HalalBeveragesButton);
         listGift = findViewById(R.id.rv_listGift);
-        userId = FirebaseAuth.getInstance().getUid();
     }
 
     private class GetGiftData extends AsyncTask<Void, Void, Void> {
 
-        private Context context;
-
-        private ProgressDialog progressDialog;
-        private ArrayList<PlaceModel> places;
-
-        GetGiftData(Context context) {
-            this.context = context;
+        GetGiftData() {
             places = new ArrayList<>();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Fetching result...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
         }
 
         @Override
@@ -166,13 +169,13 @@ public class FoodActivity extends SlideBackActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            listGift.setLayoutManager(new LinearLayoutManager(FoodActivity.this, LinearLayoutManager.HORIZONTAL, false));
+            listGift.setLayoutManager(new LinearLayoutManager(FoodActivity.this, LinearLayoutManager.VERTICAL, false));
             GiftAdapter giftAdapter = new GiftAdapter(getApplication(), FoodActivity.this, places);
             listGift.setAdapter(giftAdapter);
+            giftShimmerLoad.stopShimmer();
+            giftShimmerLoad.setVisibility(View.GONE);
             MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
             multiSnapHelper.attachToRecyclerView(listGift);
-
-            progressDialog.dismiss();
         }
     }
 }
