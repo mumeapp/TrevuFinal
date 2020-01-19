@@ -3,6 +3,8 @@ package com.remu.adapter;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,10 +92,10 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try{
+                    try {
                         int temp = Integer.parseInt(dataSnapshot.child("Intensity").getValue().toString());
                         databaseReference.child("Intensity").setValue(Integer.toString(++temp));
-                    }catch (NullPointerException np){
+                    } catch (NullPointerException np) {
                         databaseReference.child("Intensity").setValue("2").
                                 addOnSuccessListener(aVoid ->
                                         databaseReference.child("Name").setValue(mDataset.get(position).getPlaceName()));
@@ -133,6 +135,12 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
             distance = itemView.findViewById(R.id.distance_tour_place);
         }
 
+    }
+
+    public float getPixelFromDp(float dp) {
+        Resources resources = activity.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * (metrics.densityDpi / 160f);
     }
 
     private double countDistance(LatLng latLng) {

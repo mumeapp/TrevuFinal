@@ -54,7 +54,7 @@
         <!-- mosque activities -->
         <activity
             android:name=".MosqueActivity"
-            android:theme="@style/GreenTheme" />
+            android:theme="@style/MosqueTheme" />
 
         <!-- food and beverages activities -->
         <activity

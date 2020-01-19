@@ -17,9 +17,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="75dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="50dp"
         android:elevation="12dp"
         app:cardCornerRadius="12dp">
 
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="90dp"
                 android:layout_marginTop="55dp"
-                android:fontFamily="@font/osextrabold"
+                android:fontFamily="@font/geomanistblack"
                 android:textColor="#000000"
                 android:textSize="43sp" />
 
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="75dp"
-                android:fontFamily="@font/osregular"
+                android:fontFamily="@font/geomanistmedium"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
@@ -65,14 +65,42 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listMasjid"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:clipToPadding="false"
-        android:paddingStart="20dp"
-        android:paddingEnd="15dp" />
+        android:orientation="horizontal">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_load_mosque"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="25dp"
+            app:shimmer_duration="800">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include layout="@layout/adapter_load_mosque" />
+
+                <include layout="@layout/adapter_load_mosque" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listMasjid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:clipToPadding="false"
+            android:paddingStart="15dp"
+            android:paddingEnd="10dp" />
+
+    </LinearLayout>
 
 </RelativeLayout>

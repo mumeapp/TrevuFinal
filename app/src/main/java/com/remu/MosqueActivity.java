@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alespero.expandablecardview.ExpandableCardView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
@@ -72,6 +74,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     private ExpandableCardView jamSolat;
     private RelativeLayout someInformation;
 
+    private ShimmerFrameLayout mosqueShimmerLoad;
     private LinearLayoutManager layoutManager;
     private RecyclerView listMasjid;
     private RecyclerView.Adapter mAdapter;
@@ -180,7 +183,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
             rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
             rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            rlp.setMargins(0, 0, 30, (int) getPixelFromDp(165) + 30);
+            rlp.setMargins(0, 0, 30, (int) getPixelFromDp(185) + 30);
 
             mMap.setMyLocationEnabled(true);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomlevel));
@@ -270,18 +273,32 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     }
 
     @Override
+    protected void onPause() {
+        mosqueShimmerLoad.stopShimmer();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mosqueShimmerLoad.startShimmer();
+    }
+
+    @Override
     public void finish() {
         super.finish();
         Animatoo.animateSlideRight(this);
     }
 
     private void initializeUI() {
+        mosqueShimmerLoad = findViewById(R.id.shimmer_load_mosque);
+
         jamSolat = findViewById(R.id.jamSolat);
         CardView cardJamSolat = jamSolat.findViewById(R.id.card);
         cardJamSolat.setRadius(getPixelFromDp(12));
         cardJamSolat.setElevation(0);
         TextView captionCardSholat = cardJamSolat.findViewById(R.id.title);
-        captionCardSholat.setTypeface(ResourcesCompat.getFont(this, R.font.osregular));
+        captionCardSholat.setTypeface(ResourcesCompat.getFont(this, R.font.geomanistregular));
 
         someInformation = findViewById(R.id.someInformation);
         listMasjid = findViewById(R.id.listMasjid);
@@ -405,7 +422,11 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             layoutManager = new LinearLayoutManager(MosqueActivity.this, LinearLayoutManager.HORIZONTAL, false);
             listMasjid.setLayoutManager(layoutManager);
             mAdapter = new MosqueAdapter(getApplication(), MosqueActivity.this, mDataSet, mMap);
-            listMasjid.setAdapter(mAdapter);
+            new Handler().postDelayed(() -> {
+                listMasjid.setAdapter(mAdapter);
+                mosqueShimmerLoad.stopShimmer();
+                mosqueShimmerLoad.setVisibility(View.GONE);
+            }, 800);
             setMarker("onPostExecute");
         }
 

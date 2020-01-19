@@ -61,12 +61,6 @@ public class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder
         }
 
         holder.discoverbutton.setOnClickListener((view) -> {
-//            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-//                    Uri.parse("google.navigation:q=" +
-//                            mDataset.get(position).getPlaceLocation().latitude
-//                            + "," + mDataset.get(position).getPlaceLocation().longitude));
-//            app.startActivity(intent);
-            // default origin sydney
             new GetDirection(app, mMap, mDataset.get(position).getPlaceName(), mDataset.get(position).getPlaceLocation()).execute(getDirectionsUrl(new LatLng(Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", "-33.8523341")),
                             Double.parseDouble(app.getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", "151.2106085"))),
                     mDataset.get(position).getPlaceLocation()));

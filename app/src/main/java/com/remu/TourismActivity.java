@@ -18,6 +18,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
@@ -343,10 +344,8 @@ public class TourismActivity extends SlideBackActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
             tourismAdapter = new TourismAdapter(getApplication(), TourismActivity.this, places, new LatLng(latitude, longitude));
             rvTour.setAdapter(tourismAdapter);
-
         }
     }
 

@@ -173,7 +173,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
         nextPrayerTimeLayout.setBackground(gradientDrawable);
 
-        Typeface typeface = ResourcesCompat.getFont(context, R.font.osbold);
+        Typeface typeface = ResourcesCompat.getFont(context, R.font.geomanistblack);
         nextPrayerTime.setTypeface(typeface);
     }
 
