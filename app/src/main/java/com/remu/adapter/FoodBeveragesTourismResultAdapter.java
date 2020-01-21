@@ -69,22 +69,28 @@ public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<Food
 
         holder.recommendedDistance.setText(String.format("%.2f km", countDistance(mDataset.get(position).getPlaceLocation())));
 
-        if (mDataset.get(position).getPlacePhotoUri() != null) {
-            Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + mDataset.get(position).getPlacePhotoUri()
-                    + "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+//        if (mDataset.get(position).getPlacePhotoUri() != null) {
+//            Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + mDataset.get(position).getPlacePhotoUri()
+//                    + "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+//                    .error(R.drawable.bg_loading_image)
+//                    .placeholder(R.drawable.bg_loading_image)
+//                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+//                    .into(holder.recommendedImage);
+//        } else {
+//            LatLng location = mDataset.get(position).getPlaceLocation();
+//            Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
+//                    + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+//                    .error(R.drawable.bg_loading_image)
+//                    .placeholder(R.drawable.bg_loading_image)
+//                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+//                    .into(holder.recommendedImage);
+//        }
+
+        Picasso.get().load(mDataset.get(position).getPlacePhotoUri())
                     .error(R.drawable.bg_loading_image)
                     .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(holder.recommendedImage);
-        } else {
-            LatLng location = mDataset.get(position).getPlaceLocation();
-            Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                    + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
-                    .error(R.drawable.bg_loading_image)
-                    .placeholder(R.drawable.bg_loading_image)
-                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                    .into(holder.recommendedImage);
-        }
         holder.recommendeLayout.setOnClickListener(view -> {
             System.out.println("weight " + mDataset.get(position).getPlaceWeight());
             databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(mDataset.get(position).getPlaceId());

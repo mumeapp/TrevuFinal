@@ -78,18 +78,18 @@ public class TourismActivity extends SlideBackActivity {
         Animatoo.animateSlideLeft(this);
 
         Runnable getGoogleJSON = this::getGoogleJson;
-        Runnable getFirebaseData = () -> getFirebaseData(value -> {
-            doWeighting();
-            rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
-            tourismAdapter = new TourismAdapter(getApplication(), TourismActivity.this, places, new LatLng(latitude, longitude));
-            rvTour.setAdapter(tourismAdapter);
-            tourismShimmerLoad.stopShimmer();
-            tourismShimmerLoad.setVisibility(View.GONE);
-        });
+//        Runnable getFirebaseData = () -> getFirebaseData(value -> {
+//            doWeighting();
+//            rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
+//            tourismAdapter = new TourismAdapter(getApplication(), TourismActivity.this, places, new LatLng(latitude, longitude));
+//            rvTour.setAdapter(tourismAdapter);
+//            tourismShimmerLoad.stopShimmer();
+//            tourismShimmerLoad.setVisibility(View.GONE);
+//        });
 
         generateListCategory();
 
-        new GetTourPlace().execute(getGoogleJSON, getFirebaseData);
+        new GetTourPlace().execute(getGoogleJSON);
 
         tourScrollView = findViewById(R.id.tour_scroll);
         tourScrollView.post(() -> tourScrollView.scrollTo(0, 0));
@@ -127,7 +127,7 @@ public class TourismActivity extends SlideBackActivity {
 
     @Override
     protected void onPause() {
-        tourismShimmerLoad.stopShimmer();
+//        tourismShimmerLoad.stopShimmer();
         super.onPause();
     }
 
@@ -135,80 +135,89 @@ public class TourismActivity extends SlideBackActivity {
     protected void onResume() {
         super.onResume();
         manualCategory.setText("");
-        tourismShimmerLoad.startShimmer();
+//        tourismShimmerLoad.startShimmer();
     }
 
     private void parseJSON(String jsonStr, ArrayList<String> placeIds) {
-        try {
-            JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
-
-            for (int i = 0; i < results.length(); i++) {
-                JSONObject row = results.getJSONObject(i);
-
-                if (row.isNull("photos")) {
-                    if (!placeIds.contains(row.getString("place_id"))) {
-                        places.add(new PlaceModel(
-                                row.getString("place_id"),
-                                row.getString("name"),
-                                row.getString("vicinity"),
-                                row.getDouble("rating"),
-                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
-                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
-                        ));
-                        placeIds.add(row.getString("place_id"));
-                    }
-                } else {
-                    if (!placeIds.contains(row.getString("place_id"))) {
-                        places.add(new PlaceModel(
-                                row.getString("place_id"),
-                                row.getString("name"),
-                                row.getString("vicinity"),
-                                row.getDouble("rating"),
-                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
-                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
-                                row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
-                        ));
-                        placeIds.add(row.getString("place_id"));
-                    }
-                }
-            }
-        } catch (final JSONException e) {
-            Log.e(TAG, "Json parsing error: " + e.getMessage());
-        }
+//        try {
+//            JSONArray results = new JSONObject(jsonStr).getJSONArray("results");
+//
+//            for (int i = 0; i < results.length(); i++) {
+//                JSONObject row = results.getJSONObject(i);
+//
+//                if (row.isNull("photos")) {
+//                    if (!placeIds.contains(row.getString("place_id"))) {
+//                        places.add(new PlaceModel(
+//                                row.getString("place_id"),
+//                                row.getString("name"),
+//                                row.getString("vicinity"),
+//                                row.getDouble("rating"),
+//                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+//                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng"))
+//                        ));
+//                        placeIds.add(row.getString("place_id"));
+//                    }
+//                } else {
+//                    if (!placeIds.contains(row.getString("place_id"))) {
+//                        places.add(new PlaceModel(
+//                                row.getString("place_id"),
+//                                row.getString("name"),
+//                                row.getString("vicinity"),
+//                                row.getDouble("rating"),
+//                                new LatLng(row.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+//                                        row.getJSONObject("geometry").getJSONObject("location").getDouble("lng")),
+//                                row.getJSONArray("photos").getJSONObject(0).getString("photo_reference")
+//                        ));
+//                        placeIds.add(row.getString("place_id"));
+//                    }
+//                }
+//            }
+//        } catch (final JSONException e) {
+//            Log.e(TAG, "Json parsing error: " + e.getMessage());
+//        }
     }
 
     private void getGoogleJson() {
-        HttpHandler httpHandler = new HttpHandler();
 
-        String url1 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                "6&rankby=distance&keyword=museum&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-        String url2 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                "6&rankby=distance&keyword=zoo&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-        String url3 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                "6&rankby=distance&keyword=theme%20park&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
-        String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                "6&rankby=distance&keyword=waterfall&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+        places.add(new PlaceModel("1", "Museum Batu Mulia Nusantara", "Jl. Veteran Malang, Ketawanggede, Kec. Lowokwaru, Kota Malang, Jawa Timur 65145", 5.0,new LatLng(-7.9522821,112.6132694),"https://lh5.googleusercontent.com/p/AF1QipO_tNqi6ZkK9hAWfBnlV0juU2qdgPJoND0yscjz=w408-h306-k-no"));
+        places.add(new PlaceModel("2", "Museum Zoologi Frater Vianney", "Jl. Raya No.7, Doro, Karangwidoro, Kec. Dau, Malang, Jawa Timur 65146", 4.5,new LatLng(-7.9586159,112.5961921),"https://lh5.googleusercontent.com/p/AF1QipNYyfAxe0fWXaDrh2iGoDJd6WAYCQSl7iucZ4A=w426-h240-k-no"));
 
-        ArrayList<String> arrayListJSON = new ArrayList<String>() {{
-            add(httpHandler.makeServiceCall(url1));
-            add(httpHandler.makeServiceCall(url2));
-            add(httpHandler.makeServiceCall(url3));
-            add(httpHandler.makeServiceCall(url4));
-        }};
-
-        ArrayList<String> placeIds = new ArrayList<>();
-
-        for (String jsonStr : arrayListJSON) {
-            Log.d(TAG, url1);
-            Log.d(TAG, "Response from url: " + jsonStr);
-
-            if (jsonStr != null) {
-                parseJSON(jsonStr, placeIds);
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-            }
-        }
-        doWeighting();
+        rvTour.setLayoutManager(new GridLayoutManager(TourismActivity.this, 2));
+        tourismAdapter = new TourismAdapter(getApplication(), TourismActivity.this, places, new LatLng(latitude, longitude));
+        rvTour.setAdapter(tourismAdapter);
+//        tourismShimmerLoad.stopShimmer();
+        tourismShimmerLoad.setVisibility(View.GONE);
+//        HttpHandler httpHandler = new HttpHandler();
+//
+//        String url1 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+//                "6&rankby=distance&keyword=museum&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+//        String url2 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+//                "6&rankby=distance&keyword=zoo&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+//        String url3 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+//                "6&rankby=distance&keyword=theme%20park&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+//        String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
+//                "6&rankby=distance&keyword=waterfall&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+//
+//        ArrayList<String> arrayListJSON = new ArrayList<String>() {{
+//            add(httpHandler.makeServiceCall(url1));
+//            add(httpHandler.makeServiceCall(url2));
+//            add(httpHandler.makeServiceCall(url3));
+//            add(httpHandler.makeServiceCall(url4));
+//        }};
+//
+//        ArrayList<String> placeIds = new ArrayList<>();
+//
+//        for (String jsonStr : arrayListJSON) {
+//            Log.d(TAG, url1);
+//            Log.d(TAG, "Response from url: " + jsonStr);
+//
+//            if (jsonStr != null) {
+//                parseJSON(jsonStr, placeIds);
+//            } else {
+//                Log.e(TAG, "Couldn't get json from server.");
+//            }
+//        }
+//        doWeighting();
     }
 
 
@@ -228,78 +237,78 @@ public class TourismActivity extends SlideBackActivity {
     }
 
     private void getFirebaseData(MyCallBack myCallBack) {
-        for (int i = 0; i < places.size(); i++) {
-            DatabaseReference intensity = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
-            int finalI = i;
-            intensity.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try {
-                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
-                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
-                        myCallBack.onCallback(places);
-
-                    } catch (NullPointerException np) {
-                        places.get(finalI).setPlaceIntensity(1);
-                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
-                        myCallBack.onCallback(places);
-                    }
-
-                    DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(finalI).getPlaceId());
-                    databaseReview.addChildEventListener(new ChildEventListener() {
-                        double rataRata = 0;
-                        double jumlah = 0;
-
-
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                            try {
-                                ++jumlah;
-                                rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
-                                rataRata /= jumlah;
-
-                                places.get(finalI).setTrevuRating(rataRata);
-                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
-                                myCallBack.onCallback(places);
-
-                            } catch (NullPointerException np) {
-                                places.get(finalI).setTrevuRating(1);
-                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
-                                myCallBack.onCallback(places);
-
-                            }
-                        }
-
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
+//        for (int i = 0; i < places.size(); i++) {
+//            DatabaseReference intensity = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
+//            int finalI = i;
+//            intensity.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    try {
+//                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
+//                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+//                        myCallBack.onCallback(places);
+//
+//                    } catch (NullPointerException np) {
+//                        places.get(finalI).setPlaceIntensity(1);
+//                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
+//                        myCallBack.onCallback(places);
+//                    }
+//
+//                    DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(finalI).getPlaceId());
+//                    databaseReview.addChildEventListener(new ChildEventListener() {
+//                        double rataRata = 0;
+//                        double jumlah = 0;
+//
+//
+//                        @SuppressLint("SetTextI18n")
+//                        @Override
+//                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                            try {
+//                                ++jumlah;
+//                                rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
+//                                rataRata /= jumlah;
+//
+//                                places.get(finalI).setTrevuRating(rataRata);
+//                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
+//                                myCallBack.onCallback(places);
+//
+//                            } catch (NullPointerException np) {
+//                                places.get(finalI).setTrevuRating(1);
+//                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
+//                                myCallBack.onCallback(places);
+//
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }
     }
 
     private void initializeUI() {
@@ -374,13 +383,13 @@ public class TourismActivity extends SlideBackActivity {
                 holder.categoryImage.setImageDrawable(getDrawable((int) categoryDataSet.get(position).get("category_image")));
                 holder.categoryName.setText((String) categoryDataSet.get(position).get("category_name"));
 
-                holder.categoryCard.setOnClickListener((v) -> {
-                    Intent intent = new Intent(TourismActivity.this, FoodBeverageTourismResult.class);
-                    intent.putExtra("sender", "Tourism");
-                    intent.putExtra("category", (String) categoryDataSet.get(position).get("keyword"));
-                    intent.putExtra("name", (String) categoryDataSet.get(position).get("category_name"));
-                    startActivity(intent);
-                });
+//                holder.categoryCard.setOnClickListener((v) -> {
+//                    Intent intent = new Intent(TourismActivity.this, FoodBeverageTourismResult.class);
+//                    intent.putExtra("sender", "Tourism");
+//                    intent.putExtra("category", (String) categoryDataSet.get(position).get("keyword"));
+//                    intent.putExtra("name", (String) categoryDataSet.get(position).get("category_name"));
+//                    startActivity(intent);
+//                });
             }
 
             @Override
