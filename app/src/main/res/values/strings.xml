@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Trevu</string>
 
+    <string name="API_KEY">AIzaSyA2n7hH6W6cHvZdRX2kBmL0b21ev6WWjag</string>
+
     <!-- bottom navigation strings -->
     <string name="title_home">Home</string>
     <string name="title_saved">Saved</string>

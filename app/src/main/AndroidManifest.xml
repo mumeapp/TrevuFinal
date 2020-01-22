@@ -151,7 +151,7 @@
         <!-- meta datas -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8" />
+            android:value="AIzaSyA2n7hH6W6cHvZdRX2kBmL0b21ev6WWjag" />
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />

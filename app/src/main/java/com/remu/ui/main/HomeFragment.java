@@ -98,8 +98,8 @@ public class HomeFragment extends Fragment {
 
         //go to mosque activity
         mosqueCardView.setOnClickListener(view -> {
-//            Intent viewMosque = new Intent(HomeFragment.super.getContext(), MosqueActivity.class);
-//            startActivity(viewMosque);
+            Intent viewMosque = new Intent(HomeFragment.super.getContext(), MosqueActivity.class);
+            startActivity(viewMosque);
         });
 
         //go to food activity

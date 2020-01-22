@@ -381,8 +381,10 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
 
+            String apiKey = getResources().getString(R.string.API_KEY);
+
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "&rankby=distance&type=mosque&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+                    "&rankby=distance&type=mosque&key=" + apiKey;
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
