@@ -260,8 +260,11 @@
             app:cardCornerRadius="25dp">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:id="@+id/img_clicked"
+                android:layout_width="20dp"
+                android:layout_height="17.5dp"
+                android:src="@drawable/ic_save_blank"
+                android:layout_gravity="center"/>
 
         </androidx.cardview.widget.CardView>
 

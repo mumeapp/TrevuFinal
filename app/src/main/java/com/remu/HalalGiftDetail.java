@@ -14,6 +14,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,6 +62,10 @@ public class HalalGiftDetail extends SlideBackActivity {
     private DatabaseReference databaseReference, databaseReview;
     private ProgressDialog progressDialog;
     private FirebaseRecyclerAdapter<Rating, HalalGiftDetail.HalalGiftDetailAdapter> firebaseRecyclerAdapter;
+
+    private boolean isSaved;
+    private CardView buttonSave;
+    private ImageView imageButtonSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +164,19 @@ public class HalalGiftDetail extends SlideBackActivity {
             });
         }));
 
+        // ini mustinya get apakah uda disave atau belum
+        isSaved = false;
+
+        buttonSave.setOnClickListener(v -> {
+            if (isSaved) {
+                isSaved = false;
+                imageButtonSave.setImageDrawable(getDrawable(R.drawable.ic_save_blank));
+            } else {
+                isSaved = true;
+                imageButtonSave.setImageDrawable(getDrawable(R.drawable.ic_save_filled));
+            }
+        });
+
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
@@ -253,6 +271,9 @@ public class HalalGiftDetail extends SlideBackActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Fetching result...");
         progressDialog.setCancelable(false);
+
+        buttonSave = findViewById(R.id.toggle_gift_save);
+        imageButtonSave = findViewById(R.id.img_clicked);
     }
 
     private double countDistance(LatLng latLng) {

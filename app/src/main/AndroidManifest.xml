@@ -60,7 +60,6 @@
         <activity
             android:name=".FoodActivity"
             android:theme="@style/GreenTheme" />
-        <activity android:name=".FoodBeveragesDetail" />
 
         <!-- halal food activities -->
         <activity

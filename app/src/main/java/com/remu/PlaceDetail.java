@@ -74,7 +74,7 @@ public class PlaceDetail extends SlideBackActivity {
     private TextView headerAddress, headerPlusCode, headerCloseHours, headerPhone;
     private ImageView starRating2;
     private CardView tpdDiscoverButton, tpdReviewCard;
-    private ImageView tpdPhoto, tpdBookmark, tpdProfilePicture;
+    private ImageView tpdPhoto, tpdProfilePicture;
     private RatingBar tpdInputRating;
     private EditText tpdInputReview;
     private RecyclerView tpdListUserReview;
@@ -88,6 +88,9 @@ public class PlaceDetail extends SlideBackActivity {
     private FirebaseRecyclerAdapter<Rating, PlaceDetail.TourismDetailAdapter> firebaseRecyclerAdapter;
 
     private ProgressDialog progressDialog;
+
+    private CardView cardBookmark;
+    private ImageView tpdBookmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -365,7 +368,6 @@ public class PlaceDetail extends SlideBackActivity {
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void applyPlaceInfoToView(Place tourismPlace) {
         if (tourismPlace != null) {
-
             DatabaseReference saved = FirebaseDatabase.getInstance().getReference().child("Saved").child(FirebaseAuth.getInstance().getUid())
                     .child(getIntent().getStringExtra("sender")).child(place.getId());
             saved.addValueEventListener(new ValueEventListener() {
@@ -374,21 +376,21 @@ public class PlaceDetail extends SlideBackActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
                         if (dataSnapshot.child(place.getId()).getValue().equals(true)) {
-                            tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_fill_black_24dp));
-                            tpdBookmark.setOnClickListener(view -> {
+                            tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_save_filled));
+                            cardBookmark.setOnClickListener(view -> {
                                 saved.removeValue();
-                                tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_border_black_24dp));
+                                tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_save_blank));
                             });
                         }
                     } catch (NullPointerException np) {
-                        tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_border_black_24dp));
-                        tpdBookmark.setOnClickListener(view -> {
+                        tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_save_blank));
+                        cardBookmark.setOnClickListener(view -> {
                             saved.child(place.getId()).setValue(true);
                             saved.child("latlong").setValue(place.getLatLng().latitude + ", " + place.getLatLng().longitude);
                             saved.child("id").setValue(place.getId());
                             saved.child("rating").setValue(place.getRating());
                             saved.child("title").setValue(place.getName());
-                            tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_bookmark_fill_black_24dp));
+                            tpdBookmark.setImageDrawable(getDrawable(R.drawable.ic_save_filled));
                         });
                     }
 
@@ -456,6 +458,7 @@ public class PlaceDetail extends SlideBackActivity {
             } else {
                 tpdPhone.setText(tourismPlace.getPhoneNumber());
             }
+
             tpdSubmitButon.setOnClickListener(view -> {
                 progressDialog.show();
                 Rating rating = new Rating(uId, nama, tpdInputReview.getText().toString(), Float.toString(tpdInputRating.getRating()), getIntent().getStringExtra("place_id"), tpdName.getText().toString());
@@ -478,7 +481,6 @@ public class PlaceDetail extends SlideBackActivity {
         tpdDistance = findViewById(R.id.tpd_distance);
         tpdDiscoverButton = findViewById(R.id.tpd_discoverbutton);
         tpdPhoto = findViewById(R.id.tpd_photo);
-        tpdBookmark = findViewById(R.id.tpd_bookmark);
         tpdAddress = findViewById(R.id.tpd_address);
         tpdPlusCode = findViewById(R.id.tpd_plus_code);
         tpdIsOpen = findViewById(R.id.tpd_is_open);
@@ -506,6 +508,10 @@ public class PlaceDetail extends SlideBackActivity {
         headerPhone = findViewById(R.id.tpd_header_phone);
         starRating2 = findViewById(R.id.tpd_star_rating_2);
         tpdReviewCard = findViewById(R.id.tpd_card_review);
+
+        cardBookmark = findViewById(R.id.tpd_bookmark);
+        tpdBookmark = findViewById(R.id.img_tpd_bookmark);
+
     }
 
     private double countDistance(LatLng latLng) {

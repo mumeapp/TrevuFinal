@@ -20,7 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.remu.FoodBeveragesDetail;
 import com.remu.POJO.Distance;
 import com.remu.POJO.PlaceModel;
 import com.remu.PlaceDetail;
