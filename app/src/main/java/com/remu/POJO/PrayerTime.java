@@ -218,7 +218,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
     }
 
     private void setTodayURL(String latitude, String longitude) {
-        todayUrl = "http://api.pray.zone/v2/times/today.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666";
+        todayUrl = "https://api.pray.zone/v2/times/today.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666";
     }
 
     private void setTomorrowURL(String latitude, String longitude) {
@@ -227,7 +227,7 @@ public class PrayerTime extends AsyncTask<Void, Void, Void> {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nextDate = df.format(c.getTime());
 
-        tomorrowURL = "http://api.pray.zone/v2/times/day.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666&date=" + nextDate;
+        tomorrowURL = "https://api.pray.zone/v2/times/day.json?latitude=" + latitude + "&longitude=" + longitude + "&elevation=666&date=" + nextDate;
     }
 
 }
