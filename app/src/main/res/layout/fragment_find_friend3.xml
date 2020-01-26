@@ -5,6 +5,7 @@
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     app:rb_color="#0000F6"
     app:rb_duration="3000"
     app:rb_radius="32dp"
