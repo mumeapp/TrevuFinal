@@ -17,7 +17,7 @@
             android:layout_width="110dp"
             android:layout_height="100dp"
             android:layout_margin="10dp"
-            app:cardBackgroundColor="@color/grey_300"
+            app:cardBackgroundColor="@color/quantum_grey300"
             app:cardCornerRadius="10dp"
             app:cardElevation="1dp" />
 
@@ -33,7 +33,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                app:cardBackgroundColor="@color/grey_300"
+                app:cardBackgroundColor="@color/quantum_grey300"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="1dp" />
 
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="13dp"
                 android:layout_marginTop="5dp"
-                app:cardBackgroundColor="@color/grey_300"
+                app:cardBackgroundColor="@color/quantum_grey300"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="1dp" />
 
@@ -59,7 +59,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:cardBackgroundColor="@color/grey_300"
+                    app:cardBackgroundColor="@color/quantum_grey300"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="1dp" />
 
@@ -67,7 +67,7 @@
                     android:layout_width="35dp"
                     android:layout_height="13dp"
                     android:layout_marginStart="5dp"
-                    app:cardBackgroundColor="@color/grey_300"
+                    app:cardBackgroundColor="@color/quantum_grey300"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="1dp" />
 
@@ -75,7 +75,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="10dp"
-                    app:cardBackgroundColor="@color/grey_300"
+                    app:cardBackgroundColor="@color/quantum_grey300"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="1dp" />
 
@@ -83,7 +83,7 @@
                     android:layout_width="35dp"
                     android:layout_height="13dp"
                     android:layout_marginStart="5dp"
-                    app:cardBackgroundColor="@color/grey_300"
+                    app:cardBackgroundColor="@color/quantum_grey300"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="1dp" />
 

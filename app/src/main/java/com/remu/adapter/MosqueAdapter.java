@@ -2,8 +2,6 @@ package com.remu.adapter;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +100,7 @@ public class MosqueAdapter extends RecyclerView.Adapter<MosqueAdapter.ViewHolder
         String parameters = strOrigin + "&" + strDest + "&" + sensor + "&" + mode;
         String output = "json";
 
-        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + R.string.API_KEY;
     }
 
 }

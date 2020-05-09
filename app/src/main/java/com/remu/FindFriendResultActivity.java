@@ -44,7 +44,6 @@ public class FindFriendResultActivity extends SlideBackActivity {
             }.getType();
             ArrayList<User> userList = gson.fromJson(getFriendList, type);
             initializeFriendList(userList);
-
         }
 
     }

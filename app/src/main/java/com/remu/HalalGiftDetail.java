@@ -39,7 +39,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.Distance;
 import com.remu.POJO.Rating;
-import com.remu.ui.main.FriendFragment;
 import com.saber.chentianslideback.SlideBackActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -72,7 +71,7 @@ public class HalalGiftDetail extends SlideBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_halal_gift_detail);
 
-        Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
+        Places.initialize(getApplicationContext(), getString(R.string.API_KEY));
         placesClient = Places.createClient(this);
 
         initializeUI();
@@ -225,7 +224,7 @@ public class HalalGiftDetail extends SlideBackActivity {
             } else {
                 LatLng location = giftPlace.getLatLng();
                 Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                        + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+                        + "&fov=120&pitch=10&key=" + R.string.API_KEY)
                         .error(R.drawable.bg_loading_image)
                         .placeholder(R.drawable.bg_loading_image)
                         .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)

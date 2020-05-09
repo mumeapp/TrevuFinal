@@ -1,13 +1,8 @@
 package com.remu;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,25 +14,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.remu.POJO.TextProcess;
 import com.saber.chentianslideback.SlideBackActivity;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DictionaryActivity extends SlideBackActivity {
 
@@ -84,38 +71,6 @@ public class DictionaryActivity extends SlideBackActivity {
         finish();
     }
 
-    //TODO remove later after connected with firebase
-//    private void setDummyRecyclerView() {
-//        ArrayList<HashMap<String, String>> mDataSet = new ArrayList<HashMap<String, String>>() {{
-//            add(new HashMap<String, String>() {{
-//                put("origin", "Where is the toilet?");
-//                put("destination", "トイレはどこですか？");
-//            }});
-//            add(new HashMap<String, String>() {{
-//                put("origin", "Where is the nearest restaurant?");
-//                put("destination", "最寄のレストランはどこですか？");
-//            }});
-//            add(new HashMap<String, String>() {{
-//                put("origin", "Where is the nearest mosque?");
-//                put("destination", "一番近いモスクはどこですか？");
-//            }});
-//            add(new HashMap<String, String>() {{
-//                put("origin", "Where is the nearest subway station?");
-//                put("destination", "最寄りの地下鉄の駅はどこですか？");
-//            }});
-//            add(new HashMap<String, String>() {{
-//                put("origin", "How to get to Shinjuku?");
-//                put("destination", "新宿への行き方");
-//            }});
-//        }};
-//
-//        rvDictionary = findViewById(R.id.rv_listDictionary);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(DictionaryActivity.this, LinearLayoutManager.VERTICAL, false);
-//        rvDictionary.setLayoutManager(layoutManager);
-//        TextProcessAdapter mAdapter = new TextProcessAdapter(getApplication(), mDataSet);
-//        rvDictionary.setAdapter(mAdapter);
-//    }
-
     private void initializeUI() {
         selectorOrigin = findViewById(R.id.selector_origin);
         selectorDestination = findViewById(R.id.selector_destination);
@@ -125,26 +80,20 @@ public class DictionaryActivity extends SlideBackActivity {
         languageDestination = findViewById(R.id.language_destination);
     }
 
-    private void showDictionary(){
+    private void showDictionary() {
         rvDictionary = findViewById(R.id.rv_listDictionary);
 //        rvDictionary.setHasFixedSize(true);
         rvDictionary.setLayoutManager(new LinearLayoutManager(DictionaryActivity.this, LinearLayoutManager.VERTICAL, false));
 
-        if((languageOrigin.getText().toString().equals("Indonesian")&&languageDestination.getText().toString().equals("Japanese"))||(languageDestination.getText().toString().equals("Indonesian")&&languageOrigin.getText().toString().equals("Japanese"))){
+        if ((languageOrigin.getText().toString().equals("Indonesian") && languageDestination.getText().toString().equals("Japanese")) || (languageDestination.getText().toString().equals("Indonesian") && languageOrigin.getText().toString().equals("Japanese"))) {
             databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("indonesia-jepang");
-        }
-        else if((languageOrigin.getText().toString().equals("Indonesian")&&languageDestination.getText().toString().equals("English"))||(languageDestination.getText().toString().equals("Indonesian")&&languageOrigin.getText().toString().equals("English"))){
+        } else if ((languageOrigin.getText().toString().equals("Indonesian") && languageDestination.getText().toString().equals("English")) || (languageDestination.getText().toString().equals("Indonesian") && languageOrigin.getText().toString().equals("English"))) {
             databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("inggris-indonesia");
-        }
-        else if((languageOrigin.getText().toString().equals("English")&&languageDestination.getText().toString().equals("Japanese"))||(languageDestination.getText().toString().equals("English")&&languageOrigin.getText().toString().equals("Japanese"))){
+        } else if ((languageOrigin.getText().toString().equals("English") && languageDestination.getText().toString().equals("Japanese")) || (languageDestination.getText().toString().equals("English") && languageOrigin.getText().toString().equals("Japanese"))) {
             databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("jepang-inggris");
-        }
-        else{
+        } else {
             Toast.makeText(getApplicationContext(), "Tidak bisa menggunakan bahasa yang sama", Toast.LENGTH_LONG).show();
         }
-
-//        databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("melayu-inggris");
-
         Query query = databaseReference.orderByKey();
 
         FirebaseRecyclerOptions<TextProcess> options = new FirebaseRecyclerOptions.Builder<TextProcess>()
@@ -155,7 +104,6 @@ public class DictionaryActivity extends SlideBackActivity {
             protected void onBindViewHolder(@NonNull TextProcessViewHolder textProcessViewHolder, int i, @NonNull TextProcess textProcess) {
                 textProcessViewHolder.setText1(textProcess.getTextAwal());
                 textProcessViewHolder.setText2(textProcess.getTextTranslete());
-                textProcessViewHolder.setAudio(textProcess.getAudio());
 
             }
 
@@ -274,53 +222,17 @@ public class DictionaryActivity extends SlideBackActivity {
         }
     }
 
-    //TODO remove later after connected with firebase
-    class TextProcessAdapter extends RecyclerView.Adapter<TextProcessViewHolder> {
-        private ArrayList<HashMap<String, String>> mDataset;
-        private Application app;
-
-        TextProcessAdapter(Application app, ArrayList<HashMap<String, String>> mDataset) {
-            this.app = app;
-            this.mDataset = mDataset;
-        }
-
-        @NonNull
-        @Override
-        public TextProcessViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View root = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.adapter_dictionary_result, parent, false);
-            return new TextProcessViewHolder(root);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull TextProcessViewHolder holder, int position) {
-            try {
-                holder.setText1(mDataset.get(position).get("origin"));
-                holder.setText2(mDataset.get(position).get("destination"));
-            } catch (Exception e) {
-                Log.e("DictionaryActivity", e.toString());
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return mDataset.size();
-        }
-    }
-
     class TextProcessViewHolder extends RecyclerView.ViewHolder {
 
         TextView text1;
         LinearLayout seeTranslation;
         TextView text2;
-        Button audio;
 
         TextProcessViewHolder(@NonNull View itemView) {
             super(itemView);
             text1 = itemView.findViewById(R.id.awal);
             text2 = itemView.findViewById(R.id.translete);
             seeTranslation = itemView.findViewById(R.id.see_translation);
-            audio = itemView.findViewById(R.id.audio);
 
             seeTranslation.setOnClickListener(view -> {
                 ImageView arrow = seeTranslation.findViewById(R.id.arrow_see_translation);
@@ -342,35 +254,6 @@ public class DictionaryActivity extends SlideBackActivity {
             text2.setText(text);
         }
 
-        void setAudio(String aud) {
-            if (aud!=null) {
-                audio.setOnClickListener(view -> {
-
-                    MediaPlayer player = new MediaPlayer();
-
-                    try {
-                        player.setDataSource(aud);
-                        player.setOnPreparedListener(MediaPlayer::start);
-                        player.prepare();
-//                        player.start();
-//                        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                            @Override
-//                            public void onPrepared(MediaPlayer mp) {
-//                                 mp.start();
-//                            }
-//                        });
-//                        player.prepare();
-                        Toast.makeText(getApplicationContext(), "Audio Started", Toast.LENGTH_LONG).show();
-                    } catch (IOException i) {
-                        i.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-            else{
-                audio.setVisibility(View.GONE);
-            }
-        }
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.remu;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -159,7 +157,7 @@ public class FoodBeverageTourismResult extends SlideBackActivity {
                     break;
             }
             url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "6&rankby=distance&keyword=" + keyword + "&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8";
+                    "6&rankby=distance&keyword=" + keyword + "&key=" + getString(R.string.API_KEY);
         }
 
         @Override

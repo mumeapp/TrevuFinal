@@ -66,11 +66,13 @@
                 android:elevation="5dp"
                 android:fontFamily="@font/geomanistregular"
                 android:hint="What would you like to go?"
+                android:imeOptions="actionDone"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
+                android:singleLine="true"
                 tools:ignore="HardcodedText" />
 
         </RelativeLayout>

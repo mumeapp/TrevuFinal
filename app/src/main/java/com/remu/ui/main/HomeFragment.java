@@ -72,8 +72,8 @@ public class HomeFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        latitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
-        longitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
+        latitude = requireActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null);
+        longitude = requireActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null);
 
         Log.e(TAG, "Latitude: " + latitude);
         Log.e(TAG, "Longitude: " + longitude);

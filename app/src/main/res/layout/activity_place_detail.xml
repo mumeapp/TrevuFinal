@@ -403,7 +403,7 @@
                         android:layout_height="40dp"
                         android:layout_gravity="end"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/rounded_button"
+                        android:background="@drawable/rounded_rect"
                         android:backgroundTint="@color/white"
                         android:fontFamily="@font/geomanistmedium"
                         android:text="submit"

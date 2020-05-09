@@ -2,6 +2,7 @@ package com.remu.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                         yourDatabase.child("name").setValue(mDataset.get(position).getName());
 
                         holder.addFriend.setText("Request sent");
-                        holder.addFriend.setTextColor(app.getColor(R.color.grey_300));
+                        holder.addFriend.setTextColor(Color.GRAY);
                         holder.addFriend.setOnClickListener(view1 -> {
 
                         });
@@ -98,7 +99,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             case "April":
                 birthDate[1] = "3";
                 break;
-            case "Mey":
+            case "May":
                 birthDate[1] = "4";
                 break;
             case "June":

@@ -51,7 +51,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class SavedFragment extends Fragment {
 
@@ -70,8 +69,8 @@ public class SavedFragment extends Fragment {
 
         initializeUI(root);
 
-        latitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null));
-        longitude = Objects.requireNonNull(getActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null));
+        latitude = requireActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Latitude", null);
+        longitude = requireActivity().getSharedPreferences("location", MODE_PRIVATE).getString("Longitude", null);
 
         initializeArticle();
         initializeHalalFood();
@@ -437,15 +436,15 @@ public class SavedFragment extends Fragment {
             List<Place.Field> placeFields = Arrays.asList(Place.Field.PHOTO_METADATAS);
             FetchPlaceRequest request = FetchPlaceRequest.newInstance(id, placeFields);
             if (!Places.isInitialized()) {
-                Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
+                Places.initialize(getActivity(), getString(R.string.API_KEY));
             }
             PlacesClient placesClient;
-            placesClient = Places.createClient(Objects.requireNonNull(getActivity()));
+            placesClient = Places.createClient(requireActivity());
             placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
                 Place place = response.getPlace();
                 if (place.getPhotoMetadatas() != null) {
                     PhotoMetadata photoMetadata = place.getPhotoMetadatas().get(0);
-                    Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
+                    Places.initialize(getActivity(), getString(R.string.API_KEY));
                     PlacesClient placesClient1 = Places.createClient(getActivity());
                     FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
                             .setMaxHeight(750)
@@ -457,7 +456,7 @@ public class SavedFragment extends Fragment {
                 } else {
                     LatLng location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
                     Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                            + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+                            + "&fov=120&pitch=10&key=" + R.string.API_KEY)
                             .error(R.drawable.bg_loading_image)
                             .placeholder(R.drawable.bg_loading_image)
                             .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)

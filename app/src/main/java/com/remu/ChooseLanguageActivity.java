@@ -6,18 +6,13 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.saber.chentianslideback.SlideBackActivity;
-
-import java.util.ArrayList;
 
 public class ChooseLanguageActivity extends SlideBackActivity {
 
@@ -43,6 +38,13 @@ public class ChooseLanguageActivity extends SlideBackActivity {
         highlightSelected(intent.getIntExtra("language", 0));
 
         initializeClickListener();
+        if (highlighted.equals("Indonesian")){
+            cardIndo.setVisibility(View.GONE);
+        } else if (highlighted.equals("English")) {
+            cardEnglish.setVisibility(View.GONE);
+        } else if (highlighted.equals("Japanese")){
+            cardJapanese.setVisibility(View.GONE);
+        }
 
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
@@ -81,6 +83,7 @@ public class ChooseLanguageActivity extends SlideBackActivity {
         submitLanguage.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.putExtra("selected", highlighted);
+
             setResult(RESULT_OK, intent);
             finish();
         });

@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -198,11 +197,9 @@ public class ProfileFragment extends Fragment {
         versionId.setText(versionName);
 
         signOutButton.setOnClickListener(v -> {
-            LoginManager loginManager = LoginManager.getInstance();
             Intent stopService = new Intent(ProfileFragment.super.getContext(), UpdateLocation.class);
             getActivity().stopService(stopService);
             FirebaseAuth.getInstance().signOut();
-            loginManager.logOut();
             Intent login = new Intent(ProfileFragment.super.getContext(), LoginActivity.class);
             startActivity(login);
             getActivity().finish();

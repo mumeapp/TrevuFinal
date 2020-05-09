@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_200"
+    android:background="@color/quantum_grey200"
     android:scrollbars="none"
     tools:context=".ui.main.ProfileFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey_200"
+        android:background="@color/quantum_grey200"
         android:orientation="vertical">
 
         <LinearLayout
@@ -139,7 +139,7 @@
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:src="@drawable/ic_arrow_translate"
-                    android:tint="@color/grey_600" />
+                    android:tint="@color/quantum_grey600" />
 
             </LinearLayout>
 
@@ -253,7 +253,7 @@
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:src="@drawable/ic_arrow_translate"
-                    android:tint="@color/grey_600" />
+                    android:tint="@color/quantum_grey600" />
 
             </LinearLayout>
 
@@ -262,7 +262,7 @@
                 android:layout_height="1dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@color/grey_200" />
+                android:background="@color/quantum_grey200" />
 
             <LinearLayout
                 android:id="@+id/help_center"
@@ -294,7 +294,7 @@
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:src="@drawable/ic_arrow_translate"
-                    android:tint="@color/grey_600" />
+                    android:tint="@color/quantum_grey600" />
 
             </LinearLayout>
 

@@ -155,7 +155,7 @@ public class FriendFragment extends Fragment {
                             case "April":
                                 birthDate[1] = "3";
                                 break;
-                            case "Mey":
+                            case "May":
                                 birthDate[1] = "4";
                                 break;
                             case "June":

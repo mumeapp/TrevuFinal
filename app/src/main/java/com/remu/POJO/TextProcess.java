@@ -5,7 +5,6 @@ public class TextProcess {
     private String textTranslete;
     private String bhsawal;
     private String bhsTranslete;
-    private String audio;
     private String id;
     private static String key;
 
@@ -14,12 +13,11 @@ public class TextProcess {
     public TextProcess() {
     }
 
-    public TextProcess(String textAwal, String textTranslete, String bhsawal, String bhsTranslete, String audio, String id) {
+    public TextProcess(String textAwal, String textTranslete, String bhsawal, String bhsTranslete, String id) {
         this.textAwal = textAwal;
         this.textTranslete = textTranslete;
         this.bhsawal = bhsawal;
         this.bhsTranslete = bhsTranslete;
-        this.audio = audio;
         this.id = id;
     }
 
@@ -45,14 +43,6 @@ public class TextProcess {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getAudio() {
-        return audio;
-    }
-
-    public void setAudio(String audio) {
-        this.audio = audio;
     }
 
     public String getTextAwal() {
@@ -81,6 +71,6 @@ public class TextProcess {
 
     @Override
     public String toString(){
-        return textAwal +"$"+ textTranslete+"$"+audio+"$"+bhsawal+"$"+bhsTranslete;
+        return textAwal +"$"+ textTranslete+"$"+bhsawal+"$"+bhsTranslete;
     }
 }

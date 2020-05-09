@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.remu.POJO.User;
 import com.remu.Service.UpdateLocation;
 
 import java.util.Objects;
@@ -45,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         initializeUI();
+        //updateUI();
         Animatoo.animateSlideLeft(this);
 
         registerButton = findViewById(R.id.registerButton);
@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerNewUser() {
-        String username, email, password, confirmPassword;
+        String email, password, confirmPassword;
         TextInputLayout usernameLayout = findViewById(R.id.input_layout_register_username);
         usernameLayout.setError(null);
         TextInputLayout emailLayout = findViewById(R.id.input_layout_register_email);
@@ -63,7 +63,6 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPasswordLayout.setError(null);
 
         boolean isError = false;
-        username = Objects.requireNonNull(registerUsername.getText()).toString();
         email = Objects.requireNonNull(registerEmail.getText()).toString();
         password = Objects.requireNonNull(registerPassword.getText()).toString();
         confirmPassword = Objects.requireNonNull(registerConfirmPassword.getText()).toString();
@@ -167,12 +166,5 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void registerWithFacebook(View view) {
-        //TODO
-    }
-
-    public void registerWithGoogle(View view) {
-        //TODO
-    }
 
 }

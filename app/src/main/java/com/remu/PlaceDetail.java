@@ -63,7 +63,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class PlaceDetail extends SlideBackActivity {
 
@@ -104,7 +103,7 @@ public class PlaceDetail extends SlideBackActivity {
         assert email != null;
         nama = email.split("@")[0];
 
-        Places.initialize(getApplicationContext(), "AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8");
+        Places.initialize(getApplicationContext(), getString(R.string.API_KEY));
         placesClient = Places.createClient(this);
         mGeocoder = new Geocoder(this, Locale.getDefault());
 
@@ -415,7 +414,7 @@ public class PlaceDetail extends SlideBackActivity {
                 LatLng location = tourismPlace.getLatLng();
                 assert location != null;
                 Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                        + "&fov=120&pitch=10&key=AIzaSyA2yW_s0jqKnavh2AxISXB272VuSE56WI8")
+                        + "&fov=120&pitch=10&key="+R.string.API_KEY)
                         .error(R.drawable.bg_loading_image)
                         .placeholder(R.drawable.bg_loading_image)
                         .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
