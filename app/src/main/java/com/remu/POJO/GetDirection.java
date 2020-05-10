@@ -10,7 +10,6 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -118,7 +117,9 @@ public class GetDirection extends AsyncTask<String, Integer, List<List<HashMap<S
                 .position(mosqueLocation)
                 .title(mosqueName)
                 .icon(bitmapDescriptorFromVector(application.getApplicationContext())));
-        mMap.addPolyline(lineOptions);
+        if (lineOptions != null){
+            mMap.addPolyline(lineOptions);
+        }
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context) {

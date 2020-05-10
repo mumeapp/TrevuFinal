@@ -38,13 +38,6 @@ public class ChooseLanguageActivity extends SlideBackActivity {
         highlightSelected(intent.getIntExtra("language", 0));
 
         initializeClickListener();
-        if (highlighted.equals("Indonesian")){
-            cardIndo.setVisibility(View.GONE);
-        } else if (highlighted.equals("English")) {
-            cardEnglish.setVisibility(View.GONE);
-        } else if (highlighted.equals("Japanese")){
-            cardJapanese.setVisibility(View.GONE);
-        }
 
         setSlideBackDirection(SlideBackActivity.LEFT);
     }

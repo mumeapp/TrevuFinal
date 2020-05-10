@@ -3,7 +3,6 @@ package com.remu;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -82,16 +81,15 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
 
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
 
-    // The entry points to the Places API.
+
     GeoDataClient mGeoDataClient;
     PlaceDetectionClient mPlaceDetectionClient;
     private GoogleMap mMap;
     private LatLng latLng;
-    // The entry point to the Fused Location Provider.
+
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private boolean mLocationPermissionGranted;
-    // The geographical location where the device is currently located. That is, the last-known
-    // location retrieved by the Fused Location Provider.
+
     private Location mLastKnownLocation;
     private boolean isClicked = false;
 
@@ -128,13 +126,10 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // Construct a GeoDataClient.
         mGeoDataClient = Places.getGeoDataClient(this, null);
 
-        // Construct a PlaceDetectionClient.
         mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
 
-        // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
@@ -153,7 +148,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
                 }
             }
         });
-
         setSlideBackDirection(SlideBackActivity.LEFT);
     }
 
@@ -166,11 +160,7 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         UiSettings uiSettings = googleMap.getUiSettings();
-
-        // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
         int zoomlevel = 16;
@@ -205,7 +195,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     }
 
     private void getLocationPermission() {
-        //WILL BE MOVED TO PERMISSIONACTIVITY LATER!
         Dexter.withActivity(MosqueActivity.this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener(new PermissionListener() {
@@ -246,10 +235,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
     }
 
     private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
         try {
             Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
             locationResult.addOnCompleteListener(this, task -> {
@@ -381,10 +366,8 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler = new HttpHandler();
 
-            String apiKey = getResources().getString(R.string.API_KEY);
-
             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                    "&rankby=distance&type=mosque&key=" + apiKey;
+                    "&rankby=distance&type=mosque&key=" + getString(R.string.API_KEY);
 
             String jsonStr = httpHandler.makeServiceCall(url);
 
@@ -413,7 +396,6 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             } else {
                 Log.e(TAG, "Couldn't get json from server.");
             }
-
             return null;
         }
 
@@ -425,14 +407,11 @@ public class MosqueActivity extends SlideBackActivity implements OnMapReadyCallb
             listMasjid.setLayoutManager(layoutManager);
             mAdapter = new MosqueAdapter(getApplication(), MosqueActivity.this, mDataSet, mMap);
             new Handler().postDelayed(() -> {
-                listMasjid.setAdapter(mAdapter);
+                    listMasjid.setAdapter(mAdapter);
                 mosqueShimmerLoad.stopShimmer();
                 mosqueShimmerLoad.setVisibility(View.GONE);
             }, 800);
             setMarker("onPostExecute");
         }
-
-
     }
-
 }

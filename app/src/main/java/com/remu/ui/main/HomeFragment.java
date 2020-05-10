@@ -38,10 +38,8 @@ import com.remu.FoodActivity;
 import com.remu.MosqueActivity;
 import com.remu.POJO.Article;
 import com.remu.POJO.PrayerTime;
-import com.remu.POJO.Tips;
 import com.remu.R;
 import com.remu.TourismActivity;
-import com.remu.adapter.TipsAdapter;
 import com.takusemba.multisnaprecyclerview.MultiSnapHelper;
 import com.takusemba.multisnaprecyclerview.SnapGravity;
 
@@ -59,14 +57,13 @@ public class HomeFragment extends Fragment {
     private CardView mosqueCardView;
     private LinearLayout fnBButton, tourismButton, findFriendButton, dictionaryButton;
     private TextView userName;
-    private RecyclerView listArticle, listTips;
+    private RecyclerView listArticle;
 
     private FirebaseRecyclerAdapter<Article, HomeFragment.ArticleViewHolder> firebaseRecyclerAdapter;
-    private ArrayList<Tips> tipsDataSet;
 
     private NestedScrollView homeScrollView;
 
-    private ShimmerFrameLayout jamSholatShimmerLoad, articleShimmerLoad, tipsShimmerLoad;
+    private ShimmerFrameLayout jamSholatShimmerLoad, articleShimmerLoad;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -139,7 +136,6 @@ public class HomeFragment extends Fragment {
     public void onPause() {
         jamSholatShimmerLoad.stopShimmer();
         articleShimmerLoad.stopShimmer();
-        tipsShimmerLoad.stopShimmer();
         super.onPause();
     }
 
@@ -148,7 +144,6 @@ public class HomeFragment extends Fragment {
         super.onResume();
         jamSholatShimmerLoad.startShimmer();
         articleShimmerLoad.startShimmer();
-        tipsShimmerLoad.startShimmer();
     }
 
     @Override
@@ -160,7 +155,6 @@ public class HomeFragment extends Fragment {
     private void initializeShimmerLoad(View root) {
         jamSholatShimmerLoad = root.findViewById(R.id.shimmer_load_jam_sholat);
         articleShimmerLoad = root.findViewById(R.id.shimmer_load_article);
-        tipsShimmerLoad = root.findViewById(R.id.shimmer_load_tips);
     }
 
     private void initializeUI(View root) {
@@ -181,13 +175,6 @@ public class HomeFragment extends Fragment {
         initializeArticle();
 
         // tips
-        listTips = root.findViewById(R.id.list_tips);
-        tipsDataSet = new ArrayList<Tips>() {{
-            add(new Tips(getActivity().getDrawable(R.drawable.ic_img_tips), "Tips #1", ""));
-            add(new Tips(getActivity().getDrawable(R.drawable.ic_img_tips), "Tips #2", ""));
-            add(new Tips(getActivity().getDrawable(R.drawable.ic_img_tips), "Tips #3", ""));
-        }};
-        initializeTips();
 
         // next prayer time
         ArrayList<TextView> textViews = new ArrayList<TextView>() {{
@@ -214,7 +201,7 @@ public class HomeFragment extends Fragment {
                 articleViewHolder.setHighlight(article.getHighlight());
                 articleViewHolder.setJudul(article.getTitle());
 
-                DatabaseReference saved = FirebaseDatabase.getInstance().getReference().child("Saved").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("Article").child(article.getTitle());
+                    DatabaseReference saved = FirebaseDatabase.getInstance().getReference().child("Saved").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("Article").child(article.getTitle());
                 saved.addValueEventListener(new ValueEventListener() {
 
                     @Override
@@ -267,17 +254,6 @@ public class HomeFragment extends Fragment {
         }, 1500);
         MultiSnapHelper multiSnapHelper = new MultiSnapHelper(SnapGravity.CENTER, 1, 100);
         multiSnapHelper.attachToRecyclerView(listArticle);
-    }
-
-    private void initializeTips() {
-        LinearLayoutManager tipsLayoutManager = new LinearLayoutManager(HomeFragment.this.getContext(), LinearLayoutManager.HORIZONTAL, false);
-        listTips.setLayoutManager(tipsLayoutManager);
-        RecyclerView.Adapter tipsAdapter = new TipsAdapter(getActivity().getApplication(), tipsDataSet);
-        new Handler().postDelayed(() -> {
-            listTips.setAdapter(tipsAdapter);
-            tipsShimmerLoad.stopShimmer();
-            tipsShimmerLoad.setVisibility(View.GONE);
-        }, 1500);
     }
 
     private void getCurrentUser(FirebaseUser user) {

@@ -3,8 +3,6 @@ package com.remu.adapter;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +40,9 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
     private String userId;
     private DatabaseReference databaseReference;
 
+    //TODO: DELETE WHEN UPLOADING OR DOCUMENTING!
+    final private String API_KEY = "";
+
     public TourismAdapter(Application app, Activity activity, ArrayList<PlaceModel> mDataset, LatLng currentLatLng) {
         this.app = app;
         this.activity = activity;
@@ -72,7 +73,7 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
 
         if (mDataset.get(position).getPlacePhotoUri() != null) {
             Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + mDataset.get(position).getPlacePhotoUri()
-                    + "&key=AIzaSyA2n7hH6W6cHvZdRX2kBmL0b21ev6WWjag")
+                    + "&key=" + API_KEY)
                     .error(R.drawable.bg_loading_image)
                     .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
@@ -80,7 +81,7 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
         } else {
             LatLng location = mDataset.get(position).getPlaceLocation();
             Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                    + "&fov=120&pitch=10&key=AIzaSyA2n7hH6W6cHvZdRX2kBmL0b21ev6WWjag")
+                    + "&fov=120&pitch=10&key=" + API_KEY)
                     .error(R.drawable.bg_loading_image)
                     .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
@@ -135,12 +136,6 @@ public class TourismAdapter extends RecyclerView.Adapter<TourismAdapter.ViewHold
             distance = itemView.findViewById(R.id.distance_tour_place);
         }
 
-    }
-
-    public float getPixelFromDp(float dp) {
-        Resources resources = activity.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        return dp * (metrics.densityDpi / 160f);
     }
 
     private double countDistance(LatLng latLng) {

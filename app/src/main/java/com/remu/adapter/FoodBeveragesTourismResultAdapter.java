@@ -39,6 +39,9 @@ public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<Food
     DatabaseReference databaseReference;
     String userId, senderType;
 
+    //TODO: DELETE WHEN UPLOADING OR DOCUMENTING!
+    final private String API_KEY = "";
+
     public FoodBeveragesTourismResultAdapter(Application app, Activity activity, String senderType, ArrayList<PlaceModel> mDataset) {
         this.app = app;
         this.activity = activity;
@@ -70,7 +73,7 @@ public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<Food
 
         if (mDataset.get(position).getPlacePhotoUri() != null) {
             Picasso.get().load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + mDataset.get(position).getPlacePhotoUri()
-                    + "&key=AIzaSyA2n7hH6W6cHvZdRX2kBmL0b21ev6WWjag")
+                    + "&key="+ API_KEY)
                     .error(R.drawable.bg_loading_image)
                     .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
@@ -78,7 +81,7 @@ public class FoodBeveragesTourismResultAdapter extends RecyclerView.Adapter<Food
         } else {
             LatLng location = mDataset.get(position).getPlaceLocation();
             Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                    + "&fov=120&pitch=10&key=AIzaSyA2n7hH6W6cHvZdRX2kBmL0b21ev6WWjag")
+                    + "&fov=120&pitch=10&key="+ API_KEY)
                     .error(R.drawable.bg_loading_image)
                     .placeholder(R.drawable.bg_loading_image)
                     .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)

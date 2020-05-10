@@ -61,10 +61,12 @@ public class HalalGiftDetail extends SlideBackActivity {
     private DatabaseReference databaseReference, databaseReview;
     private ProgressDialog progressDialog;
     private FirebaseRecyclerAdapter<Rating, HalalGiftDetail.HalalGiftDetailAdapter> firebaseRecyclerAdapter;
-
     private boolean isSaved;
     private CardView buttonSave;
     private ImageView imageButtonSave;
+
+    //TODO: DELETE WHEN UPLOADING OR DOCUMENTING!
+    final private String API_KEY = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +87,12 @@ public class HalalGiftDetail extends SlideBackActivity {
                 .placeholder(R.drawable.ic_default_avatar)
                 .into(userImage);
 
-        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(HalalGiftDetail.this, LinearLayoutManager.VERTICAL, false);
-        listReviews.setLayoutManager(articleLayoutManager);
+
 
         databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
+        System.out.println("TEST#01: " + databaseReview);
 
-        Query query = databaseReview.orderByChild(uId).equalTo(null);
+        Query query = databaseReview.orderByChild(uId);
 
         FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()
                 .setQuery(query, Rating.class).build();
@@ -99,19 +101,22 @@ public class HalalGiftDetail extends SlideBackActivity {
             @Override
             protected void onBindViewHolder(@NonNull HalalGiftDetailAdapter halalGiftDetailAdapter, int i, @NonNull Rating rating) {
                 halalGiftDetailAdapter.setReview(rating.getReview());
+
+                halalGiftDetailAdapter.setRating(rating.getRating());
+
                 DatabaseReference profileReference = FirebaseDatabase.getInstance().getReference().child("Profile").child(rating.getIdUser());
+
                 profileReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                         try {
+                            //halalGiftDetailAdapter.setNama(dataSnapshot.child("name").getValue().toString());
                             halalGiftDetailAdapter.setNama(dataSnapshot.child("name").getValue().toString());
                             halalGiftDetailAdapter.setImage(dataSnapshot.child("image").getValue().toString());
                         } catch (NullPointerException np) {
                             halalGiftDetailAdapter.setNama(rating.getNamaUser());
                             halalGiftDetailAdapter.setImage("");
                         }
-
                     }
 
                     @Override
@@ -129,7 +134,12 @@ public class HalalGiftDetail extends SlideBackActivity {
             }
 
         };
-        listReviews.setAdapter(firebaseRecyclerAdapter);
+
+        runOnUiThread(()->{
+            LinearLayoutManager articleLayoutManager = new LinearLayoutManager(HalalGiftDetail.this, LinearLayoutManager.VERTICAL, false);
+            listReviews.setLayoutManager(articleLayoutManager);
+            listReviews.setAdapter(firebaseRecyclerAdapter);
+        });
 
         getPlace(getIntent().getStringExtra("place_id"));
 
@@ -224,7 +234,7 @@ public class HalalGiftDetail extends SlideBackActivity {
             } else {
                 LatLng location = giftPlace.getLatLng();
                 Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                        + "&fov=120&pitch=10&key=" + R.string.API_KEY)
+                        + "&fov=120&pitch=10&key=" + API_KEY)
                         .error(R.drawable.bg_loading_image)
                         .placeholder(R.drawable.bg_loading_image)
                         .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
@@ -284,13 +294,14 @@ public class HalalGiftDetail extends SlideBackActivity {
     public class HalalGiftDetailAdapter extends RecyclerView.ViewHolder {
         ImageView image;
         TextView nama;
-        TextView review;
+        TextView review,rating2;
 
         public HalalGiftDetailAdapter(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.profile_image);
             nama = itemView.findViewById(R.id.username_review);
             review = itemView.findViewById(R.id.review_user);
+            rating2 = itemView.findViewById(R.id.rating);
         }
 
         public void setNama(String nama) {
@@ -306,6 +317,10 @@ public class HalalGiftDetail extends SlideBackActivity {
 
         public void setReview(String review) {
             this.review.setText(review);
+        }
+
+        public void setRating(String rating){
+            this.rating2.setText(rating);
         }
     }
 

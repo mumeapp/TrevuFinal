@@ -81,15 +81,15 @@ public class PlaceDetail extends SlideBackActivity {
     private String uId;
     private String nama;
     private Place place;
-
     private PlacesClient placesClient;
     private Geocoder mGeocoder;
     private FirebaseRecyclerAdapter<Rating, PlaceDetail.TourismDetailAdapter> firebaseRecyclerAdapter;
-
     private ProgressDialog progressDialog;
-
     private CardView cardBookmark;
     private ImageView tpdBookmark;
+
+    //TODO: DELETE WHEN UPLOADING OR DOCUMENTING!
+    final private String API_KEY = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,8 +236,7 @@ public class PlaceDetail extends SlideBackActivity {
     }
 
     private void getReview() {
-        LinearLayoutManager articleLayoutManager = new LinearLayoutManager(PlaceDetail.this, LinearLayoutManager.VERTICAL, false);
-        tpdListUserReview.setLayoutManager(articleLayoutManager);
+
 
         DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(getIntent().getStringExtra("place_id"));
         databaseReview.addChildEventListener(new ChildEventListener() {
@@ -281,7 +280,7 @@ public class PlaceDetail extends SlideBackActivity {
             }
         });
 
-        Query query = databaseReview.orderByChild(uId).equalTo(null);
+        Query query = databaseReview.orderByChild(uId);
 
         FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()
                 .setQuery(query, Rating.class).build();
@@ -309,6 +308,7 @@ public class PlaceDetail extends SlideBackActivity {
                     }
                 });
                 tourismDetailAdapter.setReview(rating.getReview());
+                tourismDetailAdapter.setRating(rating.getRating());
 
             }
 
@@ -320,7 +320,11 @@ public class PlaceDetail extends SlideBackActivity {
             }
 
         };
-        tpdListUserReview.setAdapter(firebaseRecyclerAdapter);
+        runOnUiThread(() -> {
+            LinearLayoutManager articleLayoutManager = new LinearLayoutManager(PlaceDetail.this, LinearLayoutManager.VERTICAL, false);
+            tpdListUserReview.setLayoutManager(articleLayoutManager);
+            tpdListUserReview.setAdapter(firebaseRecyclerAdapter);
+        });
     }
 
     private void checkUserReview() {
@@ -414,7 +418,7 @@ public class PlaceDetail extends SlideBackActivity {
                 LatLng location = tourismPlace.getLatLng();
                 assert location != null;
                 Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                        + "&fov=120&pitch=10&key="+R.string.API_KEY)
+                        + "&fov=120&pitch=10&key="+ API_KEY)
                         .error(R.drawable.bg_loading_image)
                         .placeholder(R.drawable.bg_loading_image)
                         .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
@@ -757,12 +761,14 @@ public class PlaceDetail extends SlideBackActivity {
         ImageView image;
         TextView nama;
         TextView review;
+        TextView rating;
 
         TourismDetailAdapter(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.profile_image);
             nama = itemView.findViewById(R.id.username_review);
             review = itemView.findViewById(R.id.review_user);
+            rating = itemView.findViewById(R.id.rating);
         }
 
         void setNama(String nama) {
@@ -779,6 +785,7 @@ public class PlaceDetail extends SlideBackActivity {
         void setReview(String review) {
             this.review.setText(review);
         }
+        void setRating(String rating) { this.rating.setText(rating);}
     }
 
 }

@@ -71,6 +71,7 @@ public class HalalBeveragesActivity extends SlideBackActivity {
                     intent.putExtra("category", changeSpace(manualCategory.getText().toString()));
                     intent.putExtra("name", manualCategory.getText().toString());
                     startActivity(intent);
+                    manualCategory.setText("");
                     return true;
                 } else {
                     manualCategory.setError("Please put what category you want.");

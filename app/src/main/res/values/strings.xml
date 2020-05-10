@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">Trevu</string>
 
-    <string name="API_KEY">AIzaSyA2n7hH6W6cHvZdRX2kBmL0b21ev6WWjag</string>
+    <string name="API_KEY">PUT_API_KEY_HERE</string>
 
     <!-- bottom navigation strings -->
     <string name="title_home">Home</string>
     <string name="title_saved">Saved</string>
     <string name="title_friends">Friends</string>
     <string name="title_profile">Profile</string>
-
-    <string name="facebook_app_id">492359438088222</string>
-    <string name="fb_login_protocol_scheme">fb492359438088222</string>
 </resources>

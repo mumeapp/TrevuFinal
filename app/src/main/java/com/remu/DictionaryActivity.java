@@ -32,15 +32,7 @@ public class DictionaryActivity extends SlideBackActivity {
     public static final int DESTINATION_REQUEST_CODE = 1;
 
     private DatabaseReference databaseReference;
-    public static String hasilAw = "hasil", hasilAk = "asa";
     private FirebaseRecyclerAdapter<TextProcess, TextProcessViewHolder> firebaseRecyclerAdapter;
-    private RecyclerView rvDictionary;
-    private Button btn1;
-    private ImageView awal, akhir;
-    private String textAw, textAk;
-    private int check, check2;
-
-    // select language
     private LinearLayout selectorOrigin, selectorDestination;
     private ImageView imageOrigin, imageDestination;
     private TextView languageOrigin, languageDestination;
@@ -53,14 +45,10 @@ public class DictionaryActivity extends SlideBackActivity {
         initializeUI();
         initializeClickListener();
 
-        //TODO remove later after connected with firebase
-//        setDummyRecyclerView();
-//        awal = findViewById(R.id.awal);
-//        akhir = findViewById(R.id.akhir);
         Animatoo.animateSlideLeft(this);
 
         showDictionary();
-        btn1 = findViewById(R.id.ButtonAdd);
+        Button btn1 = findViewById(R.id.ButtonAdd);
         btn1.setOnClickListener(view -> buttonAdd());
 
         setSlideBackDirection(SlideBackActivity.LEFT);
@@ -81,8 +69,7 @@ public class DictionaryActivity extends SlideBackActivity {
     }
 
     private void showDictionary() {
-        rvDictionary = findViewById(R.id.rv_listDictionary);
-//        rvDictionary.setHasFixedSize(true);
+        RecyclerView rvDictionary = findViewById(R.id.rv_listDictionary);
         rvDictionary.setLayoutManager(new LinearLayoutManager(DictionaryActivity.this, LinearLayoutManager.VERTICAL, false));
 
         if ((languageOrigin.getText().toString().equals("Indonesian") && languageDestination.getText().toString().equals("Japanese")) || (languageDestination.getText().toString().equals("Indonesian") && languageOrigin.getText().toString().equals("Japanese"))) {
@@ -92,7 +79,7 @@ public class DictionaryActivity extends SlideBackActivity {
         } else if ((languageOrigin.getText().toString().equals("English") && languageDestination.getText().toString().equals("Japanese")) || (languageDestination.getText().toString().equals("English") && languageOrigin.getText().toString().equals("Japanese"))) {
             databaseReference = FirebaseDatabase.getInstance().getReference().child("Dictionary").child("jepang-inggris");
         } else {
-            Toast.makeText(getApplicationContext(), "Tidak bisa menggunakan bahasa yang sama", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Cant pick same language", Toast.LENGTH_LONG).show();
         }
         Query query = databaseReference.orderByKey();
 
@@ -260,18 +247,6 @@ public class DictionaryActivity extends SlideBackActivity {
     public void finish() {
         super.finish();
         Animatoo.animateSlideRight(this);
-    }
-
-    private void awal() {
-        Intent in = new Intent(DictionaryActivity.this, ChooseLanguageActivity.class);
-        in.putExtra(ChooseLanguageActivity.test, "a");
-        startActivity(in);
-    }
-
-    private void akhir() {
-        Intent in = new Intent(DictionaryActivity.this, ChooseLanguageActivity.class);
-        in.putExtra(ChooseLanguageActivity.test, "b");
-        startActivity(in);
     }
 
     private void buttonAdd() {

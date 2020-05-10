@@ -82,7 +82,7 @@ public class AddDictionary extends SlideBackActivity {
                 etTextAwal.setText("");
                 etTextTranslete.setText("");
 
-                Toast.makeText(AddDictionary.this, "data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddDictionary.this, "Input Successful", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -25,7 +24,6 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 public class PermissionActivity extends AppCompatActivity {
 
-    Button izin;
     private FirebaseAuth mAuth;
     private Context context;
 
@@ -35,14 +33,8 @@ public class PermissionActivity extends AppCompatActivity {
 
         context = this;
 
-        //set the bar into invisible
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-        //set the status bar text to black
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-//        }
 
         Dexter.withActivity(PermissionActivity.this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)

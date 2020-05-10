@@ -61,6 +61,8 @@ public class SavedFragment extends Fragment {
     private FirebaseRecyclerAdapter<Article, SavedFragment.SavedArticleViewHolder> firebaseRecyclerAdapterArticle;
     private FirebaseRecyclerAdapter<SavedFoodBeveragesTour, SavedFragment.SavedFoodBeveragesTourViewHolder> firebaseRecyclerAdapterFood, firebaseRecyclerAdapterTour, firebaseRecyclerAdapterBeverages;
 
+    //TODO: DELETE WHEN UPLOADING OR DOCUMENTING!
+    final private String API_KEY = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -456,7 +458,7 @@ public class SavedFragment extends Fragment {
                 } else {
                     LatLng location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
                     Picasso.get().load("https://maps.googleapis.com/maps/api/streetview?size=500x300&location=" + location.latitude + "," + location.longitude
-                            + "&fov=120&pitch=10&key=" + R.string.API_KEY)
+                            + "&fov=120&pitch=10&key="+ API_KEY)
                             .error(R.drawable.bg_loading_image)
                             .placeholder(R.drawable.bg_loading_image)
                             .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)

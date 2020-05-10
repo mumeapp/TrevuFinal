@@ -1,6 +1,5 @@
 package com.remu;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,17 +23,9 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.remu.POJO.HttpHandler;
-import com.remu.POJO.MyCallBack;
 import com.remu.POJO.MyComparator;
 import com.remu.POJO.PlaceModel;
-import com.remu.POJO.Rating;
 import com.remu.POJO.Weighting;
 import com.remu.adapter.TourismAdapter;
 import com.saber.chentianslideback.SlideBackActivity;
@@ -174,7 +164,7 @@ public class TourismActivity extends SlideBackActivity {
         String url2 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
                 "6&rankby=distance&keyword=zoo&key=" + getString(R.string.API_KEY);
         String url3 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
-                "6&rankby=distance&keyword=theme%20park&key=AIzaSyA2n7hH6W6cHvZdRX2kBmL0b21ev6WWjag";
+                "6&rankby=distance&keyword=theme%20park&key=" + getString(R.string.API_KEY);
         String url4 = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "," + longitude +
                 "6&rankby=distance&keyword=waterfall&key=" + getString(R.string.API_KEY);
 
@@ -220,81 +210,6 @@ public class TourismActivity extends SlideBackActivity {
         Collections.sort(places, new MyComparator());
         if (places.size() > 20) {
             places = new ArrayList<>(places.subList(0, 20));
-        }
-    }
-
-    private void getFirebaseData(MyCallBack myCallBack) {
-        for (int i = 0; i < places.size(); i++) {
-            DatabaseReference intensity = FirebaseDatabase.getInstance().getReference().child("UserData").child(userId).child(places.get(i).getPlaceId()).child("Intensity");
-            int finalI = i;
-            intensity.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try {
-                        places.get(finalI).setPlaceIntensity(Integer.parseInt(dataSnapshot.getValue().toString()));
-                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
-                        myCallBack.onCallback(places);
-
-                    } catch (NullPointerException np) {
-                        places.get(finalI).setPlaceIntensity(1);
-                        System.out.println("onDataChange" + places.get(finalI).getPlaceIntensity());
-                        myCallBack.onCallback(places);
-                    }
-
-                    DatabaseReference databaseReview = FirebaseDatabase.getInstance().getReference().child("Places Review").child(places.get(finalI).getPlaceId());
-                    databaseReview.addChildEventListener(new ChildEventListener() {
-                        double rataRata = 0;
-                        double jumlah = 0;
-
-
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                            try {
-                                ++jumlah;
-                                rataRata += Double.parseDouble(dataSnapshot.getValue(Rating.class).getRating());
-                                rataRata /= jumlah;
-
-                                places.get(finalI).setTrevuRating(rataRata);
-                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
-                                myCallBack.onCallback(places);
-
-                            } catch (NullPointerException np) {
-                                places.get(finalI).setTrevuRating(1);
-                                System.out.println("Ratefood " + places.get(finalI).getTrevuRating());
-                                myCallBack.onCallback(places);
-
-                            }
-                        }
-
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
         }
     }
 
